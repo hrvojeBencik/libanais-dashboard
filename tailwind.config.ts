@@ -14,8 +14,11 @@ const config: Config = {
                 "white-smoke": "f9f9f9",
                 "grey-eclipse": "#3c3c3c",
             },
-            fontFamily: {
-                sans: ["Poppins", "sans-serif"],
+            maxWidth: {
+                "150": "150px",
+            },
+            margin: {
+                "18": "18px",
             },
         },
     },
