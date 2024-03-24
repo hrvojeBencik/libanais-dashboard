@@ -1,6 +1,6 @@
 "use client";
 import Link from "next/link";
-import { data } from "./data";
+import { data } from "./sidebarData";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
 
