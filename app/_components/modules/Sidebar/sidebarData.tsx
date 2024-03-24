@@ -6,7 +6,7 @@ import person from "@/public/assets/svg/person";
 import pie from "@/public/assets/svg/pie";
 import { StaticImageData } from "next/image";
 
-type DataType = {
+type SidebarData = {
     logo: StaticImageData;
     links: {
         icon: (props: React.SVGProps<SVGSVGElement>) => JSX.Element;
@@ -15,7 +15,7 @@ type DataType = {
     }[];
 };
 
-export const data: DataType = {
+export const data: SidebarData = {
     logo: Logo,
     links: [
         {
