@@ -23,8 +23,8 @@ export default function RootLayout({
         <html lang="en">
             <body className={`${poppins.className} flex w-full`}>
                 <Sidebar />
-                <div className="block flex-grow p-12">
-                    <Header />
+                <div className="block flex-grow p-11">
+                    <Header className="mb-11" />
                     {children}
                 </div>
             </body>

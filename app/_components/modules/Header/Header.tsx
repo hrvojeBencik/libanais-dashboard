@@ -1,9 +1,12 @@
 import SearchBar from "../../elements/SearchBar/SearchBar";
 import UserGreeting from "../../elements/UserGreeting/UserGreeting";
 
-const Header = () => {
+interface HeaderProps {
+    className?: string;
+}
+const Header = ({ className }: HeaderProps) => {
     return (
-        <div className="flex justify-between">
+        <div className={`${className} flex justify-between`}>
             <SearchBar className="w-1/2" />
             <UserGreeting className="" />
         </div>
