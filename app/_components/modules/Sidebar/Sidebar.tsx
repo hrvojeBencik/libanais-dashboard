@@ -17,7 +17,7 @@ const Sidebar = (type: any) => {
                 <Link
                     key={key}
                     href={link.path}
-                    className={`group flex items-center gap-6 text-lg py-3.5 mb-2.5 rounded-lg pl-5 pr-14 
+                    className={`group flex items-center gap-6 text-lg py-3.5 mb-2.5 rounded-lg pl-5 pr-14 min-w-[252px] 
                     ${
                         pathname === link.path
                             ? "bg-brown-derby bg-opacity-50 font-bold text-[#2e211c]"
