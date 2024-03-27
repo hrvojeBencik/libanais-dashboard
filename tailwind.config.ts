@@ -16,9 +16,12 @@ const config: Config = {
             colors: {
                 "brown-derby": "#5c4338",
                 "albescent-white": "#dfdac9",
-                "white-smoke": "f9f9f9",
+                "white-smoke": "#f9f9f9",
                 "grey-eclipse": "#3c3c3c",
-                "light-grey": "#8A8A8A",
+                "light-grey": "#8a8a8a",
+                "dark-gunmetal": "#181f2b",
+                "raisin-black": "#2e211c",
+                "cadet-blue": "#b2b9c4",
             },
             fontFamily: {
                 sans: ["Poppins", "sans-serif"],
