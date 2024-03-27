@@ -6,7 +6,9 @@ import Header from "./_components/modules/Header/Header";
 
 const poppins = Poppins({
     subsets: ["latin"],
-    weight: ["500"],
+    display: "swap",
+    variable: "--font-poppins",
+    weight: ["100", "200", "300", "400", "500", "600", "700", "800", "900"],
 });
 
 export const metadata: Metadata = {
@@ -23,7 +25,7 @@ export default function RootLayout({
         <html lang="en">
             <body className={`${poppins.className} flex w-full`}>
                 <Sidebar />
-                <div className="block flex-grow p-11">
+                <div className="block flex-grow p-11 bg-white-smoke">
                     <Header className="mb-11" />
                     {children}
                 </div>

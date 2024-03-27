@@ -8,14 +8,26 @@ const config: Config = {
     ],
     theme: {
         extend: {
+            screens: {
+                sm: "576px",
+                md: "960px",
+                lg: "1440px",
+            },
             colors: {
                 "brown-derby": "#5c4338",
                 "albescent-white": "#dfdac9",
                 "white-smoke": "f9f9f9",
                 "grey-eclipse": "#3c3c3c",
+                "light-grey": "#8A8A8A",
             },
             fontFamily: {
                 sans: ["Poppins", "sans-serif"],
+            },
+            fontWeight: {
+                regular: "400",
+                medium: "500",
+                semibold: "600",
+                bold: "700",
             },
             maxWidth: {
                 "150": "150px",
