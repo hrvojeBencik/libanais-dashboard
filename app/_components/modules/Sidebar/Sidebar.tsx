@@ -7,7 +7,7 @@ import { usePathname } from "next/navigation";
 const Sidebar = (type: any) => {
     const pathname = usePathname();
     return (
-        <aside className="h-screen px-12 bg-albescent-white items-center">
+        <aside className="h-screen sticky top-0 px-12 bg-albescent-white items-center overflow-y-auto">
             <Image
                 src={data.logo}
                 alt="Libanais logo"
@@ -29,7 +29,7 @@ const Sidebar = (type: any) => {
                             pathname === link.path
                                 ? "[&>*]:fill-[#2e211c]"
                                 : "[&>*]:fill-[#464255]"
-                        } group-hover:[&>*]:fill-[#2e211c]`}
+                        } group-hover:[&>*]:fill-[#2e211c] `}
                     />{" "}
                     {link.title}{" "}
                 </Link>
