@@ -1,11 +1,12 @@
-import PageTitle from "@/app/_components/elements/PageTitle/PageTitle";
+import PageHeader from "@/app/_components/elements/PageHeader/PageHeader";
 
 const Recipes = () => {
     return (
         <div>
-            <PageTitle
+            <PageHeader
                 title="Recipe List"
                 subtitle="Easily manage and add recipes!"
+                buttonLabel="Add Recipe"
             />
         </div>
     );

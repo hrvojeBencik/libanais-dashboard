@@ -1,11 +1,12 @@
-import PageTitle from "@/app/_components/elements/PageTitle/PageTitle";
+import PageHeader from "@/app/_components/elements/PageHeader/PageHeader";
 
 const Employees = () => {
     return (
         <div>
-            <PageTitle
+            <PageHeader
                 title="Employees"
                 subtitle="Effortlessly manage and organize employee information!"
+                buttonLabel="Add Employee"
             />
         </div>
     );

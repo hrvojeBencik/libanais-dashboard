@@ -1,9 +1,9 @@
-import PageTitle from "@/app/_components/elements/PageTitle/PageTitle";
+import PageHeader from "@/app/_components/elements/PageHeader/PageHeader";
 
 const Analytics = () => {
     return (
         <div>
-            <PageTitle
+            <PageHeader
                 title="Analytics"
                 subtitle="Insights for informed decision-making!"
             />
