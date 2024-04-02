@@ -76,7 +76,7 @@ const IngredientForm = ({ text, handleClose, url }: IngredientFormProps) => {
                             )}
                         </div>
                         <div className=" text-left">
-                            <label className="font-bold text-xl text-grey-eclipse">
+                            <label className="font-medium text-xl text-grey-eclipse">
                                 Please upload ingredient image, size less than
                                 100KB
                             </label>
