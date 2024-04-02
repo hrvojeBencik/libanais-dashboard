@@ -1,10 +1,9 @@
 "use client";
-import Image, { StaticImageData } from "next/image";
 import { usePathname } from "next/navigation";
 
 interface ListCardProps {
     className?: string;
-    image: StaticImageData;
+    image: string;
     header?: string;
     text?: string;
     subtext?: string;
@@ -23,10 +22,10 @@ const ListCard = ({
         <div
             className={`${className} flex pl-16 py-9 pr-10 shadow border rounded-2xl gap-3.5`}
         >
-            <Image
+            <img
                 src={image}
                 alt=""
-                className="h-full w-auto"
+                className=" h-24 w-24  rounded-full overflow-hidden"
             />
             <div>
                 <h2
