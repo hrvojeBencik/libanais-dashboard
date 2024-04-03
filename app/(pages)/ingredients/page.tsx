@@ -1,12 +1,18 @@
 "use client";
 import PageHeader from "@/app/_components/elements/PageHeader/PageHeader";
 import IngredientListItem from "@/app/_components/modules/IngredientListItem/IngredientListItem";
-import IngredientForm from "@/app/_components/modules/IngredientForm/IngredientForm";
-import QuantityForm from "@/app/_components/modules/IngredientForm/QuantityForm";
-import { useState, useEffect } from "react";
+import { useState, useEffect, lazy } from "react";
 import { db } from "@/app/firebase";
 import { collection, getDocs, query } from "firebase/firestore";
 import { Ingredient } from "@/app/_interfaces/Ingredient";
+
+const LazyIngredientForm = lazy(
+    () => import("@/app/_components/modules/IngredientForm/IngredientForm")
+);
+
+const LazyQuantityForm = lazy(
+    () => import("@/app/_components/modules/IngredientForm/QuantityForm")
+);
 
 const Ingredients = () => {
     const [isOpen, setIsOpen] = useState(false);
@@ -48,7 +54,7 @@ const Ingredients = () => {
         <div>
             <PageHeader
                 title="Ingredient List"
-                subtitle="Efficienlty manage ingredients!"
+                subtitle="Efficiently manage ingredients!"
                 buttonLabel="Add Ingredient"
                 handleIsOpen={handleIsOpen}
             />
@@ -64,13 +70,13 @@ const Ingredients = () => {
             </div>
 
             {isOpen && (
-                <IngredientForm
+                <LazyIngredientForm
                     text="Add Ingredient"
                     handleClose={handleClose}
                 />
             )}
             {isQuantityFormOpen && (
-                <QuantityForm
+                <LazyQuantityForm
                     id={selectedIngredientId}
                     handleQuantityClose={handleQuantityClose}
                 />

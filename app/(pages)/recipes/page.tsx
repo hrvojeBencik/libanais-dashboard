@@ -1,11 +1,14 @@
 "use client";
 import PageHeader from "@/app/_components/elements/PageHeader/PageHeader";
-import RecipeForm from "@/app/_components/modules/RecipeForm/RecipeForm";
-import { useState, useEffect } from "react";
+import { useState, useEffect, lazy } from "react";
 import { db } from "@/app/firebase";
 import { collection, getDocs, query } from "firebase/firestore";
 import ListCard from "@/app/_components/elements/ListCard/ListCard";
 import { Recipe } from "@/app/_interfaces/Recipe";
+
+const LazyRecipeForm = lazy(
+    () => import("@/app/_components/modules/RecipeForm/RecipeForm")
+);
 
 const Recipes = () => {
     const [isOpen, setIsOpen] = useState(false);
@@ -52,7 +55,7 @@ const Recipes = () => {
                 ))}
             </div>
             {isOpen && (
-                <RecipeForm
+                <LazyRecipeForm
                     text="Add Recipe"
                     handleClose={handleClose}
                 />

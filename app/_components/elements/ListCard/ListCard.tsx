@@ -28,7 +28,8 @@ const ListCard = ({
                 <img
                     src={image}
                     alt=""
-                    className=" h-[85px] w-[85px]  rounded-full overflow-hidden object-cover"
+                    loading="lazy"
+                    className=" h-[85px] w-[85px]  rounded-full overflow-hidden object-cover bg-albescent-white border-4 border-albescent-white"
                 />
                 {children}
             </div>
