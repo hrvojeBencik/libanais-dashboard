@@ -7,6 +7,7 @@ interface ListCardProps {
     header?: string;
     text?: string;
     subtext?: string;
+    children?: React.ReactNode;
 }
 
 const ListCard = ({
@@ -15,18 +16,22 @@ const ListCard = ({
     header,
     text,
     subtext,
+    children,
 }: ListCardProps) => {
     const pathname = usePathname();
 
     return (
         <div
-            className={`${className} flex pl-16 py-9 pr-10 shadow border rounded-2xl gap-3.5`}
+            className={`${className} flex pl-16 py-9 pr-10 shadow border rounded-2xl gap-3.5 items-center`}
         >
-            <img
-                src={image}
-                alt=""
-                className=" h-24 w-24  rounded-full overflow-hidden"
-            />
+            <div className="relative">
+                <img
+                    src={image}
+                    alt=""
+                    className=" h-[85px] w-[85px]  rounded-full overflow-hidden object-cover"
+                />
+                {children}
+            </div>
             <div>
                 <h2
                     className={`${
