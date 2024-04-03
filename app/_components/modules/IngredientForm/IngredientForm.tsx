@@ -2,32 +2,133 @@ import Card from "../../elements/Card/Card";
 import DefaultButton from "../../elements/DefaultButton/DefaultButton";
 import FormHeader from "../../elements/FormHeader/FormHeader";
 import Modal from "../../elements/Modal/Modal";
-import PlaceholderIcon from "public/assets/svg/image";
-import RemoveIcon from "public/assets/svg/close";
-
+import ImageInput from "../ImageInput/ImageInput";
+import { db, storage } from "../../../firebase";
+import { addDoc, updateDoc, collection, doc } from "firebase/firestore";
+import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import { useState } from "react";
 
 interface IngredientFormProps {
     text?: string;
-    handleClose: React.MouseEventHandler<HTMLButtonElement>;
+    handleClose: () => void;
     url?: string;
 }
+
+interface FormValues {
+    ingredient: string;
+    photo: File | string | null;
+}
+
 const IngredientForm = ({ text, handleClose, url }: IngredientFormProps) => {
     const [previewPhoto, setPreviewPhoto] = useState(url || "");
+    const [formValues, setFormValues] = useState(getDefaultFormValues());
+    const [file, setFile] = useState<File | null>(null);
+    const [sendingForm, setSendingForm] = useState(false);
+    const [errorMessage, setErrorMessage] = useState("");
+    const [successMessage, setSuccessMessage] = useState("");
 
-    const updatePreview = (e: React.ChangeEvent<HTMLInputElement>) => {
-        const file = e.target.files?.[0];
-        if (file) {
-            if (file.size >= 100 * 1024) {
-                console.log("File size exceeds 100KB");
-                return;
-            }
-            const reader = new FileReader();
-            reader.onload = () => {
-                setPreviewPhoto(reader.result as string);
-            };
-            reader.readAsDataURL(file);
+    const [formErrors, setFormErrors] = useState({
+        ingredient: "",
+        photo: "",
+    });
+
+    function getDefaultFormValues(): FormValues {
+        return {
+            ingredient: "",
+            photo: "",
+        };
+    }
+
+    const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        //Prevents user from changing input fields while form is sending
+        if (sendingForm) {
+            return;
         }
+
+        const { name, value, files } = e.target;
+
+        //When user starts to edit input field with error, then field error message should disappear
+        if (formErrors[name as keyof FormValues]) {
+            setFormErrors((previousValues) => ({
+                ...previousValues,
+                [name]: "",
+            }));
+        }
+
+        //When user starts to edit input fields, then error/success message should disappear
+        if (errorMessage) {
+            setErrorMessage("");
+        }
+
+        if (successMessage) {
+            setSuccessMessage("");
+        }
+
+        setFormValues((previousFormValues) => ({
+            ...previousFormValues,
+            [name]: value,
+        }));
+
+        const file = files?.[0];
+        if (files) {
+            if (file) {
+                if (file.size >= 100 * 1024) {
+                    console.log("File size exceeds 100KB");
+
+                    const fileInput = document.querySelector(
+                        'input[type="file"]'
+                    ) as HTMLInputElement;
+
+                    fileInput.value = ""; // Reset the input file field value
+                } else {
+                    const reader = new FileReader();
+                    reader.onload = () => {
+                        setPreviewPhoto(reader.result as string);
+                    };
+                    reader.readAsDataURL(file);
+                    setFile(files[0]);
+                }
+            }
+        }
+    };
+
+    const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+        e.preventDefault();
+
+        setSendingForm(true);
+
+        let photoUrl = "";
+        const docRef = await addDoc(collection(db, "ingredientList"), {
+            ...formValues,
+            quantity: "0",
+            photo: "", // Initially set photo to empty string
+        });
+
+        const ingredientId = docRef.id;
+
+        try {
+            if (file) {
+                const fileRef = ref(
+                    storage,
+                    `ingredients/${ingredientId}/${file.name}`
+                );
+                const snapshot = await uploadBytes(fileRef, file);
+                photoUrl = await getDownloadURL(fileRef);
+
+                await updateDoc(doc(db, "ingredientList", docRef.id), {
+                    photo: photoUrl,
+                });
+            }
+        } catch (error) {
+            console.log(error);
+        }
+
+        setFormValues({
+            ingredient: "",
+            photo: "",
+        });
+        clearPreview();
+        handleClose();
     };
 
     const clearPreview = () => {
@@ -50,6 +151,7 @@ const IngredientForm = ({ text, handleClose, url }: IngredientFormProps) => {
                 <form
                     action=""
                     className="flex flex-col min-w-[1070px] gap-10"
+                    onSubmit={handleSubmit}
                 >
                     <label className="font-medium text-3xl text-grey-eclipse text-left">
                         Ingredient Name
@@ -58,55 +160,23 @@ const IngredientForm = ({ text, handleClose, url }: IngredientFormProps) => {
                         className="p-4 border rounded-lg"
                         type="text"
                         name="ingredient"
+                        required
+                        value={formValues.ingredient}
+                        onChange={handleInputChange}
                         placeholder="Enter Ingredient Name..."
                     />
-                    <div className="flex items-center">
-                        <div className="h-24 w-24 mr-5 rounded-full overflow-hidden bg-gray-100">
-                            {!previewPhoto && (
-                                <PlaceholderIcon className="p-6" />
-                            )}
-                            {previewPhoto && (
-                                <div className="h-24 w-24 rounded-full overflow-hidden">
-                                    <img
-                                        src={previewPhoto}
-                                        alt=""
-                                        className="h-24 w-24 "
-                                    />
-                                </div>
-                            )}
-                        </div>
-                        <div className=" text-left">
-                            <label className="font-medium text-xl text-grey-eclipse">
-                                Please upload ingredient image, size less than
-                                100KB
-                            </label>
-                            <div>
-                                <input
-                                    onChange={updatePreview}
-                                    type="file"
-                                    accept="image/*"
-                                    name="photo"
-                                    className="mt-5 ml-2.5  file:border file:bg-white file:rounded-md file:py-2.5 file:px-5 file:mr-8 text-grey-eclipse"
-                                />
-                                {previewPhoto && (
-                                    <button
-                                        onClick={clearPreview}
-                                        type="button"
-                                        aria-label="Remove image"
-                                        className="w-4 ml-4"
-                                    >
-                                        <RemoveIcon className=" [&>*]:stroke-white" />
-                                    </button>
-                                )}
-                            </div>
-                        </div>
-                    </div>
+
+                    <ImageInput
+                        previewPhoto={previewPhoto}
+                        handleInputChange={handleInputChange}
+                        clearPreview={clearPreview}
+                    />
+                    <DefaultButton
+                        type="submit"
+                        text="Add Ingredient"
+                        className="mt-64 mx-auto rounded-2xl px-28 py-6 text-2xl"
+                    />
                 </form>
-                <DefaultButton
-                    onClick={() => null}
-                    text="Add Ingredient"
-                    className="mt-64 mx-auto rounded-2xl px-28 py-6 text-2xl"
-                />
             </Card>
         </Modal>
     );
