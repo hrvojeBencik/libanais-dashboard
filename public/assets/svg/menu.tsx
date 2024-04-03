@@ -1,5 +1,3 @@
-"use client";
-
 interface MenuProps {
     className?: string;
 }
