@@ -5,13 +5,7 @@ import { useState, useEffect } from "react";
 import { db } from "@/app/firebase";
 import { collection, getDocs, query } from "firebase/firestore";
 import ListCard from "@/app/_components/elements/ListCard/ListCard";
-
-interface Recipe {
-    id: string;
-    recipe: string;
-    ingredients: string;
-    photo: string;
-}
+import { Recipe } from "@/app/_interfaces/Recipe";
 
 const Recipes = () => {
     const [isOpen, setIsOpen] = useState(false);
@@ -22,14 +16,11 @@ const Recipes = () => {
     }, [isOpen]);
 
     const loadRecipeList = async () => {
-        const recipes: Recipe[] = [];
         const snapshot = await getDocs(query(collection(db, "recipeList")));
-        snapshot.forEach((doc) => {
-            recipes.push({
-                id: doc.id,
-                ...doc.data(),
-            } as Recipe);
-        });
+        const recipes = snapshot.docs.map((doc) => ({
+            id: doc.id,
+            ...doc.data(),
+        })) as Recipe[];
         setRecipeList(recipes);
     };
 
@@ -40,6 +31,7 @@ const Recipes = () => {
     const handleClose = () => {
         setIsOpen(false);
     };
+
     return (
         <div>
             <PageHeader
