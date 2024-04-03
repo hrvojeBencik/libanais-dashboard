@@ -1,23 +1,30 @@
 interface ButtonProps {
     className?: string;
     text?: string;
-    buttonType?: "button" | "submit" | "reset";
+    type?: "button" | "submit" | "reset";
     onClick?: React.MouseEventHandler<HTMLButtonElement>;
+    children?: React.ReactNode;
 }
 
 const DefaultButton = ({
     className,
     text,
     onClick,
-    buttonType,
+    type,
+    children,
 }: ButtonProps) => {
     return (
         <button
-            className={`${className} border bg-brown-derby bg-opacity-50 font-bold text-raisin-black`}
+            className={`${className}  ${
+                children
+                    ? " "
+                    : "bg-brown-derby bg-opacity-50 border  font-bold text-raisin-black"
+            }`}
             onClick={onClick}
-            type={buttonType}
+            type={type}
         >
             {text}
+            {children}
         </button>
     );
 };
