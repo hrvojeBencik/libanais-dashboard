@@ -15,7 +15,7 @@ const SearchBar = ({ className }: SearchBarProps) => {
             <input
                 placeholder="Search here"
                 title="Search bar"
-                className=" p-4 w-full font-sans tracking-wider rounded-lg  border border-solid border-[#D0D0D0] text-grey-eclipse focus:outline-0"
+                className=" p-4 w-full tracking-wider rounded-lg  border border-solid border-[#D0D0D0] text-grey-eclipse focus:outline-0"
             />
             <SearchIcon className="absolute right-4 top-4" />
         </form>
