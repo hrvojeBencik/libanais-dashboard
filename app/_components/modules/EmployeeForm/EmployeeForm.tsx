@@ -27,15 +27,6 @@ const EmployeeForm = ({ text, handleClose, url }: EmployeeFormProps) => {
     const [formValues, setFormValues] = useState(getDefaultFormValues());
     const [file, setFile] = useState<File | null>(null);
     const [sendingForm, setSendingForm] = useState(false);
-    const [errorMessage, setErrorMessage] = useState("");
-    const [successMessage, setSuccessMessage] = useState("");
-
-    const [formErrors, setFormErrors] = useState({
-        name: "",
-        position: "",
-        pin: "",
-        photo: "",
-    });
 
     function getDefaultFormValues(): FormValues {
         return {
@@ -53,23 +44,6 @@ const EmployeeForm = ({ text, handleClose, url }: EmployeeFormProps) => {
         }
 
         const { name, value, files } = e.target;
-
-        //When user starts to edit input field with error, then field error message should disappear
-        if (formErrors[name as keyof FormValues]) {
-            setFormErrors((previousValues) => ({
-                ...previousValues,
-                [name]: "",
-            }));
-        }
-
-        //When user starts to edit input fields, then error/success message should disappear
-        if (errorMessage) {
-            setErrorMessage("");
-        }
-
-        if (successMessage) {
-            setSuccessMessage("");
-        }
 
         setFormValues((previousFormValues) => ({
             ...previousFormValues,
@@ -157,7 +131,7 @@ const EmployeeForm = ({ text, handleClose, url }: EmployeeFormProps) => {
                 <form
                     onSubmit={handleSubmit}
                     action=""
-                    className="flex flex-col min-w-[1070px] gap-3"
+                    className="flex flex-col min-w-[1070px] gap-3 z-5"
                 >
                     <label className="font-medium text-3xl text-grey-eclipse text-left">
                         Name

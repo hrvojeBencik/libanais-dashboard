@@ -24,13 +24,6 @@ const IngredientForm = ({ text, handleClose, url }: IngredientFormProps) => {
     const [formValues, setFormValues] = useState(getDefaultFormValues());
     const [file, setFile] = useState<File | null>(null);
     const [sendingForm, setSendingForm] = useState(false);
-    const [errorMessage, setErrorMessage] = useState("");
-    const [successMessage, setSuccessMessage] = useState("");
-
-    const [formErrors, setFormErrors] = useState({
-        ingredient: "",
-        photo: "",
-    });
 
     function getDefaultFormValues(): FormValues {
         return {
@@ -46,23 +39,6 @@ const IngredientForm = ({ text, handleClose, url }: IngredientFormProps) => {
         }
 
         const { name, value, files } = e.target;
-
-        //When user starts to edit input field with error, then field error message should disappear
-        if (formErrors[name as keyof FormValues]) {
-            setFormErrors((previousValues) => ({
-                ...previousValues,
-                [name]: "",
-            }));
-        }
-
-        //When user starts to edit input fields, then error/success message should disappear
-        if (errorMessage) {
-            setErrorMessage("");
-        }
-
-        if (successMessage) {
-            setSuccessMessage("");
-        }
 
         setFormValues((previousFormValues) => ({
             ...previousFormValues,

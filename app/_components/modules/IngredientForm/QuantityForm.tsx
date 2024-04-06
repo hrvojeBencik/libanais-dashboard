@@ -8,7 +8,7 @@ import { doc, updateDoc } from "firebase/firestore";
 import { db } from "@/app/firebase";
 
 interface QunatityFormProps {
-    text?: string;
+    text: string;
     id: string;
     handleQuantityClose: () => void;
 }
@@ -20,11 +20,6 @@ interface FormValues {
 const QuantityForm = ({ text, handleQuantityClose, id }: QunatityFormProps) => {
     const [formValues, setFormValues] = useState(getDefaultFormValues());
     const [sendingForm, setSendingForm] = useState(false);
-    const [errorMessage, setErrorMessage] = useState("");
-    const [successMessage, setSuccessMessage] = useState("");
-    const [formErrors, setFormErrors] = useState({
-        quantity: "",
-    });
 
     function getDefaultFormValues(): FormValues {
         return {
@@ -39,23 +34,6 @@ const QuantityForm = ({ text, handleQuantityClose, id }: QunatityFormProps) => {
         }
 
         const { name, value, files } = e.target;
-
-        //When user starts to edit input field with error, then field error message should disappear
-        if (formErrors[name as keyof FormValues]) {
-            setFormErrors((previousValues) => ({
-                ...previousValues,
-                [name]: "",
-            }));
-        }
-
-        //When user starts to edit input fields, then error/success message should disappear
-        if (errorMessage) {
-            setErrorMessage("");
-        }
-
-        if (successMessage) {
-            setSuccessMessage("");
-        }
 
         setFormValues((previousFormValues) => ({
             ...previousFormValues,
