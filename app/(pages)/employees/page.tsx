@@ -1,48 +1,34 @@
 "use client";
-import PageHeader from "@/app/_components/elements/PageHeader/PageHeader";
 import ListCard from "@/app/_components/elements/ListCard/ListCard";
 import { Employee } from "@/app/_interfaces/Employee";
-import { useState, useEffect, lazy } from "react";
-import { getDocs, collection, query } from "firebase/firestore";
-import { db } from "@/app/firebase";
+import { useState, createContext, useEffect } from "react";
+import FormController from "@/app/_components/modules/FormController/FormController";
+import EmployeeForm from "@/app/_components/modules/EmployeeForm/EmployeeForm";
+import { loadData } from "@/app/_utils/loadData";
 
-const LazyEmployeeForm = lazy(
-    () => import("@/app/_components/modules/EmployeeForm/EmployeeForm")
-);
+export const EmployeesContext = createContext<Employee[]>([]);
 
 const Employees = () => {
-    const [isOpen, setIsOpen] = useState(false);
     const [employeeList, setEmployeeList] = useState<Employee[]>([]);
 
     useEffect(() => {
-        loadEmployeeList();
-    }, [isOpen]);
+        loadData("employeeList", handleLoadedData);
+    }, []);
 
-    const loadEmployeeList = async () => {
-        const snapshot = await getDocs(query(collection(db, "employeeList")));
-        const employees = snapshot.docs.map((doc) => ({
-            id: doc.id,
-            ...doc.data(),
-        })) as Employee[];
-        setEmployeeList(employees);
-    };
-
-    const handleIsOpen = () => {
-        setIsOpen(true);
-    };
-
-    const handleClose = () => {
-        setIsOpen(false);
+    const handleLoadedData = (data: any) => {
+        setEmployeeList(data);
     };
 
     return (
-        <div>
-            <PageHeader
+        <EmployeesContext.Provider value={employeeList}>
+            <FormController
                 title="Employees"
                 subtitle="Effortlessly manage and organize employee information!"
                 buttonLabel="Add Employee"
-                handleIsOpen={handleIsOpen}
+                formComponent={EmployeeForm}
+                text="Add Employee"
             />
+
             <div className="grid grid-cols-4 gap-10">
                 {employeeList.map((employee) => (
                     <ListCard
@@ -54,13 +40,7 @@ const Employees = () => {
                     />
                 ))}
             </div>
-            {isOpen && (
-                <LazyEmployeeForm
-                    text="Add Employee"
-                    handleClose={handleClose}
-                />
-            )}
-        </div>
+        </EmployeesContext.Provider>
     );
 };
 

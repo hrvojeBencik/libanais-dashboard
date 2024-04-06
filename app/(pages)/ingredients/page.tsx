@@ -1,44 +1,24 @@
 "use client";
-import PageHeader from "@/app/_components/elements/PageHeader/PageHeader";
 import IngredientListItem from "@/app/_components/modules/IngredientListItem/IngredientListItem";
-import { useState, useEffect, lazy } from "react";
-import { db } from "@/app/firebase";
-import { collection, getDocs, query } from "firebase/firestore";
+import { useState, useEffect } from "react";
+import FormController from "@/app/_components/modules/FormController/FormController";
 import { Ingredient } from "@/app/_interfaces/Ingredient";
-
-const LazyIngredientForm = lazy(
-    () => import("@/app/_components/modules/IngredientForm/IngredientForm")
-);
-
-const LazyQuantityForm = lazy(
-    () => import("@/app/_components/modules/IngredientForm/QuantityForm")
-);
+import QuantityForm from "@/app/_components/modules/IngredientForm/QuantityForm";
+import IngredientForm from "@/app/_components/modules/IngredientForm/IngredientForm";
+import { loadData } from "@/app/_utils/loadData";
 
 const Ingredients = () => {
-    const [isOpen, setIsOpen] = useState(false);
     const [isQuantityFormOpen, setIsQuantityFormOpen] = useState(false);
-    const [ingredientList, setIngredientList] = useState<Ingredient[]>([]);
     const [selectedIngredientId, setSelectedIngredientId] = useState("");
 
+    const [ingredientList, setIngredientList] = useState<Ingredient[]>([]);
+
     useEffect(() => {
-        loadIngredientList();
-    }, [isOpen, isQuantityFormOpen]);
+        loadData("ingredientList", handleLoadedData);
+    }, []);
 
-    const loadIngredientList = async () => {
-        const snapshot = await getDocs(query(collection(db, "ingredientList")));
-        const ingredients = snapshot.docs.map((doc) => ({
-            id: doc.id,
-            ...doc.data(),
-        })) as Ingredient[];
-        setIngredientList(ingredients);
-    };
-
-    const handleIsOpen = () => {
-        setIsOpen(true);
-    };
-
-    const handleClose = () => {
-        setIsOpen(false);
+    const handleLoadedData = (data: any) => {
+        setIngredientList(data);
     };
 
     const handleIsQuantityFormOpen = (ingredientId: string) => {
@@ -52,11 +32,12 @@ const Ingredients = () => {
 
     return (
         <div>
-            <PageHeader
-                title="Ingredient List"
+            <FormController
+                title="Ingerdient List"
                 subtitle="Efficiently manage ingredients!"
                 buttonLabel="Add Ingredient"
-                handleIsOpen={handleIsOpen}
+                formComponent={IngredientForm}
+                text="Add Ingerdient"
             />
 
             <div className="grid grid-cols-4 gap-10">
@@ -69,14 +50,9 @@ const Ingredients = () => {
                 ))}
             </div>
 
-            {isOpen && (
-                <LazyIngredientForm
-                    text="Add Ingredient"
-                    handleClose={handleClose}
-                />
-            )}
             {isQuantityFormOpen && (
-                <LazyQuantityForm
+                <QuantityForm
+                    text="Change Quantity"
                     id={selectedIngredientId}
                     handleQuantityClose={handleQuantityClose}
                 />
