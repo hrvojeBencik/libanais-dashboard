@@ -6,6 +6,7 @@ import { Ingredient } from "@/app/_interfaces/Ingredient";
 import QuantityForm from "@/app/_components/modules/IngredientForm/QuantityForm";
 import IngredientForm from "@/app/_components/modules/IngredientForm/IngredientForm";
 import { loadData } from "@/app/_utils/loadData";
+import PageHeader from "@/app/_components/elements/PageHeader/PageHeader";
 
 const Ingredients = () => {
     const [isQuantityFormOpen, setIsQuantityFormOpen] = useState(false);
@@ -33,12 +34,15 @@ const Ingredients = () => {
     return (
         <div>
             <FormController
-                title="Ingerdient List"
-                subtitle="Efficiently manage ingredients!"
                 buttonLabel="Add Ingredient"
                 formComponent={IngredientForm}
                 text="Add Ingerdient"
-            />
+            >
+                <PageHeader
+                    title="Ingerdient List"
+                    subtitle="Efficiently manage ingredients!"
+                />
+            </FormController>
 
             <div className="grid grid-cols-4 gap-10">
                 {ingredientList.map((ingredient, key) => (

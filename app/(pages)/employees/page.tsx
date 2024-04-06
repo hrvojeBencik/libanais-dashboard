@@ -5,7 +5,7 @@ import { useState, createContext, useEffect } from "react";
 import FormController from "@/app/_components/modules/FormController/FormController";
 import EmployeeForm from "@/app/_components/modules/EmployeeForm/EmployeeForm";
 import { loadData } from "@/app/_utils/loadData";
-
+import PageHeader from "@/app/_components/elements/PageHeader/PageHeader";
 export const EmployeesContext = createContext<Employee[]>([]);
 
 const Employees = () => {
@@ -20,14 +20,17 @@ const Employees = () => {
     };
 
     return (
-        <EmployeesContext.Provider value={employeeList}>
+        <div className=" relative">
             <FormController
-                title="Employees"
-                subtitle="Effortlessly manage and organize employee information!"
                 buttonLabel="Add Employee"
                 formComponent={EmployeeForm}
                 text="Add Employee"
-            />
+            >
+                <PageHeader
+                    title="Employees"
+                    subtitle="Effortlessly manage and organize employee information!"
+                />
+            </FormController>
 
             <div className="grid grid-cols-4 gap-10">
                 {employeeList.map((employee) => (
@@ -40,7 +43,7 @@ const Employees = () => {
                     />
                 ))}
             </div>
-        </EmployeesContext.Provider>
+        </div>
     );
 };
 

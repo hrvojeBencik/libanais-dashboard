@@ -5,6 +5,7 @@ import { Recipe } from "@/app/_interfaces/Recipe";
 import RecipeForm from "@/app/_components/modules/RecipeForm/RecipeForm";
 import FormController from "@/app/_components/modules/FormController/FormController";
 import { loadData } from "@/app/_utils/loadData";
+import PageHeader from "@/app/_components/elements/PageHeader/PageHeader";
 
 const Recipes = () => {
     const [recipeList, setRecipeList] = useState<Recipe[]>([]);
@@ -20,13 +21,15 @@ const Recipes = () => {
     return (
         <div>
             <FormController
-                title="Recipe List"
-                subtitle="Easily manage and add recipes!"
                 buttonLabel="Add Recipe"
                 formComponent={RecipeForm}
                 text="Add Recipe"
-            />
-
+            >
+                <PageHeader
+                    title="Recipe List"
+                    subtitle="Easily manage and add recipes!"
+                />
+            </FormController>
             <div className="grid grid-cols-3 gap-7">
                 {recipeList.map((recipe, key) => (
                     <ListCard

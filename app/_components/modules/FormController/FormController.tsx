@@ -1,19 +1,17 @@
-import PageHeader from "../../elements/PageHeader/PageHeader";
 import { useState } from "react";
+import DefaultButton from "../../elements/DefaultButton/DefaultButton";
 
 interface FormControllerProps {
     text: string;
-    title: string;
-    subtitle: string;
     buttonLabel?: string;
     formComponent: React.ComponentType<any>;
+    children?: React.ReactNode;
 }
 const FormController = ({
     text,
-    title,
-    subtitle,
     buttonLabel,
     formComponent: FormComponent,
+    children,
 }: FormControllerProps) => {
     const [isOpen, setIsOpen] = useState(false);
 
@@ -26,21 +24,24 @@ const FormController = ({
     };
 
     return (
-        <>
-            <PageHeader
-                title={title}
-                subtitle={subtitle}
-                buttonLabel={buttonLabel}
-                handleIsOpen={handleIsOpen}
-            />
-
+        <div className=" relative z-20">
+            {buttonLabel && (
+                <div className="flex justify-between items-center mb-10">
+                    {children}
+                    <DefaultButton
+                        text={buttonLabel}
+                        onClick={handleIsOpen}
+                        className="px-16 py-4 rounded-lg h-fit "
+                    />
+                </div>
+            )}
             {isOpen && (
                 <FormComponent
                     text={text}
                     handleClose={handleClose}
                 />
             )}
-        </>
+        </div>
     );
 };
 
