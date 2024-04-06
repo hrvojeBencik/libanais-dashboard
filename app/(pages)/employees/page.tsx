@@ -12,12 +12,8 @@ const Employees = () => {
     const [employeeList, setEmployeeList] = useState<Employee[]>([]);
 
     useEffect(() => {
-        loadData("employeeList", handleLoadedData);
+        loadData("employeeList", setEmployeeList);
     }, []);
-
-    const handleLoadedData = (data: any) => {
-        setEmployeeList(data);
-    };
 
     return (
         <div className=" relative">

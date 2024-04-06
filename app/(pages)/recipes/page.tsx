@@ -11,12 +11,8 @@ const Recipes = () => {
     const [recipeList, setRecipeList] = useState<Recipe[]>([]);
 
     useEffect(() => {
-        loadData("recipeList", handleLoadedData);
+        loadData("recipeList", setRecipeList);
     }, []);
-
-    const handleLoadedData = (data: any) => {
-        setRecipeList(data);
-    };
 
     return (
         <div>

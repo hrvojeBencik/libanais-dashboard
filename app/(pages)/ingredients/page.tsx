@@ -15,12 +15,8 @@ const Ingredients = () => {
     const [ingredientList, setIngredientList] = useState<Ingredient[]>([]);
 
     useEffect(() => {
-        loadData("ingredientList", handleLoadedData);
+        loadData("ingredientList", setIngredientList);
     }, []);
-
-    const handleLoadedData = (data: any) => {
-        setIngredientList(data);
-    };
 
     const handleIsQuantityFormOpen = (ingredientId: string) => {
         setSelectedIngredientId(ingredientId);
