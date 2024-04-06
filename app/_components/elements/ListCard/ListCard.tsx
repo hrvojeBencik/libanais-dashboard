@@ -22,7 +22,7 @@ const ListCard = ({
 
     return (
         <div
-            className={`${className} flex pl-16 py-9 pr-10 shadow border rounded-2xl gap-3.5 items-center`}
+            className={`${className} flex pl-[70px] py-11 pr-10 shadow border rounded-2xl gap-3.5 items-center`}
         >
             <div className="relative">
                 <img
