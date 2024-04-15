@@ -26,7 +26,7 @@ export default function RootLayout({
             <body className={`${poppins.className} flex w-full`}>
                 <Sidebar />
                 <div className="w-full">
-                    <Banner className="mb-11" />
+                    <Banner />
                     <div className="block flex-grow p-11 bg-white-smoke">
                         {children}
                     </div>
