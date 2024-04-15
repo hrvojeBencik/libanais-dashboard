@@ -76,6 +76,7 @@ const IngredientForm = ({ text, handleClose, url }: IngredientFormProps) => {
         let photoUrl = "";
         const docRef = await addDoc(collection(db, "ingredientList"), {
             ...formValues,
+            date: new Date().toISOString(),
             quantity: "0",
             photo: "", // Initially set photo to empty string
         });

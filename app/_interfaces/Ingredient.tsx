@@ -3,4 +3,5 @@ export interface Ingredient {
     ingredient: string;
     quantity: string;
     photo: string;
+    date: Date;
 }

@@ -4,4 +4,5 @@ export interface Employee {
     position: string;
     pin: string;
     photo: string;
+    date: Date;
 }

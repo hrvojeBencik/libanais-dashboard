@@ -78,6 +78,7 @@ const EmployeeForm = ({ text, handleClose, url }: EmployeeFormProps) => {
         let photoUrl = "";
         const docRef = await addDoc(collection(db, "employeeList"), {
             ...formValues,
+            date: new Date().toISOString(),
             photo: "", // Initially set photo to empty string
         });
 
