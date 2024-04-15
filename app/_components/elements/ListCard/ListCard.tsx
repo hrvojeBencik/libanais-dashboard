@@ -1,10 +1,11 @@
 "use client";
+import { StaticImageData } from "next/image";
 import { usePathname } from "next/navigation";
 
 interface ListCardProps {
     className?: string;
-    image: string;
-    header?: string;
+    image: string | StaticImageData;
+    header?: string | number;
     text?: string;
     subtext?: string;
     children?: React.ReactNode;
@@ -22,22 +23,34 @@ const ListCard = ({
 
     return (
         <div
-            className={`${className} flex pl-[70px] py-11 pr-10 shadow border rounded-2xl gap-3.5 items-center`}
+            className={`${className} flex pl-16 py-9 pr-10 shadow border rounded-2xl gap-6 items-center`}
         >
             <div className="relative">
-                <img
-                    src={image}
-                    alt=""
-                    loading="lazy"
-                    className=" h-[85px] w-[85px]  rounded-full overflow-hidden object-cover bg-albescent-white border-4 border-albescent-white"
-                />
+                {typeof image === "string" ? (
+                    <img
+                        src={image}
+                        alt=""
+                        loading="lazy"
+                        className=" h-[85px] w-[85px] rounded-full overflow-hidden object-cover bg-albescent-white border-4 border-albescent-white"
+                    />
+                ) : (
+                    <div className=" w-full  h-full rounded-full overflow-hidden bg-albescent-white border-4 border-albescent-white">
+                        <img
+                            src={image.src}
+                            alt=""
+                            loading="lazy"
+                            className=" m-5"
+                        />
+                    </div>
+                )}
+
                 {children}
             </div>
             <div>
                 <h2
                     className={`${
                         pathname === "/"
-                            ? "text-[46px] font-semibold mb-2"
+                            ? "text-[46px] font-semibold"
                             : pathname === "/ingredients"
                             ? "text-[40px] font-semibold mb-1"
                             : "font-bold mb-5"
