@@ -10,14 +10,14 @@ const SearchBar = ({ className }: SearchBarProps) => {
             noValidate
             action=""
             role="search"
-            className={`${className} relative`}
+            className={`${className} relative mt-8 mb-11`}
         >
             <input
                 placeholder="Search here"
                 title="Search bar"
-                className=" p-4 w-full font-sans tracking-wider rounded-lg  border border-solid border-[#D0D0D0] text-grey-eclipse focus:outline-0"
+                className=" py-4 pr-4 pl-16 w-full bg-albescent-white font-sans tracking-wider rounded-[27px] focus:outline-0 text-brown-derby placeholder-brown-derby"
             />
-            <SearchIcon className="absolute right-4 top-4" />
+            <SearchIcon className="absolute left-4 top-4" />
         </form>
     );
 };

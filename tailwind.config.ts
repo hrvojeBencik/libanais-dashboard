@@ -14,7 +14,7 @@ const config: Config = {
                 "white-smoke": "#f9f9f9",
                 "grey-eclipse": "#3c3c3c",
                 "brown-coffee": "#482428",
-                "black-chocolate": "#1C170D ",
+                "black-chocolate": "#1c170d",
             },
             fontFamily: {
                 sans: ["Poppins", "sans-serif"],
