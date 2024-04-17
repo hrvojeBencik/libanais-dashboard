@@ -2,11 +2,13 @@ import type { Metadata } from "next";
 import { Poppins } from "next/font/google";
 import "./globals.css";
 import Sidebar from "./_components/modules/Sidebar/Sidebar";
-import Header from "./_components/modules/Header/Header";
+import Banner from "./_components/elements/Banner/Banner";
 
 const poppins = Poppins({
     subsets: ["latin"],
-    weight: ["500"],
+    display: "swap",
+    variable: "--font-poppins",
+    weight: ["100", "200", "300", "400", "500", "600", "700", "800", "900"],
 });
 
 export const metadata: Metadata = {
@@ -23,9 +25,11 @@ export default function RootLayout({
         <html lang="en">
             <body className={`${poppins.className} flex w-full`}>
                 <Sidebar />
-                <div className="block flex-grow p-12">
-                    <Header />
-                    {children}
+                <div className="w-full">
+                    <Banner />
+                    <div className="block flex-grow p-11 bg-white-smoke">
+                        {children}
+                    </div>
                 </div>
             </body>
         </html>

@@ -1,6 +1,6 @@
 import Logo from "@/public/assets/Logo.png";
 import home from "@/public/assets/svg/home";
-import menu from "@/public/assets/svg/menu";
+import box from "@/public/assets/svg/box";
 import edit from "@/public/assets/svg/edit";
 import person from "@/public/assets/svg/person";
 import pie from "@/public/assets/svg/pie";
@@ -24,11 +24,6 @@ export const data: SidebarData = {
             path: "/",
         },
         {
-            icon: menu,
-            title: "Ingredient List",
-            path: "/ingredients",
-        },
-        {
             icon: edit,
             title: "Recipe List",
             path: "/recipes",
@@ -42,6 +37,11 @@ export const data: SidebarData = {
             icon: pie,
             title: "Analytics",
             path: "/analytics",
+        },
+        {
+            icon: box,
+            title: "Packaging",
+            path: "/packaging",
         },
     ],
 };
