@@ -2,6 +2,7 @@
 
 interface MenuProps {
     className?: string;
+    onClick: React.MouseEventHandler<HTMLButtonElement>;
 }
 
 export default ({ className }: MenuProps) => (
