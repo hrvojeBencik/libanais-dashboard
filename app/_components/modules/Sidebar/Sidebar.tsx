@@ -6,8 +6,9 @@ import { usePathname } from "next/navigation";
 
 const Sidebar = (type: any) => {
     const pathname = usePathname();
+
     return (
-        <aside className="h-screen px-12 bg-albescent-white items-center">
+        <aside className="top-0 h-screen px-12 bg-albescent-white items-center sticky">
             <Image
                 src={data.logo}
                 alt="Libanais logo"
