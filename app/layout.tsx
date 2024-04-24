@@ -23,11 +23,13 @@ export default function RootLayout({
 }>) {
     return (
         <html lang="en">
-            <body className={`${poppins.className} flex `}>
+            <body
+                className={`${poppins.className} flex min-h-screen overflow-hidden`}
+            >
                 <SidebarHandler>
                     <div className="w-full bg-white-smoke ">
                         <Banner />
-                        <div className="flex flex-col wrapper">{children}</div>
+                        <div className="flex flex-col ">{children}</div>
                     </div>
                 </SidebarHandler>
             </body>

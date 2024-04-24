@@ -1,9 +1,9 @@
 import Image from "next/image";
 import baklava from "public/assets/baklava.png";
-import DefaultButton from "../../DefaultButton/DefaultButton";
+import DefaultButton from "../DefaultButton/DefaultButton";
 const RecipeCard = () => {
     return (
-        <div className="w-full flex bg-white rounded-xl p-4 justify-between max-w-[1000px]">
+        <div className="w-full flex bg-white rounded-xl p-4 justify-between">
             <div>
                 <h4 className=" text-brown-coffee">
                     Ingredients: Phyllo Dough, Clarified Butter, Pistachios,
