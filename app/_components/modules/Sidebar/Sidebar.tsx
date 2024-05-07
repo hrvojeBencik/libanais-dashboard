@@ -13,6 +13,7 @@ const Sidebar = (type: any) => {
                 src={data.logo}
                 alt="Libanais logo"
                 className="max-w-150 mt-18 mb-11 mx-auto"
+                priority={true}
             />
             {data.links.map((link, key) => (
                 <Link

@@ -35,7 +35,7 @@ const TextareaField = ({
                 onChange={onChange}
                 required={required}
             />
-            {error && <p>Input filed can't be empty!</p>}
+            {error && <p>Input filed can&apos;t be empty!</p>}
         </>
     );
 };

@@ -1,11 +1,11 @@
 "use client";
 
-interface MenuProps {
+interface BoxProps {
     className?: string;
-    onClick: React.MouseEventHandler<HTMLButtonElement>;
+    onClick?: React.MouseEventHandler<HTMLButtonElement>;
 }
 
-export default ({ className }: MenuProps) => (
+export default ({ className }: BoxProps) => (
     <svg
         width="20"
         height="22"

@@ -40,7 +40,7 @@ const InputField = ({
                 </label>
                 {children}
             </div>
-            {error && <p>Input filed can't be empty!</p>}
+            {error && <p>Input filed can&apos;t be empty!</p>}
         </div>
     );
 };
