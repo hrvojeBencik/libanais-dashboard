@@ -1,7 +1,7 @@
 "use client";
 
 interface BoxProps {
-    className: string;
+    className?: string;
 }
 
 export default ({ className }: BoxProps) => (
