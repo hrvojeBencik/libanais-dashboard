@@ -23,9 +23,7 @@ export default function RootLayout({
 }>) {
     return (
         <html lang="en">
-            <body
-                className={`${poppins.className} flex min-h-screen overflow-hidden`}
-            >
+            <body className={`${poppins.className} flex min-h-screen`}>
                 <SidebarHandler>
                     <div className="w-full bg-white-smoke ">
                         <Banner />
