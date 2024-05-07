@@ -6,12 +6,14 @@ interface ImageInputProps {
     className?: string;
     previewPhoto?: string;
     handleInputChange: React.ChangeEventHandler<HTMLInputElement>;
+    error: boolean;
 }
 
 const ImageInput = ({
     className,
     previewPhoto,
     handleInputChange,
+    error,
 }: ImageInputProps) => {
     return (
         <div
@@ -24,7 +26,7 @@ const ImageInput = ({
                         <img
                             src={previewPhoto}
                             alt=""
-                            className=""
+                            className="max-h-44 w-auto"
                         />
                     </div>
                 )}
@@ -38,7 +40,7 @@ const ImageInput = ({
                         onChange={handleInputChange}
                         type="file"
                         accept="image/*"
-                        name="photo"
+                        name="imageUrl"
                         className="file-button ml-[6px] file:border-[1px] mt-[6.33px] file:text-black-chocolate file:border-albescent-white file:bg-white file:rounded file:py-[6.33px] file:px-[12.66px] file:mr-[18px] file:text-[10.13px] text-[10.13px] text-brown-coffee font-medium"
                     />
                     {/* {previewPhoto && (
@@ -52,6 +54,7 @@ const ImageInput = ({
                     )} */}
                 </div>
             </div>
+            {error && <p>You must select an image.</p>}
         </div>
     );
 };

@@ -1,5 +1,5 @@
 "use client";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Header from "../../elements/Header/Header";
 import InputField from "../../elements/InputField/InputField";
 import TextareaField from "../../elements/TextareaField/TextareaField";
@@ -7,6 +7,11 @@ import DefaultButton from "../../elements/DefaultButton/DefaultButton";
 import IngredientForm from "../IngredientForm/IngredientForm";
 import ImageInput from "../ImageInput/ImageInput";
 import { inputChangeHandler } from "@/app/_utils/inputChangeHandle";
+import { Ingredient } from "@/app/_interfaces/Ingredient";
+import validateForm from "@/app/_utils/validateForm";
+import { db, storage } from "../../../firebase";
+import { addDoc, updateDoc, collection, doc } from "firebase/firestore";
+import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 
 interface RecipeFormProps {
     handleClose: boolean | (() => void);
@@ -14,41 +19,52 @@ interface RecipeFormProps {
 }
 
 interface FormValues {
-    recipe: string;
+    name: string;
     description: string;
-    photo: File | string | null;
-    ingredients: string;
+    imageUrl: string;
+    [key: string]: string;
 }
 
 const RecipeForm = ({ handleClose, url }: RecipeFormProps) => {
     const [previewPhoto, setPreviewPhoto] = useState(url || "");
     const [formValues, setFormValues] = useState(getDefaultFormValues());
     const [file, setFile] = useState<File | null>(null);
-    // const [sendingForm, setSendingForm] = useState(false);
+    const [ingredientList, setIngredientList] = useState<Ingredient[]>([]);
+    const [emptyIngredients, setEmptyIngredients] = useState(false);
+    const [formErrors, setFormErrors] = useState({
+        name: false,
+        description: false,
+        imageUrl: false,
+    });
+    const [sendingForm, setSendingForm] = useState(false);
 
-    const [ingredients, setIngredients] = useState([]);
     function getDefaultFormValues(): FormValues {
         return {
-            recipe: "",
+            name: "",
             description: "",
-            photo: "",
-            ingredients: "",
+            imageUrl: "",
         };
     }
 
-    const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        inputChangeHandler(e, setFormValues, setPreviewPhoto, setFile);
-    };
-
-    const handleDescriptionChange = (
-        e: React.ChangeEvent<HTMLTextAreaElement>
+    const handleInputChange = (
+        e:
+            | React.ChangeEvent<HTMLInputElement>
+            | React.ChangeEvent<HTMLTextAreaElement>
     ) => {
-        const { name, value } = e.target;
+        if (sendingForm) {
+            return;
+        }
 
-        setFormValues((previousFormValues) => ({
-            ...previousFormValues,
-            [name]: value,
-        }));
+        const { name } = e.target;
+
+        if ([name]) {
+            setFormErrors((previousValues) => ({
+                ...previousValues,
+                [name]: false,
+            }));
+        }
+
+        inputChangeHandler(e, setFormValues, setPreviewPhoto, setFile);
     };
 
     // const clearPreview = () => {
@@ -61,10 +77,70 @@ const RecipeForm = ({ handleClose, url }: RecipeFormProps) => {
     //     }
     // };
 
-    const handleClick = () => {
+    const handleCloseForm = () => {
         if (typeof handleClose === "function") {
             handleClose();
         }
+    };
+
+    const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+        e.preventDefault();
+
+        if (sendingForm) {
+            return;
+        }
+
+        setSendingForm(true);
+
+        const errors = validateForm(formValues);
+        setFormErrors(errors);
+
+        if (
+            Object.values(errors).some((error) => error) ||
+            ingredientList.length < 1
+        ) {
+            if (ingredientList.length < 1) {
+                setEmptyIngredients(true);
+            }
+            setSendingForm(false);
+
+            return;
+        }
+
+        let photoUrl = "";
+        const docRef = await addDoc(collection(db, "recipeList"), {
+            id: "",
+            ...formValues,
+            ingredients: ingredientList.map((ingredient) => ({
+                ...ingredient,
+                lotNumber: "", //
+                quantityHalf: "",
+            })),
+            date: new Date().toISOString(),
+            imageUrl: "", // Initially set photo to empty string
+        });
+
+        const recipeId = docRef.id;
+
+        try {
+            if (file) {
+                const fileRef = ref(
+                    storage,
+                    `recipes/${recipeId}/${file.name}`
+                );
+                const snapshot = await uploadBytes(fileRef, file);
+                photoUrl = await getDownloadURL(fileRef);
+
+                await updateDoc(doc(db, "recipeList", docRef.id), {
+                    id: docRef.id,
+                    imageUrl: photoUrl,
+                });
+            }
+        } catch (error) {
+            console.log(error);
+        }
+        handleCloseForm();
+        setSendingForm(false);
     };
 
     return (
@@ -74,52 +150,61 @@ const RecipeForm = ({ handleClose, url }: RecipeFormProps) => {
                 subtitle="Hi, Name. Let's add a new recipe to your inventory!"
             />
             <form
-                onSubmit={() => {}}
+                onSubmit={handleSubmit}
                 action=""
-                className="mt-[58.5px] flex"
+                className="mt-[58.5px]"
                 name="recipeForm"
             >
-                <div className="flex flex-col w-[52%]">
-                    <InputField
-                        label="Recipe Name"
-                        type="text"
-                        name="recipe"
-                        required
-                        value={formValues.recipe}
-                        onChange={handleInputChange}
-                        placeholder="Enter the recipe name"
-                    />
-                    <TextareaField
-                        label="Short Description"
-                        rows={3}
-                        value={formValues.description}
-                        name="description"
-                        placeholder="Enter recipe's short description"
-                        onChange={handleDescriptionChange}
+                <div className="flex">
+                    <div className="flex flex-col w-[52%]">
+                        <InputField
+                            label="Recipe Name"
+                            type="text"
+                            name="name"
+                            value={formValues.name}
+                            onChange={handleInputChange}
+                            placeholder="Enter the recipe name"
+                            error={formErrors.name}
+                        />
+                        <TextareaField
+                            label="Short Description"
+                            rows={3}
+                            value={formValues.description}
+                            name="description"
+                            placeholder="Enter recipe's short description"
+                            onChange={handleInputChange}
+                            error={formErrors.description}
+                        />
+                    </div>
+                    <ImageInput
+                        //clearPreview={clearPreview}
+                        className="pl-[92px]"
+                        previewPhoto={previewPhoto}
+                        handleInputChange={handleInputChange}
+                        error={formErrors.imageUrl}
                     />
                 </div>
-                <ImageInput
-                    //clearPreview={clearPreview}
-                    className="pl-[92px]"
-                    previewPhoto={previewPhoto}
-                    handleInputChange={handleInputChange}
+                <IngredientForm
+                    setIngredientList={setIngredientList}
+                    emptyIngredients={emptyIngredients}
+                    setEmptyIngredients={setEmptyIngredients}
                 />
+                <div className="mt-[180px] flex gap-[51px]">
+                    <DefaultButton
+                        text="Go Back"
+                        className="form-button"
+                        light={true}
+                        onClick={() => {
+                            handleCloseForm();
+                        }}
+                    />
+                    <DefaultButton
+                        text="Save Recipe"
+                        type="submit"
+                        className="form-button"
+                    />
+                </div>
             </form>
-            <IngredientForm />
-            <div className="mt-[180px] flex gap-[51px]">
-                <DefaultButton
-                    text="Go Back"
-                    className="form-button"
-                    light={true}
-                    onClick={() => {
-                        handleClick();
-                    }}
-                />
-                <DefaultButton
-                    text="Save Recipe"
-                    className="form-button"
-                />
-            </div>
         </div>
     );
 };

@@ -1,31 +1,56 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useState } from "react";
 import DefaultButton from "../../elements/DefaultButton/DefaultButton";
 import Bin from "public/assets/svg/bin";
 import { inputChangeHandler } from "@/app/_utils/inputChangeHandle";
 import InputField from "../../elements/InputField/InputField";
 import IngredientButton from "./IngredientButton/IngredientButton";
+import { Dispatch, SetStateAction } from "react";
+import validateForm from "@/app/_utils/validateForm";
+import { error } from "console";
+
+interface IngredientFormProps {
+    setIngredientList: Dispatch<SetStateAction<FormValues[]>>;
+    emptyIngredients: boolean;
+    setEmptyIngredients: Dispatch<SetStateAction<boolean>>;
+}
 
 interface FormValues {
-    ingredient: string;
-    amount: string;
+    name: string;
+    quantityFull: number | "";
     unit: string;
 }
 
-const IngredientForm = () => {
+const IngredientForm = ({
+    setIngredientList,
+    emptyIngredients,
+    setEmptyIngredients,
+}: IngredientFormProps) => {
     const [ingredients, setIngredients] = useState<FormValues[]>([]);
-    const [formValues, setFormValues] = useState(getDefaultFormValues());
     const [unit, setUnit] = useState("grams");
+    const [formValues, setFormValues] = useState(getDefaultFormValues());
+    const [formErrors, setFormErrors] = useState({
+        name: false,
+        quantityFull: false,
+    });
 
     function getDefaultFormValues(): FormValues {
         return {
-            ingredient: "",
-            amount: "",
-            unit: "",
+            name: "",
+            quantityFull: "",
+            unit: "grams",
         };
     }
 
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const { name, value } = e.target;
+
+        if (name) {
+            setFormErrors((previousValues) => ({
+                ...previousValues,
+                [name]: false,
+            }));
+        }
         inputChangeHandler(e, setFormValues);
     };
 
@@ -35,15 +60,30 @@ const IngredientForm = () => {
         };
     };
 
-    const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-        e.preventDefault();
+    const handleAddIngredient = () => {
+        const errors = validateForm(formValues);
+
+        setFormErrors(errors);
+
+        if (Object.values(errors).some((error) => error)) {
+            return;
+        }
+
         setIngredients((prevIngredients) => [
             ...prevIngredients,
-            { ...formValues, unit: unit },
+            {
+                ...formValues,
+                unit: unit,
+            },
         ]);
         setFormValues(getDefaultFormValues());
         setUnit("grams");
+        setEmptyIngredients(false);
     };
+
+    useEffect(() => {
+        setIngredientList(ingredients);
+    }, [ingredients]);
 
     const handleRemoveIngredient = (key: number) => {
         setIngredients((prevIngredients) =>
@@ -52,11 +92,7 @@ const IngredientForm = () => {
     };
 
     return (
-        <form
-            className="mt-[17.5px]"
-            onSubmit={handleSubmit}
-            name="ingredientForm"
-        >
+        <div className="mt-[17.5px]">
             <p className="mb-[53.5px] text-[20.25px] font-semibold tracking-tight leading-snug">
                 Ingredients
             </p>
@@ -66,28 +102,25 @@ const IngredientForm = () => {
                         label="Ingredient Name"
                         type="text"
                         placeholder="Enter the ingredient name"
-                        name="ingredient"
-                        value={formValues.ingredient}
+                        name="name"
+                        value={formValues.name}
                         onChange={handleInputChange}
-                        required
+                        error={formErrors.name}
                     />
-                    <div className="flex gap-5 mt-[8px] items-end">
-                        <div className="flex-column">
-                            <InputField
-                                label="Amount"
-                                type="number"
-                                placeholder="500"
-                                name="amount"
-                                value={formValues.amount}
-                                onChange={handleInputChange}
-                                required
-                                className="[&::-webkit-inner-spin-button]:appearance-none "
-                            />
-                        </div>
-                        <div className="mb-7 w-full h-fit pl-[18px] pt-[18px] pb-[18px] text-[18px] rounded-[13.5px] bg-albescent-white text-brown-coffee">
+                    <InputField
+                        label="Amount"
+                        type="number"
+                        placeholder="500"
+                        name="quantityFull"
+                        value={formValues.quantityFull}
+                        onChange={handleInputChange}
+                        className="[&::-webkit-inner-spin-button]:appearance-none"
+                        error={formErrors.quantityFull}
+                    >
+                        <div className="w-full pl-[18px] py-[19px] text-[18px] rounded-[13.5px] bg-albescent-white text-brown-coffee">
                             {unit}
                         </div>
-                    </div>
+                    </InputField>
 
                     <div className="flex justify-between mb-[42px] gap-[20px]">
                         <IngredientButton
@@ -105,7 +138,8 @@ const IngredientForm = () => {
                     </div>
                     <DefaultButton
                         text="Add Ingredient"
-                        type="submit"
+                        type="button"
+                        onClick={handleAddIngredient}
                         className="p-2.5 rounded-[13.5px] "
                     />
                 </div>
@@ -120,8 +154,9 @@ const IngredientForm = () => {
                                       key={key}
                                       className="flex w-3/4 justify-between"
                                   >
-                                      {ingredient.ingredient} -{" "}
-                                      {ingredient.amount} {ingredient.unit}
+                                      {ingredient.name} -{" "}
+                                      {ingredient.quantityFull}{" "}
+                                      {ingredient.unit}
                                       <Bin
                                           onClick={() => {
                                               handleRemoveIngredient(key);
@@ -131,9 +166,10 @@ const IngredientForm = () => {
                               ))
                             : "Used Ingredients"}
                     </div>
+                    {emptyIngredients && <p>Add Ingredients.</p>}
                 </div>
             </div>
-        </form>
+        </div>
     );
 };
 
