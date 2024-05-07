@@ -1,18 +1,22 @@
 export const inputChangeHandler = (
-    e: React.ChangeEvent<HTMLInputElement>,
+    e:
+        | React.ChangeEvent<HTMLInputElement>
+        | React.ChangeEvent<HTMLTextAreaElement>,
     setFormValues: (data: any) => void,
     setPreviewPhoto?: (photo: string) => void,
     setFile?: (file: any) => void
 ) => {
-    const { name, value, files } = e.target;
+    const { name, value } = e.target;
 
     setFormValues((data: any) => ({
         ...data,
         [name]: value,
     }));
 
-    const file = files?.[0];
-    if (files && setPreviewPhoto && setFile) {
+    const fileInput = e.target as HTMLInputElement;
+
+    const file = fileInput.files?.[0];
+    if (fileInput && setPreviewPhoto && setFile) {
         if (file) {
             if (file.size >= 1 * 1024 * 1024 * 1024) {
                 console.log("File size exceeds 1GB");
@@ -28,7 +32,7 @@ export const inputChangeHandler = (
                     setPreviewPhoto(reader.result as string);
                 };
                 reader.readAsDataURL(file);
-                setFile(files[0]);
+                setFile(fileInput.files?.[0]);
             }
         }
     }
