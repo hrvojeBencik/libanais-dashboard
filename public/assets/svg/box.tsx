@@ -1,11 +1,6 @@
 "use client";
 
-interface BoxProps {
-    className?: string;
-    onClick?: React.MouseEventHandler<HTMLButtonElement>;
-}
-
-export default ({ className }: BoxProps) => (
+export default () => (
     <svg
         width="20"
         height="22"
