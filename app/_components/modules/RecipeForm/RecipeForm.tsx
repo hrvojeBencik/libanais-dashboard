@@ -3,7 +3,6 @@ import { useEffect, useState } from "react";
 import Header from "../../elements/Header/Header";
 import InputField from "../../elements/InputField/InputField";
 import TextareaField from "../../elements/TextareaField/TextareaField";
-import DefaultButton from "../../elements/DefaultButton/DefaultButton";
 import IngredientForm from "../IngredientForm/IngredientForm";
 import ImageInput from "../ImageInput/ImageInput";
 import { inputChangeHandler } from "@/app/_utils/inputChangeHandle";
@@ -29,7 +28,7 @@ interface FormValues {
 }
 
 const RecipeForm = ({ handleClose, recipe, updateRecipe }: RecipeFormProps) => {
-    const [previewPhoto, setPreviewPhoto] = useState(recipe?.image || "");
+    const [previewPhoto, setPreviewPhoto] = useState(recipe?.imageUrl || "");
     const [formValues, setFormValues] = useState(
         recipe || getDefaultFormValues()
     );
