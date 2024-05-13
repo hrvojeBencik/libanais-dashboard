@@ -33,7 +33,7 @@ const Employees = () => {
                         buttonText="Add Employee"
                         handleOpen={handleOpen}
                     />
-                    <table className="w-full text-left mt-4 ">
+                    <table className="w-full text-left my-4 ">
                         <thead>
                             <tr>
                                 <th>PIN</th>
