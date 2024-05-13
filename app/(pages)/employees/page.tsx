@@ -1,29 +1,28 @@
 "use client";
-import PageHeader from "@/app/_components/modules/PageHeader/PageHeader";
 import { useState, useEffect } from "react";
+import { Employee } from "@/app/_interfaces/Employee";
+import { loadData } from "@/app/_utils/loadData";
+import PageHeader from "@/app/_components/modules/PageHeader/PageHeader";
 import useOpenForm from "@/app/_helpers/useOpenForm";
 import EmployeeForm from "@/app/_components/modules/EmployeeForm/EmployeeForm";
+import EmployeeRow from "@/app/_components/modules/EmployeeRow/EmployeeRow";
 
 const Employees = () => {
     const [isOpen, handleOpen, handleClose] = useOpenForm(false);
     const [isUpdated, setIsUpdated] = useState(false);
+    const [employeeList, setEmplyeeList] = useState<Employee[]>([]);
 
     useEffect(() => {
         setIsUpdated(false);
+        loadData("employeeList", setEmplyeeList);
     }, [isOpen, isUpdated]);
-
-    const handleClick = () => {
-        if (typeof handleOpen === "function") {
-            handleOpen();
-        }
-    };
 
     const updateEmployee = () => {
         setIsUpdated(true);
     };
 
     return (
-        <div className="w-full pt-[40.5px]">
+        <div className="w-full pt-[40.5px] relative">
             {isOpen ? (
                 <EmployeeForm handleClose={handleClose} />
             ) : (
@@ -45,41 +44,13 @@ const Employees = () => {
                             </tr>
                         </thead>
                         <tbody>
-                            <tr>
-                                <td>1234</td>
-                                <td className="name-row">Alice Johnson</td>
-                                <td>Chef</td>
-                                <td>alice@libanais.com</td>
-                                <td onClick={handleClick}>Edit</td>
-                            </tr>
-                            <tr>
-                                <td>5678</td>
-                                <td className="name-row">Bob Smith</td>
-                                <td>Sous Chef</td>
-                                <td>bob@libanais.com</td>
-                                <td onClick={handleClick}>Edit</td>
-                            </tr>
-                            <tr>
-                                <td>9101</td>
-                                <td className="name-row">Charlie Davis</td>
-                                <td>Kitchen Hand</td>
-                                <td>charlie@libanais.com</td>
-                                <td onClick={handleClick}>Edit</td>
-                            </tr>
-                            <tr>
-                                <td>1121</td>
-                                <td className="name-row">Dorotdy Miller</td>
-                                <td>Prep Cook</td>
-                                <td>dorotdy@libanais.com</td>
-                                <td onClick={handleClick}>Edit</td>
-                            </tr>
-                            <tr>
-                                <td>3141</td>
-                                <td className="name-row">Eve Wilson</td>
-                                <td>Line Cook</td>
-                                <td>eve@libanais.com</td>
-                                <td onClick={handleClick}>Edit</td>
-                            </tr>
+                            {employeeList.map((employee) => (
+                                <EmployeeRow
+                                    key={employee.id}
+                                    employee={employee}
+                                    updateEmployee={updateEmployee}
+                                />
+                            ))}
                         </tbody>
                     </table>
                 </div>
