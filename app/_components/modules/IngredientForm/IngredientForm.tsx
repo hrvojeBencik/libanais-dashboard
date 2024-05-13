@@ -7,12 +7,12 @@ import InputField from "../../elements/InputField/InputField";
 import IngredientButton from "./IngredientButton/IngredientButton";
 import { Dispatch, SetStateAction } from "react";
 import validateForm from "@/app/_utils/validateForm";
-import { error } from "console";
 
 interface IngredientFormProps {
     setIngredientList: Dispatch<SetStateAction<FormValues[]>>;
     emptyIngredients: boolean;
     setEmptyIngredients: Dispatch<SetStateAction<boolean>>;
+    ingredientList: any;
 }
 
 interface FormValues {
@@ -25,8 +25,11 @@ const IngredientForm = ({
     setIngredientList,
     emptyIngredients,
     setEmptyIngredients,
+    ingredientList,
 }: IngredientFormProps) => {
-    const [ingredients, setIngredients] = useState<FormValues[]>([]);
+    const [ingredients, setIngredients] = useState<FormValues[]>(
+        ingredientList || []
+    );
     const [unit, setUnit] = useState("grams");
     const [formValues, setFormValues] = useState(getDefaultFormValues());
     const [formErrors, setFormErrors] = useState({

@@ -15,7 +15,8 @@ import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 
 interface RecipeFormProps {
     handleClose: boolean | (() => void);
-    url?: string;
+    recipe?: any;
+    updateRecipe?: any;
 }
 
 interface FormValues {
@@ -25,9 +26,11 @@ interface FormValues {
     [key: string]: string;
 }
 
-const RecipeForm = ({ handleClose, url }: RecipeFormProps) => {
-    const [previewPhoto, setPreviewPhoto] = useState(url || "");
-    const [formValues, setFormValues] = useState(getDefaultFormValues());
+const RecipeForm = ({ handleClose, recipe, updateRecipe }: RecipeFormProps) => {
+    const [previewPhoto, setPreviewPhoto] = useState(recipe?.image || "");
+    const [formValues, setFormValues] = useState(
+        recipe || getDefaultFormValues()
+    );
     const [file, setFile] = useState<File | null>(null);
     const [ingredientList, setIngredientList] = useState<Ingredient[]>([]);
     const [emptyIngredients, setEmptyIngredients] = useState(false);
@@ -67,16 +70,6 @@ const RecipeForm = ({ handleClose, url }: RecipeFormProps) => {
         inputChangeHandler(e, setFormValues, setPreviewPhoto, setFile);
     };
 
-    // const clearPreview = () => {
-    //     setPreviewPhoto(url || "");
-    //     const fileInput = document.querySelector(
-    //         'input[type="file"]'
-    //     ) as HTMLInputElement;
-    //     if (fileInput) {
-    //         fileInput.value = ""; // Reset the input file field value
-    //     }
-    // };
-
     const handleCloseForm = () => {
         if (typeof handleClose === "function") {
             handleClose();
@@ -107,37 +100,60 @@ const RecipeForm = ({ handleClose, url }: RecipeFormProps) => {
             return;
         }
 
-        let photoUrl = "";
-        const docRef = await addDoc(collection(db, "recipeList"), {
-            id: "",
-            ...formValues,
-            ingredients: ingredientList.map((ingredient) => ({
-                ...ingredient,
-                lotNumber: "", //
-                quantityHalf: "",
-            })),
-            date: new Date().toISOString(),
-            imageUrl: "", // Initially set photo to empty string
-        });
+        if (recipe) {
+            await updateDoc(doc(db, "recipeList", recipe.id), {
+                ...formValues,
+                ingredients: ingredientList.map((ingredient) => ({
+                    ...ingredient,
+                    lotNumber: "", //
+                    quantityHalf: "",
+                })),
+            });
 
-        const recipeId = docRef.id;
-
-        try {
             if (file) {
-                const fileRef = ref(
-                    storage,
-                    `recipes/${recipeId}/${file.name}`
-                );
-                const snapshot = await uploadBytes(fileRef, file);
-                photoUrl = await getDownloadURL(fileRef);
+                const fileRef = ref(storage, `recipes/${recipe.id}/image.jpeg`);
+                await uploadBytes(fileRef, file);
+                const photoUrl = await getDownloadURL(fileRef);
 
-                await updateDoc(doc(db, "recipeList", docRef.id), {
-                    id: docRef.id,
+                await updateDoc(doc(db, "recipeList", recipe.id), {
                     imageUrl: photoUrl,
                 });
             }
-        } catch (error) {
-            console.log(error);
+            updateRecipe();
+            handleCloseForm();
+            setSendingForm(false);
+        } else {
+            const docRef = await addDoc(collection(db, "recipeList"), {
+                id: "",
+                ...formValues,
+                ingredients: ingredientList.map((ingredient) => ({
+                    ...ingredient,
+                    lotNumber: "", //
+                    quantityHalf: "",
+                })),
+                date: new Date().toISOString(),
+                imageUrl: "", // Initially set photo to empty string
+            });
+
+            const recipeId = docRef.id;
+
+            try {
+                if (file) {
+                    const fileRef = ref(
+                        storage,
+                        `recipes/${recipeId}/image.jpeg`
+                    );
+                    await uploadBytes(fileRef, file);
+                    const photoUrl = await getDownloadURL(fileRef);
+
+                    await updateDoc(doc(db, "recipeList", docRef.id), {
+                        id: docRef.id,
+                        imageUrl: photoUrl,
+                    });
+                }
+            } catch (error) {
+                console.log(error);
+            }
         }
         handleCloseForm();
         setSendingForm(false);
@@ -146,8 +162,10 @@ const RecipeForm = ({ handleClose, url }: RecipeFormProps) => {
     return (
         <div className="wrapper pl-[18px] ">
             <Header
-                title="Add Recipe"
-                subtitle="Hi, Name. Let's add a new recipe to your inventory!"
+                title={recipe ? "Edit Recipe" : "Add Recipe"}
+                subtitle={`Hi, Name. Let's ${
+                    recipe ? "edit reicpe in" : "add a new recipe to"
+                }  your inventory!`}
             />
             <form
                 onSubmit={handleSubmit}
@@ -177,7 +195,6 @@ const RecipeForm = ({ handleClose, url }: RecipeFormProps) => {
                         />
                     </div>
                     <ImageInput
-                        //clearPreview={clearPreview}
                         className="pl-[92px]"
                         previewPhoto={previewPhoto}
                         handleInputChange={handleInputChange}
@@ -188,18 +205,21 @@ const RecipeForm = ({ handleClose, url }: RecipeFormProps) => {
                     setIngredientList={setIngredientList}
                     emptyIngredients={emptyIngredients}
                     setEmptyIngredients={setEmptyIngredients}
+                    ingredientList={recipe?.ingredients}
                 />
-                <div className="mt-[180px] flex gap-[51px]">
+                <div className="mt-[160px] flex gap-[51px]">
                     <DefaultButton
                         text="Go Back"
                         className="form-button"
                         light={true}
-                        onClick={() => {
+                        onClick={(e) => {
+                            e.preventDefault();
                             handleCloseForm();
                         }}
                     />
+
                     <DefaultButton
-                        text="Save Recipe"
+                        text={recipe ? "Update Recipe" : "Save Recipe"}
                         type="submit"
                         className="form-button"
                     />
