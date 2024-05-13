@@ -1,8 +1,15 @@
 import { ChangeEvent } from "react";
 
+export enum InputType {
+    Text = "text",
+    Number = "number",
+    Email = "email",
+    Password = "password",
+}
+
 interface InputFieldProps {
     className?: string;
-    type: "text" | "number" | "email" | "password";
+    type: InputType;
     label: string;
     value: string | number;
     name: string;

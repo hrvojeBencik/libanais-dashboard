@@ -12,6 +12,7 @@ import validateForm from "@/app/_utils/validateForm";
 import { db, storage } from "../../../firebase";
 import { addDoc, updateDoc, collection, doc } from "firebase/firestore";
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
+import { InputType } from "../../elements/InputField/InputField";
 
 interface RecipeFormProps {
     handleClose: boolean | (() => void);
@@ -177,7 +178,7 @@ const RecipeForm = ({ handleClose, recipe, updateRecipe }: RecipeFormProps) => {
                     <div className="flex flex-col w-[52%]">
                         <InputField
                             label="Recipe Name"
-                            type="text"
+                            type={InputType.Text}
                             name="name"
                             value={formValues.name}
                             onChange={handleInputChange}

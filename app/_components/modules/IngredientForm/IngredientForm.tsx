@@ -7,6 +7,7 @@ import InputField from "../../elements/InputField/InputField";
 import IngredientButton from "./IngredientButton/IngredientButton";
 import { Dispatch, SetStateAction } from "react";
 import validateForm from "@/app/_utils/validateForm";
+import { InputType } from "../../elements/InputField/InputField";
 
 interface IngredientFormProps {
     setIngredientList: Dispatch<SetStateAction<FormValues[]>>;
@@ -103,7 +104,7 @@ const IngredientForm = ({
                 <div className="flex flex-col w-[52%]">
                     <InputField
                         label="Ingredient Name"
-                        type="text"
+                        type={InputType.Text}
                         placeholder="Enter the ingredient name"
                         name="name"
                         value={formValues.name}
@@ -112,7 +113,7 @@ const IngredientForm = ({
                     />
                     <InputField
                         label="Amount"
-                        type="number"
+                        type={InputType.Number}
                         placeholder="500"
                         name="quantityFull"
                         value={formValues.quantityFull}

@@ -20,8 +20,7 @@ const ImageInput = ({
             className={`${className} flex-column items-center w-1/2 mt-[28px]`}
         >
             <div className="mb-[58px] ml-[22px]">
-                {!previewPhoto && <PlaceholderIcon className="mb-16" />}
-                {previewPhoto && (
+                {previewPhoto ? (
                     <div className="">
                         <img
                             src={previewPhoto}
@@ -29,6 +28,8 @@ const ImageInput = ({
                             className="max-h-44 w-auto"
                         />
                     </div>
+                ) : (
+                    <PlaceholderIcon className="mb-16" />
                 )}
             </div>
             <div className="">
