@@ -13,6 +13,7 @@ import { db, storage } from "../../../firebase";
 import { addDoc, updateDoc, collection, doc } from "firebase/firestore";
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import { InputType } from "../../elements/InputField/InputField";
+import FormButtons from "../../elements/FormButtons/FormButtons";
 
 interface RecipeFormProps {
     handleClose: boolean | (() => void);
@@ -208,23 +209,11 @@ const RecipeForm = ({ handleClose, recipe, updateRecipe }: RecipeFormProps) => {
                     setEmptyIngredients={setEmptyIngredients}
                     ingredientList={recipe?.ingredients}
                 />
-                <div className="mt-[160px] flex gap-[51px]">
-                    <DefaultButton
-                        text="Go Back"
-                        className="form-button"
-                        light={true}
-                        onClick={(e) => {
-                            e.preventDefault();
-                            handleCloseForm();
-                        }}
-                    />
-
-                    <DefaultButton
-                        text={recipe ? "Update Recipe" : "Save Recipe"}
-                        type="submit"
-                        className="form-button"
-                    />
-                </div>
+                <FormButtons
+                    className="mt-[160px]"
+                    text="Recipes"
+                    handleCloseForm={handleCloseForm}
+                />
             </form>
         </div>
     );
