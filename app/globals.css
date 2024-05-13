@@ -1,3 +1,24 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+.wrapper {
+    max-width: 1080px;
+    margin-inline: auto;
+}
+
+.flex-column {
+    display: flex;
+    flex-direction: column;
+}
+
+.file-button::file-selector-button {
+    border: solid;
+}
+
+.form-button {
+    min-width: 350px;
+    border-radius: 27px;
+    padding-block: 13.5px;
+    font-size: 18px;
+}

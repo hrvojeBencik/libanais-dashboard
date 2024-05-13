@@ -7,9 +7,7 @@ interface BannerProps {
 
 const Banner = ({ className }: BannerProps) => {
     return (
-        <div
-            className={`${className} ml-auto mr-0 w-full bg-albescent-white py-3.5`}
-        >
+        <div className={`${className} bg-albescent-white py-[14.06px]`}>
             <Image
                 src={EmployeeImage}
                 alt="Employee Image"

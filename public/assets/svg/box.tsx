@@ -1,16 +1,17 @@
 "use client";
 
-interface MenuProps {
+interface BoxProps {
     className?: string;
 }
 
-export default ({ className }: MenuProps) => (
+export default ({ className }: BoxProps) => (
     <svg
         width="20"
         height="22"
         viewBox="0 0 20 22"
         fill="none"
         xmlns="http://www.w3.org/2000/svg"
+        className={className}
     >
         <path
             fillRule="evenodd"

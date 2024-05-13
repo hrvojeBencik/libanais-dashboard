@@ -6,12 +6,14 @@ import { usePathname } from "next/navigation";
 
 const Sidebar = (type: any) => {
     const pathname = usePathname();
+
     return (
-        <aside className="h-screen px-12 bg-albescent-white items-center">
+        <aside className="top-0 h-screen px-12 bg-albescent-white items-center sticky">
             <Image
                 src={data.logo}
                 alt="Libanais logo"
                 className="max-w-150 mt-18 mb-11 mx-auto"
+                priority={true}
             />
             {data.links.map((link, key) => (
                 <Link
