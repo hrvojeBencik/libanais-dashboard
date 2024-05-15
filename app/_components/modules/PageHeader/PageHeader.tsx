@@ -7,12 +7,14 @@ interface PageHeaderProps {
     className?: string;
     title: string;
     subtitle: string;
+    buttonText?: string;
     handleOpen: boolean | (() => void);
 }
 const PageHeader = ({
     className,
     title,
     subtitle,
+    buttonText,
     handleOpen,
 }: PageHeaderProps) => {
     const handleClick = () => {
@@ -22,17 +24,19 @@ const PageHeader = ({
     };
 
     return (
-        <div>
+        <div className={className}>
             <div className="flex justify-between items-center ">
                 <Header
                     title={title}
                     subtitle={subtitle}
                 />
-                <DefaultButton
-                    text="Add Recipes"
-                    className="rounded-[100px] px-[105px] h-fit py-3 text-[18px]"
-                    onClick={handleClick}
-                />
+                {buttonText && (
+                    <DefaultButton
+                        text={buttonText}
+                        className="rounded-[100px] px-[105px] h-fit py-3 text-[18px]"
+                        onClick={handleClick}
+                    />
+                )}
             </div>
             <SearchBar />
         </div>

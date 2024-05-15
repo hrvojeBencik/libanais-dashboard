@@ -3,9 +3,8 @@ import RecipeCard from "@/app/_components/elements/RecipeCard/RecipeCard";
 import PageHeader from "@/app/_components/modules/PageHeader/PageHeader";
 import RecipeForm from "@/app/_components/modules/RecipeForm/RecipeForm";
 import useOpenForm from "@/app/_helpers/useOpenForm";
-import { useEffect } from "react";
 import { loadData } from "@/app/_utils/loadData";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Recipe } from "@/app/_interfaces/Recipe";
 
 const Recipes = () => {
@@ -30,17 +29,14 @@ const Recipes = () => {
                     <PageHeader
                         title="Recipe List"
                         subtitle="Hi, Name. Easily manage and add recipes!"
+                        buttonText="Add Recipes"
                         handleOpen={handleOpen}
                     />
-                    <div className=" box-border">
+                    <div className=" box-border mt-11">
                         {recipeList.map((recipe) => (
                             <RecipeCard
                                 key={recipe.id}
-                                id={recipe.id}
-                                name={recipe.name}
-                                description={recipe.description}
-                                ingredients={recipe.ingredients}
-                                image={recipe.imageUrl}
+                                recipe={recipe}
                                 updateRecipe={updateRecipe}
                             />
                         ))}

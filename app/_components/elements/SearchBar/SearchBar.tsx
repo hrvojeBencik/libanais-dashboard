@@ -10,7 +10,7 @@ const SearchBar = ({ className }: SearchBarProps) => {
             noValidate
             action=""
             role="search"
-            className={`${className} relative mt-8 mb-11`}
+            className={`${className} relative mt-8`}
         >
             <input
                 placeholder="Search here"

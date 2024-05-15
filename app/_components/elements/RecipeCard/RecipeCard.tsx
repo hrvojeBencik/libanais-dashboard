@@ -2,25 +2,14 @@ import DefaultButton from "../DefaultButton/DefaultButton";
 import { Ingredient } from "@/app/_interfaces/Ingredient";
 import useOpenForm from "@/app/_helpers/useOpenForm";
 import RecipeForm from "../../modules/RecipeForm/RecipeForm";
+import { Recipe } from "@/app/_interfaces/Recipe";
 
 interface RecipeCardProps {
-    id: string;
-    name: string;
-    description: string;
-    ingredients: Ingredient[];
-    image: string;
+    recipe: Recipe;
     updateRecipe: () => void;
 }
-const RecipeCard = ({
-    id,
-    name,
-    description,
-    ingredients,
-    image,
-    updateRecipe,
-}: RecipeCardProps) => {
-    const recipe = { id, name, description, ingredients, image };
-    const ingredientList = ingredients
+const RecipeCard = ({ recipe, updateRecipe }: RecipeCardProps) => {
+    const ingredientList = recipe.ingredients
         .map((ingredient) => ingredient.name)
         .join(", ");
 
@@ -39,9 +28,9 @@ const RecipeCard = ({
                     Ingredients: {ingredientList}
                 </h4>
                 <h2 className=" text-black-chocolate text-lg font-bold my-1">
-                    {name}
+                    {recipe.name}
                 </h2>
-                <h4 className=" text-brown-coffee">{description}</h4>
+                <h4 className=" text-brown-coffee">{recipe.description}</h4>
                 <DefaultButton
                     text="Edit Recipe"
                     className="rounded-[18px] py-1.5 px-14 mt-[18px]"
@@ -50,7 +39,7 @@ const RecipeCard = ({
             </div>
             <div className="relative overflow-hidden rounded-xl">
                 <img
-                    src={image}
+                    src={recipe.imageUrl}
                     alt=""
                     className="max-h-44 w-auto"
                 />

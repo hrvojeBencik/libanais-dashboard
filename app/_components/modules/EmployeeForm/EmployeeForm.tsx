@@ -1,43 +1,45 @@
-"use client";
-import { useEffect, useState } from "react";
-import Header from "../../elements/Header/Header";
-import InputField from "../../elements/InputField/InputField";
-import TextareaField from "../../elements/TextareaField/TextareaField";
-import IngredientForm from "../IngredientForm/IngredientForm";
-import ImageInput from "../ImageInput/ImageInput";
-import { inputChangeHandler } from "@/app/_utils/inputChangeHandle";
-import { Ingredient } from "@/app/_interfaces/Ingredient";
-import validateForm from "@/app/_utils/validateForm";
+import { useState } from "react";
+import { InputType } from "../../elements/InputField/InputField";
 import { db, storage } from "../../../firebase";
 import { addDoc, updateDoc, collection, doc } from "firebase/firestore";
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
-import { InputType } from "../../elements/InputField/InputField";
+import { inputChangeHandler } from "@/app/_utils/inputChangeHandle";
+import { Employee } from "@/app/_interfaces/Employee";
 import FormButtons from "../../elements/FormButtons/FormButtons";
+import InputField from "../../elements/InputField/InputField";
+import ImageInput from "../ImageInput/ImageInput";
+import validateForm from "@/app/_utils/validateForm";
+import Header from "../../elements/Header/Header";
 
-interface RecipeFormProps {
+interface EmployeeFormProps {
     handleClose: boolean | (() => void);
-    recipe?: any;
-    updateRecipe?: any;
+    employee?: Employee | undefined;
+    updateEmployee?: any;
 }
 
 interface FormValues {
     name: string;
-    description: string;
+    rank: string;
+    pin: string;
+    email: string;
     imageUrl: string;
-    [key: string]: string;
 }
 
-const RecipeForm = ({ handleClose, recipe, updateRecipe }: RecipeFormProps) => {
-    const [previewPhoto, setPreviewPhoto] = useState(recipe?.imageUrl || "");
+const EmployeeForm = ({
+    handleClose,
+    employee,
+    updateEmployee,
+}: EmployeeFormProps) => {
+    const [previewPhoto, setPreviewPhoto] = useState(employee?.imageUrl || "");
     const [formValues, setFormValues] = useState(
-        recipe || getDefaultFormValues()
+        employee || getDefaultFormValues()
     );
     const [file, setFile] = useState<File | null>(null);
-    const [ingredientList, setIngredientList] = useState<Ingredient[]>([]);
-    const [emptyIngredients, setEmptyIngredients] = useState(false);
     const [formErrors, setFormErrors] = useState({
         name: false,
-        description: false,
+        rank: false,
+        pin: false,
+        email: false,
         imageUrl: false,
     });
     const [sendingForm, setSendingForm] = useState(false);
@@ -45,7 +47,9 @@ const RecipeForm = ({ handleClose, recipe, updateRecipe }: RecipeFormProps) => {
     function getDefaultFormValues(): FormValues {
         return {
             name: "",
-            description: "",
+            rank: "",
+            pin: "",
+            email: "",
             imageUrl: "",
         };
     }
@@ -71,12 +75,6 @@ const RecipeForm = ({ handleClose, recipe, updateRecipe }: RecipeFormProps) => {
         inputChangeHandler(e, setFormValues, setPreviewPhoto, setFile);
     };
 
-    const handleCloseForm = () => {
-        if (typeof handleClose === "function") {
-            handleClose();
-        }
-    };
-
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
 
@@ -89,65 +87,52 @@ const RecipeForm = ({ handleClose, recipe, updateRecipe }: RecipeFormProps) => {
         const errors = validateForm(formValues);
         setFormErrors(errors);
 
-        if (
-            Object.values(errors).some((error) => error) ||
-            ingredientList.length < 1
-        ) {
-            if (ingredientList.length < 1) {
-                setEmptyIngredients(true);
-            }
+        if (Object.values(errors).some((error) => error)) {
             setSendingForm(false);
 
             return;
         }
 
-        if (recipe) {
-            await updateDoc(doc(db, "recipeList", recipe.id), {
+        if (employee) {
+            await updateDoc(doc(db, "employeeList", employee.id), {
                 ...formValues,
-                ingredients: ingredientList.map((ingredient) => ({
-                    ...ingredient,
-                    lotNumber: "", //
-                    quantityHalf: "",
-                })),
             });
 
             if (file) {
-                const fileRef = ref(storage, `recipes/${recipe.id}/image.jpeg`);
+                const fileRef = ref(
+                    storage,
+                    `employees/${employee.id}/image.jpeg`
+                );
                 await uploadBytes(fileRef, file);
                 const photoUrl = await getDownloadURL(fileRef);
 
-                await updateDoc(doc(db, "recipeList", recipe.id), {
+                await updateDoc(doc(db, "employeeList", employee.id), {
                     imageUrl: photoUrl,
                 });
             }
-            updateRecipe();
+            updateEmployee();
             handleCloseForm();
             setSendingForm(false);
         } else {
-            const docRef = await addDoc(collection(db, "recipeList"), {
+            const docRef = await addDoc(collection(db, "employeeList"), {
                 id: "",
                 ...formValues,
-                ingredients: ingredientList.map((ingredient) => ({
-                    ...ingredient,
-                    lotNumber: "", //
-                    quantityHalf: "",
-                })),
                 date: new Date().toISOString(),
-                imageUrl: "", // Initially set photo to empty string
+                imageUrl: "",
             });
 
-            const recipeId = docRef.id;
+            const employeeId = docRef.id;
 
             try {
                 if (file) {
                     const fileRef = ref(
                         storage,
-                        `recipes/${recipeId}/image.jpeg`
+                        `employees/${employeeId}/image.jpeg`
                     );
                     await uploadBytes(fileRef, file);
                     const photoUrl = await getDownloadURL(fileRef);
 
-                    await updateDoc(doc(db, "recipeList", docRef.id), {
+                    await updateDoc(doc(db, "employeeList", docRef.id), {
                         id: docRef.id,
                         imageUrl: photoUrl,
                     });
@@ -160,39 +145,64 @@ const RecipeForm = ({ handleClose, recipe, updateRecipe }: RecipeFormProps) => {
         setSendingForm(false);
     };
 
+    const handleCloseForm = () => {
+        if (typeof handleClose === "function") {
+            handleClose();
+        }
+    };
+
     return (
         <div className="wrapper pl-[18px] ">
             <Header
-                title={recipe ? "Edit Recipe" : "Add Recipe"}
+                title={employee ? "Edit Employee" : "Add Employee"}
                 subtitle={`Hi, Name. Let's ${
-                    recipe ? "edit reicpe in" : "add a new recipe to"
-                }  your inventory!`}
+                    employee ? "edit" : "add"
+                }  an employee!`}
             />
             <form
                 onSubmit={handleSubmit}
                 action=""
                 className="mt-[58.5px]"
-                name="recipeForm"
+                name="employeeForm"
             >
-                <div className="flex">
+                <div className="flex items-center mb-[45px]">
                     <div className="flex flex-col w-[52%]">
                         <InputField
-                            label="Recipe Name"
+                            label="Full Name"
                             type={InputType.Text}
                             name="name"
                             value={formValues.name}
                             onChange={handleInputChange}
-                            placeholder="Enter the recipe name"
+                            placeholder="Employee full name"
                             error={formErrors.name}
                         />
-                        <TextareaField
-                            label="Short Description"
-                            rows={3}
-                            value={formValues.description}
-                            name="description"
-                            placeholder="Enter recipe's short description"
+                        <InputField
+                            label="Rank"
+                            type={InputType.Text}
+                            name="rank"
+                            value={formValues.rank}
                             onChange={handleInputChange}
-                            error={formErrors.description}
+                            placeholder="Employee Rank"
+                            error={formErrors.rank}
+                        />
+                        <InputField
+                            label="4-Digit PIN"
+                            type={InputType.Number}
+                            name="pin"
+                            value={formValues.pin}
+                            onChange={handleInputChange}
+                            placeholder="Employee PIN"
+                            error={formErrors.pin}
+                            className="[&::-webkit-inner-spin-button]:appearance-none"
+                        />
+                        <InputField
+                            label="Email Address"
+                            type={InputType.Email}
+                            name="email"
+                            value={formValues.email}
+                            onChange={handleInputChange}
+                            placeholder="Employee email address"
+                            error={formErrors.email}
                         />
                     </div>
                     <ImageInput
@@ -202,15 +212,8 @@ const RecipeForm = ({ handleClose, recipe, updateRecipe }: RecipeFormProps) => {
                         error={formErrors.imageUrl}
                     />
                 </div>
-                <IngredientForm
-                    setIngredientList={setIngredientList}
-                    emptyIngredients={emptyIngredients}
-                    setEmptyIngredients={setEmptyIngredients}
-                    ingredientList={recipe?.ingredients}
-                />
                 <FormButtons
-                    className="mt-[160px]"
-                    text="Recipes"
+                    text="Employee"
                     handleCloseForm={handleCloseForm}
                 />
             </form>
@@ -218,4 +221,4 @@ const RecipeForm = ({ handleClose, recipe, updateRecipe }: RecipeFormProps) => {
     );
 };
 
-export default RecipeForm;
+export default EmployeeForm;

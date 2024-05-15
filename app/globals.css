@@ -22,3 +22,38 @@
     padding-block: 13.5px;
     font-size: 18px;
 }
+
+table {
+    border: 1px solid theme('colors.albescent-white');
+    border-radius: 13.75px;
+    border-collapse: separate;
+    border-spacing: 0;
+    background-color: #fff;
+}
+
+td,
+th {
+    border-bottom: 1px solid #e5e8eb;
+    padding-inline: 18px;
+
+}
+
+tbody tr:last-of-type td {
+    border-bottom: none;
+    /* Remove bottom border from last row */
+}
+
+th {
+    color: theme('colors.black-chocolate');
+    font-weight: 500;
+    padding-block: 14px;
+}
+
+td {
+    color: theme('colors.brown-coffee');
+    padding-block: 28.5px;
+}
+
+.name-row {
+    color: theme('colors.black-chocolate');
+}

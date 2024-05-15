@@ -42,7 +42,7 @@ const ImageInput = ({
                         type="file"
                         accept="image/*"
                         name="imageUrl"
-                        className="file-button ml-[6px] file:border-[1px] mt-[6.33px] file:text-black-chocolate file:border-albescent-white file:bg-white file:rounded file:py-[6.33px] file:px-[12.66px] file:mr-[18px] file:text-[10.13px] text-[10.13px] text-brown-coffee font-medium"
+                        className="file-button file:cursor-pointer ml-[6px] file:border-[1px] mt-[6.33px] file:text-black-chocolate file:border-albescent-white file:bg-white file:rounded file:py-[6.33px] file:px-[12.66px] file:mr-[18px] file:text-[10.13px] text-[10.13px] text-brown-coffee font-medium"
                     />
                 </div>
             </div>
