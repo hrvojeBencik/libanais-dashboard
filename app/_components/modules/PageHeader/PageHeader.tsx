@@ -1,4 +1,3 @@
-import React from "react";
 import DefaultButton from "../../elements/DefaultButton/DefaultButton";
 import SearchBar from "../../elements/SearchBar/SearchBar";
 import Header from "../../elements/Header/Header";
@@ -10,6 +9,8 @@ interface PageHeaderProps {
     subtitle: string;
     buttonText?: string;
     handleOpen?: boolean | (() => void);
+    dataList?: any;
+    handleFilteredData?: any;
 }
 const PageHeader = ({
     className,
@@ -18,6 +19,8 @@ const PageHeader = ({
     subtitle,
     buttonText,
     handleOpen,
+    dataList,
+    handleFilteredData,
 }: PageHeaderProps) => {
     const handleClick = () => {
         if (typeof handleOpen === "function") {
@@ -40,7 +43,11 @@ const PageHeader = ({
                     />
                 )}
             </div>
-            <SearchBar searchbarClassName={searchbarClassName} />
+            <SearchBar
+                searchbarClassName={searchbarClassName}
+                dataList={dataList}
+                handleFilteredData={handleFilteredData}
+            />
         </div>
     );
 };

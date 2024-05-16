@@ -11,14 +11,19 @@ const Employees = () => {
     const [isOpen, handleOpen, handleClose] = useOpenForm(false);
     const [isUpdated, setIsUpdated] = useState(false);
     const [employeeList, setEmplyeeList] = useState<Employee[]>([]);
+    const [filteredEmployeeList, setFilteredEmployeeList] =
+        useState<Employee[]>(employeeList);
 
     useEffect(() => {
         setIsUpdated(false);
         loadData("employeeList", setEmplyeeList);
     }, [isOpen, isUpdated]);
-
     const updateEmployee = () => {
         setIsUpdated(true);
+    };
+
+    const handleFilteredData = (filteredData: Employee[]) => {
+        setFilteredEmployeeList(filteredData);
     };
 
     return (
@@ -32,6 +37,8 @@ const Employees = () => {
                         subtitle="Hi, Name. Here you can easily manage employees!"
                         buttonText="Add Employee"
                         handleOpen={handleOpen}
+                        dataList={employeeList}
+                        handleFilteredData={handleFilteredData}
                     />
                     <table className="w-full text-left my-4 ">
                         <thead>
@@ -44,7 +51,7 @@ const Employees = () => {
                             </tr>
                         </thead>
                         <tbody>
-                            {employeeList.map((employee) => (
+                            {filteredEmployeeList.map((employee) => (
                                 <EmployeeRow
                                     key={employee.id}
                                     employee={employee}
