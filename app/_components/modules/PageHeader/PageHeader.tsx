@@ -5,13 +5,15 @@ import Header from "../../elements/Header/Header";
 
 interface PageHeaderProps {
     className?: string;
+    searchbarClassName?: string;
     title: string;
     subtitle: string;
     buttonText?: string;
-    handleOpen: boolean | (() => void);
+    handleOpen?: boolean | (() => void);
 }
 const PageHeader = ({
     className,
+    searchbarClassName,
     title,
     subtitle,
     buttonText,
@@ -38,7 +40,7 @@ const PageHeader = ({
                     />
                 )}
             </div>
-            <SearchBar />
+            <SearchBar searchbarClassName={searchbarClassName} />
         </div>
     );
 };
