@@ -33,6 +33,7 @@ table {
 
 td,
 th {
+    width: 20%;
     border-bottom: 1px solid #e5e8eb;
     padding-inline: 18px;
 
