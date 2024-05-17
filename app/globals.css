@@ -57,3 +57,7 @@ td {
 .name-row {
     color: theme('colors.black-chocolate');
 }
+
+.shadow {
+    box-shadow: 0 4px 4px rgba(92, 67, 56, 0.25);
+}
