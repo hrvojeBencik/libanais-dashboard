@@ -12,6 +12,7 @@ import validateForm from "@/app/_utils/validateForm";
 import Header from "../../elements/Header/Header";
 
 interface EmployeeFormProps {
+    className?: string;
     handleClose: boolean | (() => void);
     employee?: Employee | undefined;
     updateEmployee?: any;
@@ -26,6 +27,7 @@ interface FormValues {
 }
 
 const EmployeeForm = ({
+    className,
     handleClose,
     employee,
     updateEmployee,
@@ -152,7 +154,7 @@ const EmployeeForm = ({
     };
 
     return (
-        <div className="wrapper pl-[18px] ">
+        <div className={`${className} wrapper pl-[18px]`}>
             <Header
                 title={employee ? "Edit Employee" : "Add Employee"}
                 subtitle={`Hi, Name. Let's ${

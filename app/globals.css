@@ -33,6 +33,7 @@ table {
 
 td,
 th {
+    width: 20%;
     border-bottom: 1px solid #e5e8eb;
     padding-inline: 18px;
 
@@ -60,4 +61,26 @@ td {
 
 .shadow {
     box-shadow: 0 4px 4px rgba(92, 67, 56, 0.25);
+}
+
+.sidebar-hidden {
+    position: absolute;
+    visibility: hidden;
+    transform: translateX(-100%);
+    transition: all 0.3s;
+}
+
+.slide,
+.sidebar-visible,
+.form-visible {
+    transition: all 0.3s;
+    transform: scale(1);
+}
+
+.page-hidden,
+.form-hidden {
+    visibility: hidden;
+    position: absolute;
+    bottom: 0;
+    transform: scale(0.7);
 }

@@ -21,7 +21,10 @@ const SidebarHandler = ({
 
     return (
         <SidebarContext.Provider value={{ openSidebar, setOpenSidebar }}>
-            {openSidebar && <Sidebar />}
+            <div className="absolute h-full w-full top-0 bottom-0 -z-10 bg-white-smoke">
+                <div className=" h-[72px] top-0 w-full bg-albescent-white"></div>
+            </div>
+            <Sidebar openSidebar={openSidebar} />
             {children}
         </SidebarContext.Provider>
     );
