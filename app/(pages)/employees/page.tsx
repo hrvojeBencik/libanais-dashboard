@@ -28,40 +28,40 @@ const Employees = () => {
 
     return (
         <div className="w-full pt-[40.5px] relative">
-            {isOpen ? (
-                <EmployeeForm handleClose={handleClose} />
-            ) : (
-                <div className="pl-16 pr-6">
-                    <PageHeader
-                        title="Employees List"
-                        subtitle="Hi, Name. Here you can easily manage employees!"
-                        buttonText="Add Employee"
-                        handleOpen={handleOpen}
-                        dataList={employeeList}
-                        handleFilteredData={handleFilteredData}
-                    />
-                    <table className="w-full text-left my-4 ">
-                        <thead>
-                            <tr>
-                                <th>PIN</th>
-                                <th>Full Name</th>
-                                <th>Rank</th>
-                                <th>Email</th>
-                                <th>Action</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {filteredEmployeeList.map((employee) => (
-                                <EmployeeRow
-                                    key={employee.id}
-                                    employee={employee}
-                                    updateEmployee={updateEmployee}
-                                />
-                            ))}
-                        </tbody>
-                    </table>
-                </div>
-            )}
+            <EmployeeForm
+                handleClose={handleClose}
+                className={`${isOpen ? "form-visible" : "form-hidden"}`}
+            />
+            <div className={`pl-16 pr-6 ${isOpen ? "page-hidden" : "slide"} `}>
+                <PageHeader
+                    title="Employees List"
+                    subtitle="Hi, Name. Here you can easily manage employees!"
+                    buttonText="Add Employee"
+                    handleOpen={handleOpen}
+                    dataList={employeeList}
+                    handleFilteredData={handleFilteredData}
+                />
+                <table className="w-full text-left my-4 ">
+                    <thead>
+                        <tr>
+                            <th>PIN</th>
+                            <th>Full Name</th>
+                            <th>Rank</th>
+                            <th>Email</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {filteredEmployeeList.map((employee) => (
+                            <EmployeeRow
+                                key={employee.id}
+                                employee={employee}
+                                updateEmployee={updateEmployee}
+                            />
+                        ))}
+                    </tbody>
+                </table>
+            </div>
         </div>
     );
 };

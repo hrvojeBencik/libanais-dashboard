@@ -15,6 +15,7 @@ import { InputType } from "../../elements/InputField/InputField";
 import FormButtons from "../../elements/FormButtons/FormButtons";
 
 interface RecipeFormProps {
+    className?: string;
     handleClose: boolean | (() => void);
     recipe?: any;
     updateRecipe?: any;
@@ -27,7 +28,12 @@ interface FormValues {
     [key: string]: string;
 }
 
-const RecipeForm = ({ handleClose, recipe, updateRecipe }: RecipeFormProps) => {
+const RecipeForm = ({
+    className,
+    handleClose,
+    recipe,
+    updateRecipe,
+}: RecipeFormProps) => {
     const [previewPhoto, setPreviewPhoto] = useState(recipe?.imageUrl || "");
     const [formValues, setFormValues] = useState(
         recipe || getDefaultFormValues()
@@ -161,7 +167,7 @@ const RecipeForm = ({ handleClose, recipe, updateRecipe }: RecipeFormProps) => {
     };
 
     return (
-        <div className="wrapper pl-[18px] ">
+        <div className={`${className} wrapper pl-[18px]`}>
             <Header
                 title={recipe ? "Edit Recipe" : "Add Recipe"}
                 subtitle={`Hi, Name. Let's ${

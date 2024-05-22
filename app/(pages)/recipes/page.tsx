@@ -28,29 +28,33 @@ const Recipes = () => {
     };
     return (
         <div className="w-full pt-[40.5px]">
-            {isOpen ? (
-                <RecipeForm handleClose={handleClose} />
-            ) : (
-                <div className="pl-16 pr-6 relative">
-                    <PageHeader
-                        title="Recipe List"
-                        subtitle="Hi, Name. Easily manage and add recipes!"
-                        buttonText="Add Recipes"
-                        handleOpen={handleOpen}
-                        dataList={recipeList}
-                        handleFilteredData={handleFilteredData}
-                    />
-                    <div className=" box-border mt-11">
-                        {filteredRecipeList.map((recipe) => (
-                            <RecipeCard
-                                key={recipe.id}
-                                recipe={recipe}
-                                updateRecipe={updateRecipe}
-                            />
-                        ))}
-                    </div>
+            <RecipeForm
+                handleClose={handleClose}
+                className={`${isOpen ? "form-visible" : "form-hidden"}`}
+            />
+            <div
+                className={`pl-16 pr-6 relative ${
+                    isOpen ? "page-hidden" : "slide"
+                }`}
+            >
+                <PageHeader
+                    title="Recipe List"
+                    subtitle="Hi, Name. Easily manage and add recipes!"
+                    buttonText="Add Recipes"
+                    handleOpen={handleOpen}
+                    dataList={recipeList}
+                    handleFilteredData={handleFilteredData}
+                />
+                <div className=" box-border mt-11">
+                    {filteredRecipeList.map((recipe) => (
+                        <RecipeCard
+                            key={recipe.id}
+                            recipe={recipe}
+                            updateRecipe={updateRecipe}
+                        />
+                    ))}
                 </div>
-            )}
+            </div>
         </div>
     );
 };

@@ -4,11 +4,18 @@ import { data } from "./sidebarData";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
 
-const Sidebar = (type: any) => {
+interface SidebarProps {
+    openSidebar: boolean;
+}
+
+const Sidebar = ({ openSidebar }: SidebarProps) => {
     const pathname = usePathname();
 
     return (
-        <aside className="top-0 h-screen px-12 bg-albescent-white items-center sticky">
+        <aside
+            className={`top-0 h-screen px-12 bg-albescent-white items-center sticky
+            ${openSidebar ? "sidebar-visible" : "sidebar-hidden"}`}
+        >
             <Image
                 src={data.logo}
                 alt="Libanais logo"
