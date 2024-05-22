@@ -11,11 +11,17 @@ const Recipes = () => {
     const [isOpen, handleOpen, handleClose] = useOpenForm(false);
     const [isUpdated, setIsUpdated] = useState(false);
     const [recipeList, setRecipeList] = useState<Recipe[]>([]);
+    const [filteredRecipeList, setFilteredRecipeList] =
+        useState<Recipe[]>(recipeList);
 
     useEffect(() => {
         setIsUpdated(false);
         loadData("recipeList", setRecipeList);
     }, [isOpen, isUpdated]);
+
+    const handleFilteredData = (filteredData: Recipe[]) => {
+        setFilteredRecipeList(filteredData);
+    };
 
     const updateRecipe = () => {
         setIsUpdated(true);
@@ -31,9 +37,11 @@ const Recipes = () => {
                         subtitle="Hi, Name. Easily manage and add recipes!"
                         buttonText="Add Recipes"
                         handleOpen={handleOpen}
+                        dataList={recipeList}
+                        handleFilteredData={handleFilteredData}
                     />
                     <div className=" box-border mt-11">
-                        {recipeList.map((recipe) => (
+                        {filteredRecipeList.map((recipe) => (
                             <RecipeCard
                                 key={recipe.id}
                                 recipe={recipe}
