@@ -1,5 +1,3 @@
-"use client";
-
 interface BinProps {
     onClick?: React.MouseEventHandler<SVGElement>;
 }
