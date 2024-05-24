@@ -44,6 +44,7 @@ const PageHeader = ({
                 )}
             </div>
             <SearchBar
+                className="mt-8 sm:mt-6"
                 searchbarClassName={searchbarClassName}
                 dataList={dataList}
                 handleFilteredData={handleFilteredData}
