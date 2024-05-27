@@ -10,10 +10,12 @@ const useOpenForm = (initialState = false) => {
 
     const handleOpen = () => {
         setIsOpen(true);
+        window.scrollTo(0, 0);
     };
 
     const handleClose = () => {
         setIsOpen(false);
+        window.scrollTo(0, 0);
     };
 
     useEffect(() => {

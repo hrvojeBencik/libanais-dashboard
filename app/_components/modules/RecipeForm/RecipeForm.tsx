@@ -19,6 +19,7 @@ interface RecipeFormProps {
     handleClose: boolean | (() => void);
     recipe?: any;
     updateRecipe?: any;
+    setRecipeToUpdate?: any;
 }
 
 interface FormValues {
@@ -33,6 +34,7 @@ const RecipeForm = ({
     handleClose,
     recipe,
     updateRecipe,
+    setRecipeToUpdate,
 }: RecipeFormProps) => {
     const [previewPhoto, setPreviewPhoto] = useState(recipe?.imageUrl || "");
     const [formValues, setFormValues] = useState(
@@ -47,6 +49,14 @@ const RecipeForm = ({
         imageUrl: false,
     });
     const [sendingForm, setSendingForm] = useState(false);
+
+    useEffect(() => {
+        if (recipe) {
+            setFormValues(recipe);
+            setPreviewPhoto(recipe.imageUrl);
+            setIngredientList(recipe.ingredients);
+        }
+    }, [recipe]);
 
     function getDefaultFormValues(): FormValues {
         return {
@@ -78,6 +88,10 @@ const RecipeForm = ({
     };
 
     const handleCloseForm = () => {
+        setRecipeToUpdate({
+            ...getDefaultFormValues(),
+            ingredients: [],
+        });
         if (typeof handleClose === "function") {
             handleClose();
         }
@@ -167,7 +181,7 @@ const RecipeForm = ({
     };
 
     return (
-        <div className={`${className} wrapper pl-[18px]`}>
+        <div className={`${className} wrapper pl-[18px] sm:p-4`}>
             <Header
                 title={recipe ? "Edit Recipe" : "Add Recipe"}
                 subtitle={`Hi, Name. Let's ${
@@ -177,11 +191,11 @@ const RecipeForm = ({
             <form
                 onSubmit={handleSubmit}
                 action=""
-                className="mt-[58.5px]"
+                className="mt-[58.5px] sm:mt-6"
                 name="recipeForm"
             >
-                <div className="flex">
-                    <div className="flex flex-col w-[52%]">
+                <div className="flex sm:flex-col">
+                    <div className="flex flex-col w-[52%] sm:w-full">
                         <InputField
                             label="Recipe Name"
                             type={InputType.Text}
@@ -202,7 +216,7 @@ const RecipeForm = ({
                         />
                     </div>
                     <ImageInput
-                        className="pl-[92px]"
+                        className="pl-[92px] sm:px-0 sm:w-full"
                         previewPhoto={previewPhoto}
                         handleInputChange={handleInputChange}
                         error={formErrors.imageUrl}
@@ -215,7 +229,7 @@ const RecipeForm = ({
                     ingredientList={recipe?.ingredients}
                 />
                 <FormButtons
-                    className="mt-[160px]"
+                    className="mt-[160px] sm:mt-6"
                     text="Recipes"
                     handleCloseForm={handleCloseForm}
                 />

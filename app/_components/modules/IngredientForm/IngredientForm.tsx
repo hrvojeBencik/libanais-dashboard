@@ -1,5 +1,5 @@
-import React, { useEffect } from "react";
-import { useState } from "react";
+"use client";
+import { useState, useEffect } from "react";
 import DefaultButton from "../../elements/DefaultButton/DefaultButton";
 import Bin from "public/assets/svg/bin";
 import { inputChangeHandler } from "@/app/_utils/inputChangeHandle";
@@ -89,6 +89,12 @@ const IngredientForm = ({
         setIngredientList(ingredients);
     }, [ingredients]);
 
+    useEffect(() => {
+        if (ingredientList) {
+            setIngredients(ingredientList);
+        }
+    }, [ingredientList]);
+
     const handleRemoveIngredient = (key: number) => {
         setIngredients((prevIngredients) =>
             prevIngredients.filter((_, i) => i !== key)
@@ -96,12 +102,12 @@ const IngredientForm = ({
     };
 
     return (
-        <div className="mt-[17.5px]">
-            <p className="mb-[53.5px] text-[20.25px] font-semibold tracking-tight leading-snug">
+        <div className="mt-[17.5px] sm:mt-6">
+            <p className="mb-[53.5px] sm:mb-4 text-[20.25px] font-semibold tracking-tight leading-snug">
                 Ingredients
             </p>
-            <div className="flex max-h-[364px] ">
-                <div className="flex flex-col w-[52%]">
+            <div className="flex max-h-[364px] sm:flex-col sm:max-h-fit">
+                <div className="flex flex-col w-[52%] sm:w-full">
                     <InputField
                         label="Ingredient Name"
                         type={InputType.Text}
@@ -121,12 +127,12 @@ const IngredientForm = ({
                         className="[&::-webkit-inner-spin-button]:appearance-none"
                         error={formErrors.quantityFull}
                     >
-                        <div className="w-full pl-[18px] py-[19px] text-[18px] rounded-[13.5px] bg-albescent-white text-brown-coffee">
+                        <div className="w-full pl-[18px] py-[19px] sm:p-3 text-[18px] sm:text-sm rounded-[13.5px] sm:rounded-lg bg-albescent-white text-brown-coffee">
                             {unit}
                         </div>
                     </InputField>
 
-                    <div className="flex justify-between mb-[42px] gap-[20px]">
+                    <div className="flex justify-between mb-[42px] sm:mb-6 gap-[20px] sm:gap-0">
                         <IngredientButton
                             label="Dry Ingredients"
                             onClick={handleButtonClick("grams")}
@@ -147,16 +153,16 @@ const IngredientForm = ({
                         className="p-2.5 rounded-[13.5px] "
                     />
                 </div>
-                <div className="flex-column w-1/2 pl-[92px] box-border">
+                <div className="flex-column w-1/2 pl-[92px] sm:p-0 box-border sm:w-full">
                     <p className="font-medium mt-3.5 mb-2 tracking-tight text-[18px]">
                         Ingredients
                     </p>
-                    <div className=" bg-albescent-white text-brown-coffee h-full overflow-auto text-[18px] rounded-[13.5px] p-[18px] min-h-[336px]">
+                    <div className=" bg-albescent-white text-brown-coffee h-full overflow-auto text-[18px] sm:text-sm rounded-[13.5px] p-[18px] min-h-[336px]">
                         {ingredients.length
                             ? ingredients.map((ingredient, key) => (
                                   <div
                                       key={key}
-                                      className="flex w-3/4 justify-between"
+                                      className="flex w-3/4 justify-between sm:w-full"
                                   >
                                       {ingredient.name} -{" "}
                                       {ingredient.quantityFull}{" "}
@@ -170,7 +176,9 @@ const IngredientForm = ({
                               ))
                             : "Used Ingredients"}
                     </div>
-                    {emptyIngredients && <p>Add Ingredients.</p>}
+                    {emptyIngredients && (
+                        <p className="sm:text-sm">Add Ingredients.</p>
+                    )}
                 </div>
             </div>
         </div>

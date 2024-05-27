@@ -11,6 +11,7 @@ const Recipes = () => {
     const [isOpen, handleOpen, handleClose] = useOpenForm(false);
     const [isUpdated, setIsUpdated] = useState(false);
     const [recipeList, setRecipeList] = useState<Recipe[]>([]);
+    const [recipeToUpdate, setRecipeToUpdate] = useState<Recipe[]>([]);
     const [filteredRecipeList, setFilteredRecipeList] =
         useState<Recipe[]>(recipeList);
 
@@ -26,17 +27,17 @@ const Recipes = () => {
     const updateRecipe = () => {
         setIsUpdated(true);
     };
+
     return (
-        <div className="w-full pt-[40.5px]">
+        <div className="">
             <RecipeForm
                 handleClose={handleClose}
                 className={`${isOpen ? "form-visible" : "form-hidden"}`}
+                recipe={recipeToUpdate}
+                updateRecipe={updateRecipe}
+                setRecipeToUpdate={setRecipeToUpdate}
             />
-            <div
-                className={`pl-16 pr-6 relative ${
-                    isOpen ? "page-hidden" : "slide"
-                }`}
-            >
+            <div className={`${isOpen ? "page-hidden" : "slide"}`}>
                 <PageHeader
                     title="Recipe List"
                     subtitle="Hi, Name. Easily manage and add recipes!"
@@ -44,13 +45,16 @@ const Recipes = () => {
                     handleOpen={handleOpen}
                     dataList={recipeList}
                     handleFilteredData={handleFilteredData}
+                    className=""
                 />
-                <div className=" box-border mt-11">
+                <div className=" mt-8 sm:mt-6 flex flex-col gap-[36px] sm:gap-[22px]">
                     {filteredRecipeList.map((recipe) => (
                         <RecipeCard
                             key={recipe.id}
                             recipe={recipe}
                             updateRecipe={updateRecipe}
+                            setRecipeToUpdate={setRecipeToUpdate}
+                            handleOpen={handleOpen}
                         />
                     ))}
                 </div>

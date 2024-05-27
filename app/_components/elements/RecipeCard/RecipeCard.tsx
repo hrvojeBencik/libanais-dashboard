@@ -7,33 +7,38 @@ import { Recipe } from "@/app/_interfaces/Recipe";
 interface RecipeCardProps {
     recipe: Recipe;
     updateRecipe: () => void;
+    setRecipeToUpdate: any;
+    handleOpen: any;
 }
-const RecipeCard = ({ recipe, updateRecipe }: RecipeCardProps) => {
+const RecipeCard = ({
+    recipe,
+    setRecipeToUpdate,
+    handleOpen,
+}: RecipeCardProps) => {
     const ingredientList = recipe.ingredients
         .map((ingredient) => ingredient.name)
         .join(", ");
 
-    const [isOpen, handleOpen, handleClose] = useOpenForm(false);
-
     const handleClick = () => {
-        if (typeof handleOpen === "function") {
-            handleOpen();
-        }
+        setRecipeToUpdate(recipe);
+        handleOpen();
     };
 
     return (
-        <div className="w-full flex bg-white rounded-xl p-[18px] mb-[36px] justify-between">
+        <div className="flex bg-white rounded-xl p-[18px] sm:p-4 justify-between sm:flex-col-reverse">
             <div>
-                <h4 className=" text-brown-coffee">
+                <h4 className=" text-brown-coffee sm:mt-4 sm:text-sm">
                     Ingredients: {ingredientList}
                 </h4>
-                <h2 className=" text-black-chocolate text-lg font-bold my-1">
+                <h2 className=" text-black-chocolate text-lg font-bold my-1 sm:my-5 sm:text-sm">
                     {recipe.name}
                 </h2>
-                <h4 className=" text-brown-coffee">{recipe.description}</h4>
+                <h4 className=" text-brown-coffee sm:text-sm">
+                    {recipe.description}
+                </h4>
                 <DefaultButton
                     text="Edit Recipe"
-                    className="rounded-[18px] py-1.5 px-14 mt-[18px]"
+                    className="rounded-[18px] py-1.5 px-14 mt-[18px] sm:text-sm sm:w-full"
                     onClick={handleClick}
                 />
             </div>
@@ -41,19 +46,9 @@ const RecipeCard = ({ recipe, updateRecipe }: RecipeCardProps) => {
                 <img
                     src={recipe.imageUrl}
                     alt=""
-                    className="max-h-44 w-auto"
+                    className="max-h-44 max-w-80 w-auto h-auto sm:w-full sm:max-h-24 object-cover object-center"
                 />
                 <div className="absolute inset-0 h-[347px] bg-gradient-to-b from-transparent to-black "></div>
-            </div>
-
-            <div className="absolute top-0 left-0 right-0 bg-white-smoke z-10">
-                {isOpen && (
-                    <RecipeForm
-                        handleClose={handleClose}
-                        recipe={recipe}
-                        updateRecipe={updateRecipe}
-                    />
-                )}
             </div>
         </div>
     );
