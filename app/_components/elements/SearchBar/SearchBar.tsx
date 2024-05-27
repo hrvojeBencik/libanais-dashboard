@@ -44,8 +44,8 @@ const SearchBar = ({
             <input
                 placeholder="Search here"
                 title="Search bar"
-                className={`${searchbarClassName} py-4 pr-4 pl-16 w-full bg-albescent-white 
-                font-sans tracking-wider rounded-[27px] focus:outline-0 text-brown-derby 
+                className={`${searchbarClassName} py-[13.5px] pr-4 pl-14 w-full bg-albescent-white 
+                font-sans text-lg rounded-[27px] focus:outline-0 text-brown-derby 
                 placeholder-brown-derby`}
                 value={query}
                 onChange={handleInputChange}

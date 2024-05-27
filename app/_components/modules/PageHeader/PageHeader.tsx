@@ -30,7 +30,7 @@ const PageHeader = ({
 
     return (
         <div className={className}>
-            <div className="flex justify-between items-center ">
+            <div className="flex justify-between items-center sm:flex-col">
                 <Header
                     title={title}
                     subtitle={subtitle}
@@ -38,7 +38,7 @@ const PageHeader = ({
                 {buttonText && (
                     <DefaultButton
                         text={buttonText}
-                        className="rounded-[100px] px-[105px] h-fit py-3 text-[18px]"
+                        className="rounded-[100px] px-[105px] h-fit py-3 text-[18px] sm:mt-6"
                         onClick={handleClick}
                     />
                 )}
