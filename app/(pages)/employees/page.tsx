@@ -2,18 +2,20 @@
 import { useState, useEffect } from "react";
 import { Employee } from "@/app/_interfaces/Employee";
 import { loadData } from "@/app/_utils/loadData";
-import PageHeader from "@/app/_components/modules/PageHeader/PageHeader";
 import useOpenForm from "@/app/_helpers/useOpenForm";
+import PageHeader from "@/app/_components/modules/PageHeader/PageHeader";
 import EmployeeForm from "@/app/_components/modules/EmployeeForm/EmployeeForm";
-import EmployeeRow from "@/app/_components/modules/EmployeeRow/EmployeeRow";
 import EmployeeCard from "@/app/_components/elements/EmployeeCard/EmployeeCard";
+import EmployeeRow from "@/app/_components/modules/EmployeeRow/EmployeeRow";
 
 const Employees = () => {
     const SCREEN_WIDTH_LIMIT_FOR_MOBILE = 990;
     const [isMobile, setIsMobile] = useState(false);
     const [isOpen, handleOpen, handleClose] = useOpenForm(false);
     const [isUpdated, setIsUpdated] = useState(false);
-    const [employeeToUpdate, setEmployeeToUpdate] = useState<Employee[]>([]);
+    const [employeeToUpdate, setEmployeeToUpdate] = useState<Employee | null>(
+        null
+    );
     const [employeeList, setEmplyeeList] = useState<Employee[]>([]);
     const [filteredEmployeeList, setFilteredEmployeeList] =
         useState<Employee[]>(employeeList);

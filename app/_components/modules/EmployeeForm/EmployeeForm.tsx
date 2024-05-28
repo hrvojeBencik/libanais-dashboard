@@ -5,11 +5,10 @@ import { db, storage } from "../../../firebase";
 import { addDoc, updateDoc, collection, doc } from "firebase/firestore";
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import { inputChangeHandler } from "@/app/_utils/inputChangeHandle";
-import { Employee } from "@/app/_interfaces/Employee";
+import validateForm from "@/app/_utils/validateForm";
 import FormButtons from "../../elements/FormButtons/FormButtons";
 import InputField from "../../elements/InputField/InputField";
 import ImageInput from "../ImageInput/ImageInput";
-import validateForm from "@/app/_utils/validateForm";
 import Header from "../../elements/Header/Header";
 
 interface EmployeeFormProps {
@@ -20,14 +19,6 @@ interface EmployeeFormProps {
     setEmployeeToUpdate: any;
 }
 
-interface FormValues {
-    name: string;
-    rank: string;
-    pin: string;
-    email: string;
-    imageUrl: string;
-}
-
 const EmployeeForm = ({
     className,
     handleClose,
@@ -36,9 +27,13 @@ const EmployeeForm = ({
     setEmployeeToUpdate,
 }: EmployeeFormProps) => {
     const [previewPhoto, setPreviewPhoto] = useState(employee?.imageUrl || "");
-    const [formValues, setFormValues] = useState(
-        employee || getDefaultFormValues()
-    );
+    const [formValues, setFormValues] = useState({
+        name: employee?.name || "",
+        rank: employee?.rank || "",
+        pin: employee?.pin || "",
+        email: employee?.email || "",
+        imageUrl: employee?.imageUrl || "",
+    });
     const [file, setFile] = useState<File | null>(null);
     const [formErrors, setFormErrors] = useState({
         name: false,
@@ -51,20 +46,16 @@ const EmployeeForm = ({
 
     useEffect(() => {
         if (employee) {
-            setFormValues(employee);
+            setFormValues({
+                name: employee.name || "",
+                rank: employee.rank || "",
+                pin: employee.pin || "",
+                email: employee.email || "",
+                imageUrl: employee.imageUrl || "",
+            });
             setPreviewPhoto(employee.imageUrl);
         }
     }, [employee]);
-
-    function getDefaultFormValues(): FormValues {
-        return {
-            name: "",
-            rank: "",
-            pin: "",
-            email: "",
-            imageUrl: "",
-        };
-    }
 
     const handleInputChange = (
         e:
@@ -158,7 +149,15 @@ const EmployeeForm = ({
     };
 
     const handleCloseForm = () => {
-        setEmployeeToUpdate(getDefaultFormValues());
+        setEmployeeToUpdate(null);
+        setFormValues({
+            name: "",
+            rank: "",
+            pin: "",
+            email: "",
+            imageUrl: "",
+        });
+        setPreviewPhoto("");
         if (typeof handleClose === "function") {
             handleClose();
         }

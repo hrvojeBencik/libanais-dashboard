@@ -1,17 +1,17 @@
 "use client";
 import { useEffect, useState } from "react";
+import { inputChangeHandler } from "@/app/_utils/inputChangeHandle";
+import { Ingredient } from "@/app/_interfaces/Ingredient";
+import { InputType } from "../../elements/InputField/InputField";
+import { addDoc, updateDoc, collection, doc } from "firebase/firestore";
+import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
+import { db, storage } from "../../../firebase";
+import validateForm from "@/app/_utils/validateForm";
 import Header from "../../elements/Header/Header";
 import InputField from "../../elements/InputField/InputField";
 import TextareaField from "../../elements/TextareaField/TextareaField";
 import IngredientForm from "../IngredientForm/IngredientForm";
 import ImageInput from "../ImageInput/ImageInput";
-import { inputChangeHandler } from "@/app/_utils/inputChangeHandle";
-import { Ingredient } from "@/app/_interfaces/Ingredient";
-import validateForm from "@/app/_utils/validateForm";
-import { db, storage } from "../../../firebase";
-import { addDoc, updateDoc, collection, doc } from "firebase/firestore";
-import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
-import { InputType } from "../../elements/InputField/InputField";
 import FormButtons from "../../elements/FormButtons/FormButtons";
 
 interface RecipeFormProps {
@@ -22,13 +22,6 @@ interface RecipeFormProps {
     setRecipeToUpdate?: any;
 }
 
-interface FormValues {
-    name: string;
-    description: string;
-    imageUrl: string;
-    [key: string]: string;
-}
-
 const RecipeForm = ({
     className,
     handleClose,
@@ -37,9 +30,11 @@ const RecipeForm = ({
     setRecipeToUpdate,
 }: RecipeFormProps) => {
     const [previewPhoto, setPreviewPhoto] = useState(recipe?.imageUrl || "");
-    const [formValues, setFormValues] = useState(
-        recipe || getDefaultFormValues()
-    );
+    const [formValues, setFormValues] = useState({
+        name: recipe?.name || "",
+        description: recipe?.description || "",
+        imageUrl: recipe?.imageUrl || "",
+    });
     const [file, setFile] = useState<File | null>(null);
     const [ingredientList, setIngredientList] = useState<Ingredient[]>([]);
     const [emptyIngredients, setEmptyIngredients] = useState(false);
@@ -52,19 +47,15 @@ const RecipeForm = ({
 
     useEffect(() => {
         if (recipe) {
-            setFormValues(recipe);
+            setFormValues({
+                name: recipe.name || "",
+                description: recipe.description || "",
+                imageUrl: recipe.imageUrl || "",
+            });
             setPreviewPhoto(recipe.imageUrl);
-            setIngredientList(recipe.ingredients);
+            setIngredientList(recipe.ingredients || []);
         }
     }, [recipe]);
-
-    function getDefaultFormValues(): FormValues {
-        return {
-            name: "",
-            description: "",
-            imageUrl: "",
-        };
-    }
 
     const handleInputChange = (
         e:
@@ -88,10 +79,14 @@ const RecipeForm = ({
     };
 
     const handleCloseForm = () => {
-        setRecipeToUpdate({
-            ...getDefaultFormValues(),
-            ingredients: [],
+        setRecipeToUpdate(null);
+        setFormValues({
+            name: "",
+            description: "",
+            imageUrl: "",
         });
+        setPreviewPhoto("");
+        setIngredientList([]);
         if (typeof handleClose === "function") {
             handleClose();
         }
@@ -181,7 +176,7 @@ const RecipeForm = ({
     };
 
     return (
-        <div className={`${className} wrapper pl-[18px] sm:p-4`}>
+        <div className={`${className} wrapper pl-[18px] sm:p-4 `}>
             <Header
                 title={recipe ? "Edit Recipe" : "Add Recipe"}
                 subtitle={`Hi, Name. Let's ${
@@ -226,11 +221,11 @@ const RecipeForm = ({
                     setIngredientList={setIngredientList}
                     emptyIngredients={emptyIngredients}
                     setEmptyIngredients={setEmptyIngredients}
-                    ingredientList={recipe?.ingredients}
+                    ingredientList={ingredientList}
                 />
                 <FormButtons
                     className="mt-[160px] sm:mt-6"
-                    text="Recipes"
+                    text="Recipe"
                     handleCloseForm={handleCloseForm}
                 />
             </form>

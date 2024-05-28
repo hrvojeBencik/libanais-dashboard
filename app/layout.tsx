@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import { Poppins } from "next/font/google";
 import "./globals.css";
-import Banner from "./_components/elements/Banner/Banner";
 import SidebarHandler from "./_components/modules/Sidebar/SidebarHandler";
 
 const poppins = Poppins({
@@ -23,13 +22,10 @@ export default function RootLayout({
 }>) {
     return (
         <html lang="en">
-            <body className={`${poppins.className} flex min-h-screen`}>
-                <SidebarHandler>
-                    <div className="w-full bg-white-smoke ">
-                        <Banner />
-                        <div className="flex flex-col ">{children}</div>
-                    </div>
-                </SidebarHandler>
+            <body
+                className={`${poppins.className}  min-h-screen bg-white-smoke max-w-screen box-border w-screen`}
+            >
+                <SidebarHandler>{children}</SidebarHandler>
             </body>
         </html>
     );

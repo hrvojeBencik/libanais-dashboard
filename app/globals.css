@@ -91,6 +91,7 @@ td {
 
 }
 
+
 @media screen and (max-width: 990px) {
     .form-button {
         min-width: fit-content;
@@ -98,5 +99,29 @@ td {
         border-radius: 27px;
         padding-block: 15px;
         font-size: 14px;
+    }
+}
+
+@keyframes inAnimation {
+    0% {
+        opacity: 0;
+        max-height: 0px;
+    }
+
+    100% {
+        opacity: 1;
+        max-height: 600px;
+    }
+}
+
+@keyframes outAnimation {
+    0% {
+        opacity: 1;
+        max-height: 600px;
+    }
+
+    100% {
+        opacity: 0;
+        max-height: 0px;
     }
 }
