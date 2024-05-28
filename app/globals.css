@@ -85,6 +85,12 @@ td {
     transform: scale(0.7);
 }
 
+.employeeCardField {
+    font-weight: 500;
+    margin-bottom: 4px;
+
+}
+
 @media screen and (max-width: 990px) {
     .form-button {
         min-width: fit-content;

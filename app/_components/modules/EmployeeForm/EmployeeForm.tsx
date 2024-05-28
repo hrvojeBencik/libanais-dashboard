@@ -1,4 +1,5 @@
-import { useState } from "react";
+"use client";
+import { useState, useEffect } from "react";
 import { InputType } from "../../elements/InputField/InputField";
 import { db, storage } from "../../../firebase";
 import { addDoc, updateDoc, collection, doc } from "firebase/firestore";
@@ -14,8 +15,9 @@ import Header from "../../elements/Header/Header";
 interface EmployeeFormProps {
     className?: string;
     handleClose: boolean | (() => void);
-    employee?: Employee | undefined;
+    employee?: any;
     updateEmployee?: any;
+    setEmployeeToUpdate: any;
 }
 
 interface FormValues {
@@ -31,6 +33,7 @@ const EmployeeForm = ({
     handleClose,
     employee,
     updateEmployee,
+    setEmployeeToUpdate,
 }: EmployeeFormProps) => {
     const [previewPhoto, setPreviewPhoto] = useState(employee?.imageUrl || "");
     const [formValues, setFormValues] = useState(
@@ -45,6 +48,13 @@ const EmployeeForm = ({
         imageUrl: false,
     });
     const [sendingForm, setSendingForm] = useState(false);
+
+    useEffect(() => {
+        if (employee) {
+            setFormValues(employee);
+            setPreviewPhoto(employee.imageUrl);
+        }
+    }, [employee]);
 
     function getDefaultFormValues(): FormValues {
         return {
@@ -148,13 +158,14 @@ const EmployeeForm = ({
     };
 
     const handleCloseForm = () => {
+        setEmployeeToUpdate(getDefaultFormValues());
         if (typeof handleClose === "function") {
             handleClose();
         }
     };
 
     return (
-        <div className={`${className} wrapper pl-[18px]`}>
+        <div className={`${className} wrapper pl-[18px] sm:p-4`}>
             <Header
                 title={employee ? "Edit Employee" : "Add Employee"}
                 subtitle={`Hi, Name. Let's ${
@@ -164,11 +175,11 @@ const EmployeeForm = ({
             <form
                 onSubmit={handleSubmit}
                 action=""
-                className="mt-[58.5px]"
+                className="mt-[58.5px] sm:mt-6"
                 name="employeeForm"
             >
-                <div className="flex items-center mb-[45px]">
-                    <div className="flex flex-col w-[52%]">
+                <div className="flex items-center mb-[45px] sm:flex-col">
+                    <div className="flex flex-col w-[52%] sm:w-full">
                         <InputField
                             label="Full Name"
                             type={InputType.Text}
@@ -208,7 +219,7 @@ const EmployeeForm = ({
                         />
                     </div>
                     <ImageInput
-                        className="pl-[92px]"
+                        className="pl-[92px] sm:p-0"
                         previewPhoto={previewPhoto}
                         handleInputChange={handleInputChange}
                         error={formErrors.imageUrl}
