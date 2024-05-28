@@ -37,13 +37,11 @@ const InputField = ({
                 className={`${children ? "flex items-end gap-5 sm:gap-6" : ""}`}
             >
                 <label
-                    className={`font-medium flex-column text-[18px] sm:text-sm  text-black-chocolate text-left ${
-                        children ? "sm:w-1/2" : ""
-                    }`}
+                    className={`font-medium flex-column text-[18px] sm:text-sm  text-black-chocolate text-left`}
                 >
                     {label}
                     <input
-                        className={`${className} font-normal leading-relaxed  mt-2 p-[18px] 
+                        className={`${className}  sm:w-full font-normal leading-relaxed  mt-2 p-[18px] 
                         sm:p-3 focus:outline-0 text-[18px] sm:text-sm rounded-[13.5px] sm:rounded-lg 
                         bg-albescent-white text-brown-coffee placeholder:text-brown-coffee`}
                         type={type}
