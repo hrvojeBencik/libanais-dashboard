@@ -22,24 +22,27 @@ const useOpenForm = (initialState = false) => {
     const controlSidebarOnResize = () => {
         const width = window.innerWidth;
         if (width > SCREEN_WIDTH_LIMIT_FOR_MOBILE) {
-            if (isOpen) {
-                setOpenSidebar(true);
-            }
+            setOpenSidebar(!isOpen);
         }
     };
 
     useEffect(() => {
+        const controlSidebarOnResize = () => {
+            const width = window.innerWidth;
+            if (width > SCREEN_WIDTH_LIMIT_FOR_MOBILE) {
+                setOpenSidebar(!isOpen);
+            }
+        };
+
         window.addEventListener("resize", controlSidebarOnResize);
 
-        //Needed to show/hide links on initial site load
+        // Needed to show/hide links on initial site load
         controlSidebarOnResize();
 
         return () => {
             window.removeEventListener("resize", controlSidebarOnResize);
         };
-
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, []);
+    }, [isOpen]);
 
     return [isOpen, handleOpen, handleClose];
 };

@@ -23,7 +23,7 @@ export default function RootLayout({
     return (
         <html lang="en">
             <body
-                className={`${poppins.className}  min-h-screen bg-white-smoke max-w-screen box-border w-screen`}
+                className={`${poppins.className}  min-h-screen bg-white-smoke w-screen`}
             >
                 <SidebarHandler>{children}</SidebarHandler>
             </body>

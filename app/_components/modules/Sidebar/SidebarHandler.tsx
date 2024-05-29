@@ -58,9 +58,11 @@ const SidebarHandler = ({ children }: SidebarHandlerProps) => {
         <SidebarContext.Provider value={{ openSidebar, setOpenSidebar }}>
             <div
                 className={`${
-                    openSidebar
-                        ? " box-border overflow-hidden fixed w-full"
-                        : ""
+                    isMobile
+                        ? openSidebar
+                            ? "  sm:fixed w-full"
+                            : ""
+                        : " max-w-screen w-screen box-border"
                 }`}
             >
                 {!isMobile && (
@@ -68,8 +70,7 @@ const SidebarHandler = ({ children }: SidebarHandlerProps) => {
                         <div className=" h-[72px] top-0 w-full bg-albescent-white"></div>
                     </div>
                 )}
-
-                {isMobile ? <MobileBanner /> : <Banner />}
+                {isMobile && <MobileBanner />}
                 <div className="relative">
                     {isMobile ? (
                         openSidebar ? (
@@ -79,7 +80,7 @@ const SidebarHandler = ({ children }: SidebarHandlerProps) => {
                                 setOpenSidebar={setOpenSidebar}
                             />
                         ) : (
-                            <div className="py-[40.5px] pl-[50px] pr-6 sm:px-4 sm:py-6 w-full box-border">
+                            <div className="py-[40.5px] pl-[50px] pr-6 sm:px-4 sm:py-6 w-full">
                                 {children}
                             </div>
                         )
@@ -89,8 +90,12 @@ const SidebarHandler = ({ children }: SidebarHandlerProps) => {
                                 openSidebar={openSidebar}
                                 isMobile={isMobile}
                             />
-                            <div className="py-[40.5px] pl-[50px] pr-6 sm:px-4 sm:py-6 w-full box-border">
-                                {children}
+                            <div className="w-full box-border">
+                                {!isMobile && <Banner />}
+
+                                <div className="py-[40.5px] pl-[50px] pr-6 sm:px-4 sm:py-6 w-full">
+                                    {children}
+                                </div>
                             </div>
                         </div>
                     )}

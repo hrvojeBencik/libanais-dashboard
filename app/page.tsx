@@ -201,7 +201,6 @@ export default function Home() {
             <PageHeader
                 title="Dashboard"
                 subtitle="Hi, Name. Welcome back to Libanais Dashboard!"
-                searchbarClassName="shadow"
             />
             <div className="flex gap-[18px] mt-8 sm:mt-6 sm:gap-4 sm:flex-col">
                 <DashboardCard

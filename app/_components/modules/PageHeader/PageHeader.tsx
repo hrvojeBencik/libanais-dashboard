@@ -31,10 +31,7 @@ const PageHeader = ({
     return (
         <div className={className}>
             <div className="flex justify-between items-center sm:flex-col sm:items-baseline">
-                <Header
-                    title={title}
-                    subtitle={subtitle}
-                />
+                <Header title={title} subtitle={subtitle} />
                 {buttonText && (
                     <DefaultButton
                         text={buttonText}
@@ -45,7 +42,8 @@ const PageHeader = ({
             </div>
             <SearchBar
                 className="mt-8 sm:mt-6"
-                searchbarClassName={searchbarClassName}
+                searchbarClassName={`${searchbarClassName} bg-albescent-white py-[13.5px] text-lg`}
+                iconStyle="top-4"
                 dataList={dataList}
                 handleFilteredData={handleFilteredData}
             />
