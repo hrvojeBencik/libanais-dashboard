@@ -31,36 +31,34 @@ const Recipes = () => {
     return (
         <div className="relative">
             <div>
-                {isOpen ? (
-                    <RecipeForm
-                        handleClose={handleClose}
-                        recipe={recipeToUpdate}
-                        updateRecipe={updateRecipe}
-                        setRecipeToUpdate={setRecipeToUpdate}
+                <RecipeForm
+                    handleClose={handleClose}
+                    className={`${isOpen ? "form-visible" : "form-hidden"}`}
+                    recipe={recipeToUpdate}
+                    updateRecipe={updateRecipe}
+                    setRecipeToUpdate={setRecipeToUpdate}
+                />
+                <div className={` ${isOpen ? "page-hidden" : "slide"} `}>
+                    <PageHeader
+                        title="Recipe List"
+                        subtitle="Hi, Name. Easily manage and add recipes!"
+                        buttonText="Add Recipes"
+                        handleOpen={handleOpen}
+                        dataList={recipeList}
+                        handleFilteredData={handleFilteredData}
+                        className=""
                     />
-                ) : (
-                    <div>
-                        <PageHeader
-                            title="Recipe List"
-                            subtitle="Hi, Name. Easily manage and add recipes!"
-                            buttonText="Add Recipes"
-                            handleOpen={handleOpen}
-                            dataList={recipeList}
-                            handleFilteredData={handleFilteredData}
-                            className=""
-                        />
-                        <div className="mt-8 sm:mt-6 flex flex-col gap-[36px] sm:gap-[22px]">
-                            {filteredRecipeList.map((recipe) => (
-                                <RecipeCard
-                                    key={recipe.id}
-                                    recipe={recipe}
-                                    setRecipeToUpdate={setRecipeToUpdate}
-                                    handleOpen={handleOpen}
-                                />
-                            ))}
-                        </div>
+                    <div className="mt-8 sm:mt-6 flex flex-col gap-[36px] sm:gap-[22px]">
+                        {filteredRecipeList.map((recipe) => (
+                            <RecipeCard
+                                key={recipe.id}
+                                recipe={recipe}
+                                setRecipeToUpdate={setRecipeToUpdate}
+                                handleOpen={handleOpen}
+                            />
+                        ))}
                     </div>
-                )}
+                </div>
             </div>
         </div>
     );
