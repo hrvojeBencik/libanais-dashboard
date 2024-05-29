@@ -12,12 +12,12 @@ const Banner = ({ className, isMobile }: BannerProps) => {
     const pathname = usePathname();
     return (
         <div
-            className={`${className} bg-albescent-white py-[12.5px] max-h-[73px] justify-end flex gap-10 items-center pr-10 sm:flex-row-reverse sm:gap-3`}
+            className={`${className} bg-albescent-white py-[14px] max-h-[73px] justify-end flex gap-10 items-center pr-10 sm:flex-row-reverse sm:gap-3`}
         >
             {pathname === "/" || isMobile ? (
                 <SearchBar
                     searchbarClassName="bg-[#F5F0E5] w-full py-3"
-                    className="min-w-[358px] sm:min-w-fit ml-auto z-50 sm:m-0 sm:w-full sm:max-w-full z-50"
+                    className="min-w-[358px] sm:min-w-0 sm:min-w-fit ml-auto z-50 sm:m-0 sm:w-full sm:max-w-full z-50"
                     iconStyle="top-3"
                 />
             ) : (
@@ -26,7 +26,7 @@ const Banner = ({ className, isMobile }: BannerProps) => {
             <Image
                 src={EmployeeImage}
                 alt="Employee Image"
-                className=" max-h-11 w-auto"
+                className=" max-h-[45px] w-auto"
             />
         </div>
     );

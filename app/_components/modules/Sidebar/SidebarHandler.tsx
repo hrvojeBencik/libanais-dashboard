@@ -42,6 +42,15 @@ const SidebarHandler = ({ children }: SidebarHandlerProps) => {
     };
 
     useEffect(() => {
+        // Add/remove class to body based on sidebar visibility
+        if (isMobile && openSidebar) {
+            document.body.classList.add("overflow-hidden");
+        } else {
+            document.body.classList.remove("overflow-hidden");
+        }
+    }, [isMobile && openSidebar]);
+
+    useEffect(() => {
         window.addEventListener("resize", controlNavbarOnResize);
 
         //Needed to show/hide links on initial site load
@@ -56,17 +65,9 @@ const SidebarHandler = ({ children }: SidebarHandlerProps) => {
 
     return (
         <SidebarContext.Provider value={{ openSidebar, setOpenSidebar }}>
-            <div
-                className={`${
-                    isMobile
-                        ? openSidebar
-                            ? "  sm:fixed w-full"
-                            : ""
-                        : " max-w-screen w-screen box-border"
-                }`}
-            >
+            <div>
                 {!isMobile && (
-                    <div className="absolute h-full w-full top-0 bottom-0 -z-10 bg-white-smoke">
+                    <div className="absolute h-full w-[346px] top-0 bottom-0 -z-10 bg-white-smoke">
                         <div className=" h-[72px] top-0 w-full bg-albescent-white"></div>
                     </div>
                 )}
@@ -80,17 +81,17 @@ const SidebarHandler = ({ children }: SidebarHandlerProps) => {
                                 setOpenSidebar={setOpenSidebar}
                             />
                         ) : (
-                            <div className="py-[40.5px] pl-[50px] pr-6 sm:px-4 sm:py-6 w-full">
+                            <div className="py-[40.5px] pl-[50px] pr-6 sm:px-4 sm:py-6">
                                 {children}
                             </div>
                         )
                     ) : (
-                        <div className="flex max-w-screen reltive">
+                        <div className="flex ">
                             <Sidebar
                                 openSidebar={openSidebar}
                                 isMobile={isMobile}
                             />
-                            <div className="w-full box-border">
+                            <div className="w-full">
                                 {!isMobile && <Banner />}
 
                                 <div className="py-[40.5px] pl-[50px] pr-6 sm:px-4 sm:py-6 w-full">

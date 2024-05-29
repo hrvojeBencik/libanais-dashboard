@@ -23,7 +23,8 @@ const Sidebar = ({ openSidebar, isMobile, setOpenSidebar }: SidebarProps) => {
 
     return (
         <aside
-            className={`top-0 bottom-0 h-screen max-h-screen min-h-screen sm:fixed sm:top-16 sm:max-h-[calc(100vh-72px)] sm:w-full box-content sm:left-0 sm:right-0  z-50 bg-albescent-white items-center sticky
+            className={`top-0 h-screen sm:top-16 sm:w-full sm:fixed box-content z-50 
+            bg-albescent-white items-center sticky
             ${openSidebar ? "sidebar-visible" : "sidebar-hidden"}`}
         >
             {!isMobile ? (

@@ -2,6 +2,9 @@
 @tailwind components;
 @tailwind utilities;
 
+body {
+    overflow-x: hidden;
+}
 .wrapper {
     max-width: 1080px;
     margin-inline: auto;
@@ -24,7 +27,7 @@
 }
 
 table {
-    border: 1px solid theme('colors.albescent-white');
+    border: 1px solid theme("colors.albescent-white");
     border-radius: 13.75px;
     border-collapse: separate;
     border-spacing: 0;
@@ -36,7 +39,6 @@ th {
     width: 20%;
     border-bottom: 1px solid #e5e8eb;
     padding-inline: 18px;
-
 }
 
 tbody tr:last-of-type td {
@@ -45,18 +47,18 @@ tbody tr:last-of-type td {
 }
 
 th {
-    color: theme('colors.black-chocolate');
+    color: theme("colors.black-chocolate");
     font-weight: 500;
     padding-block: 14px;
 }
 
 td {
-    color: theme('colors.brown-coffee');
+    color: theme("colors.brown-coffee");
     padding-block: 28.5px;
 }
 
 .name-row {
-    color: theme('colors.black-chocolate');
+    color: theme("colors.black-chocolate");
 }
 
 .shadow {
@@ -88,9 +90,7 @@ td {
 .employeeCardField {
     font-weight: 500;
     margin-bottom: 4px;
-
 }
-
 
 @media screen and (max-width: 990px) {
     .form-button {

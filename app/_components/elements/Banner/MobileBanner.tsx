@@ -1,6 +1,5 @@
-import { useState, useContext } from "react";
+import { useContext } from "react";
 import { SidebarContext } from "../../modules/Sidebar/SidebarHandler";
-import { Dispatch, SetStateAction } from "react";
 import Image from "next/image";
 import Logo from "@/public/assets/Logo.png";
 import MenuIcon from "@/public/assets/svg/menu";
@@ -20,10 +19,7 @@ const MobileBanner = ({}: MobileBannerProps) => {
                 className="h-8 w-auto"
                 priority={true}
             />
-            <MenuIcon
-                className="h-8 w-auto"
-                onClick={toggleSidebar}
-            />
+            <MenuIcon className="h-8 w-auto" onClick={toggleSidebar} />
         </div>
     );
 };

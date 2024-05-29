@@ -11,38 +11,15 @@ const useOpenForm = (initialState = false) => {
 
     const handleOpen = () => {
         setIsOpen(true);
+        setOpenSidebar(false);
         window.scrollTo(0, 0);
     };
 
     const handleClose = () => {
         setIsOpen(false);
+        setOpenSidebar(true);
         window.scrollTo(0, 0);
     };
-
-    const controlSidebarOnResize = () => {
-        const width = window.innerWidth;
-        if (width > SCREEN_WIDTH_LIMIT_FOR_MOBILE) {
-            setOpenSidebar(!isOpen);
-        }
-    };
-
-    useEffect(() => {
-        const controlSidebarOnResize = () => {
-            const width = window.innerWidth;
-            if (width > SCREEN_WIDTH_LIMIT_FOR_MOBILE) {
-                setOpenSidebar(!isOpen);
-            }
-        };
-
-        window.addEventListener("resize", controlSidebarOnResize);
-
-        // Needed to show/hide links on initial site load
-        controlSidebarOnResize();
-
-        return () => {
-            window.removeEventListener("resize", controlSidebarOnResize);
-        };
-    }, [isOpen]);
 
     return [isOpen, handleOpen, handleClose];
 };
