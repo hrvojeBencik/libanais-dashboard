@@ -93,16 +93,6 @@ td {
     margin-bottom: 4px;
 }
 
-.menuButton {
-    display: block;
-    border: none;
-    background-color: var(--color-surface);
-    color: var(--color-primary);
-}
-
-.menuButton:hover {
-    cursor: pointer;
-}
 
 .closeIcon *,
 .menuButton * {
