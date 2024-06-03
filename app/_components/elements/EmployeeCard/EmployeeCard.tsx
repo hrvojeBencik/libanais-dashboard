@@ -1,22 +1,18 @@
 import { Employee } from "@/app/_interfaces/Employee";
 import DefaultButton from "../DefaultButton/DefaultButton";
-
+import { useContext } from "react";
+import { FormContext } from "@/app/_contexts/FormContext";
 interface EmployeeCardProps {
     employee: Employee;
-    setEmployeeToUpdate: any;
-    handleOpen: any;
 }
 
-const EmployeeCard = ({
-    employee,
-    setEmployeeToUpdate,
-    handleOpen,
-}: EmployeeCardProps) => {
+const EmployeeCard = ({ employee }: EmployeeCardProps) => {
+    const { setOpenForm, setEditFormData } = useContext(FormContext);
+
     const handleClick = () => {
-        setEmployeeToUpdate(employee);
-        if (typeof handleOpen === "function") {
-            handleOpen();
-        }
+        setEditFormData(employee);
+        setOpenForm(true);
+        window.scrollTo(0, 0);
     };
 
     return (
@@ -37,7 +33,7 @@ const EmployeeCard = ({
                 </div>
                 <div>
                     <div className="employeeCardField">Email</div>
-                    <div className=" truncate">{employee.email}</div>
+                    <div className="truncate">{employee.email}</div>
                 </div>
             </div>
             <DefaultButton

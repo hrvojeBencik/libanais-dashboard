@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { Poppins } from "next/font/google";
 import "./globals.css";
-import SidebarHandler from "./_components/modules/Sidebar/SidebarHandler";
+import NavigationHandler from "./_components/modules/NavigationHandler/NavigationHandler";
 
 const poppins = Poppins({
     subsets: ["latin"],
@@ -25,7 +25,7 @@ export default function RootLayout({
             <body
                 className={`${poppins.className}  min-h-screen bg-white-smoke w-screen`}
             >
-                <SidebarHandler>{children}</SidebarHandler>
+                <NavigationHandler>{children}</NavigationHandler>
             </body>
         </html>
     );

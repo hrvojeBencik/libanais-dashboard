@@ -1,5 +1,5 @@
 import { useContext } from "react";
-import { SidebarContext } from "../../modules/Sidebar/SidebarHandler";
+import { SidebarContext } from "@/app/_contexts/SidebarContext";
 import Image from "next/image";
 import Logo from "@/public/assets/Logo.png";
 import MenuIcon from "@/public/assets/svg/menu";

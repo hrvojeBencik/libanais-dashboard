@@ -3,8 +3,9 @@ import Link from "next/link";
 import { data } from "./sidebarData";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
-import { Dispatch, SetStateAction } from "react";
+import { Dispatch, SetStateAction, useContext } from "react";
 import Banner from "../../elements/Banner/Banner";
+import { FormContext } from "@/app/_contexts/FormContext";
 
 interface SidebarProps {
     openSidebar: boolean;
@@ -13,9 +14,11 @@ interface SidebarProps {
 }
 
 const Sidebar = ({ openSidebar, isMobile, setOpenSidebar }: SidebarProps) => {
+    const { setOpenForm } = useContext(FormContext);
     const pathname = usePathname();
 
     const toggleMobileSidebar = () => {
+        setOpenForm(false);
         if (setOpenSidebar) {
             setOpenSidebar(false);
         }
@@ -35,7 +38,10 @@ const Sidebar = ({ openSidebar, isMobile, setOpenSidebar }: SidebarProps) => {
                     priority={true}
                 />
             ) : (
-                <Banner isMobile={isMobile} className="sm:p-6" />
+                <Banner
+                    isMobile={isMobile}
+                    className="sm:p-6"
+                />
             )}
             <div className=" pl-[49px] pr-[46px] sm:p-6">
                 {data.links.map((link, key) => (

@@ -1,5 +1,5 @@
 "use client";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 import { InputType } from "../../elements/InputField/InputField";
 import { db, storage } from "../../../firebase";
 import { addDoc, updateDoc, collection, doc } from "firebase/firestore";
@@ -10,29 +10,25 @@ import FormButtons from "../../elements/FormButtons/FormButtons";
 import InputField from "../../elements/InputField/InputField";
 import ImageInput from "../ImageInput/ImageInput";
 import Header from "../../elements/Header/Header";
-
+import { FormContext } from "@/app/_contexts/FormContext";
 interface EmployeeFormProps {
     className?: string;
-    handleClose: boolean | (() => void);
     employee?: any;
     updateEmployee?: any;
-    setEmployeeToUpdate: any;
 }
 
-const EmployeeForm = ({
-    className,
-    handleClose,
-    employee,
-    updateEmployee,
-    setEmployeeToUpdate,
-}: EmployeeFormProps) => {
-    const [previewPhoto, setPreviewPhoto] = useState(employee?.imageUrl || "");
+const EmployeeForm = ({ className, updateEmployee }: EmployeeFormProps) => {
+    const { setOpenForm, editFormData, setEditFormData } =
+        useContext(FormContext);
+    const [previewPhoto, setPreviewPhoto] = useState(
+        editFormData?.imageUrl || ""
+    );
     const [formValues, setFormValues] = useState({
-        name: employee?.name || "",
-        rank: employee?.rank || "",
-        pin: employee?.pin || "",
-        email: employee?.email || "",
-        imageUrl: employee?.imageUrl || "",
+        name: editFormData?.name || "",
+        rank: editFormData?.rank || "",
+        pin: editFormData?.pin || "",
+        email: editFormData?.email || "",
+        imageUrl: editFormData?.imageUrl || "",
     });
     const [file, setFile] = useState<File | null>(null);
     const [formErrors, setFormErrors] = useState({
@@ -45,17 +41,17 @@ const EmployeeForm = ({
     const [sendingForm, setSendingForm] = useState(false);
 
     useEffect(() => {
-        if (employee) {
+        if (editFormData) {
             setFormValues({
-                name: employee.name || "",
-                rank: employee.rank || "",
-                pin: employee.pin || "",
-                email: employee.email || "",
-                imageUrl: employee.imageUrl || "",
+                name: editFormData.name || "",
+                rank: editFormData.rank || "",
+                pin: editFormData.pin || "",
+                email: editFormData.email || "",
+                imageUrl: editFormData.imageUrl || "",
             });
-            setPreviewPhoto(employee.imageUrl);
+            setPreviewPhoto(editFormData.imageUrl);
         }
-    }, [employee]);
+    }, [editFormData]);
 
     const handleInputChange = (
         e:
@@ -96,20 +92,20 @@ const EmployeeForm = ({
             return;
         }
 
-        if (employee) {
-            await updateDoc(doc(db, "employeeList", employee.id), {
+        if (editFormData) {
+            await updateDoc(doc(db, "employeeList", editFormData.id), {
                 ...formValues,
             });
 
             if (file) {
                 const fileRef = ref(
                     storage,
-                    `employees/${employee.id}/image.jpeg`
+                    `employees/${editFormData.id}/image.jpeg`
                 );
                 await uploadBytes(fileRef, file);
                 const photoUrl = await getDownloadURL(fileRef);
 
-                await updateDoc(doc(db, "employeeList", employee.id), {
+                await updateDoc(doc(db, "employeeList", editFormData.id), {
                     imageUrl: photoUrl,
                 });
             }
@@ -149,7 +145,6 @@ const EmployeeForm = ({
     };
 
     const handleCloseForm = () => {
-        setEmployeeToUpdate(null);
         setFormValues({
             name: "",
             rank: "",
@@ -158,17 +153,17 @@ const EmployeeForm = ({
             imageUrl: "",
         });
         setPreviewPhoto("");
-        if (typeof handleClose === "function") {
-            handleClose();
-        }
+        setOpenForm(false);
+        setEditFormData(null);
+        window.scrollTo(0, 0);
     };
 
     return (
         <div className={`${className} wrapper pl-[18px] sm:p-4`}>
             <Header
-                title={employee ? "Edit Employee" : "Add Employee"}
+                title={editFormData ? "Edit Employee" : "Add Employee"}
                 subtitle={`Hi, Name. Let's ${
-                    employee ? "edit" : "add"
+                    editFormData ? "edit" : "add"
                 }  an employee!`}
             />
             <form

@@ -1,23 +1,21 @@
 import DefaultButton from "../DefaultButton/DefaultButton";
 import { Recipe } from "@/app/_interfaces/Recipe";
-
+import { useContext } from "react";
+import { FormContext } from "@/app/_contexts/FormContext";
 interface RecipeCardProps {
     recipe: Recipe;
-    setRecipeToUpdate: any;
-    handleOpen: any;
 }
-const RecipeCard = ({
-    recipe,
-    setRecipeToUpdate,
-    handleOpen,
-}: RecipeCardProps) => {
+const RecipeCard = ({ recipe }: RecipeCardProps) => {
+    const { setOpenForm, setEditFormData } = useContext(FormContext);
+
     const ingredientList = recipe.ingredients
         .map((ingredient) => ingredient.name)
         .join(", ");
 
     const handleClick = () => {
-        setRecipeToUpdate(recipe);
-        handleOpen();
+        setEditFormData(recipe);
+        setOpenForm(true);
+        window.scrollTo(0, 0);
     };
 
     return (

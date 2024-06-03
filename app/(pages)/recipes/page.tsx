@@ -1,24 +1,23 @@
 "use client";
 import { loadData } from "@/app/_utils/loadData";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 import { Recipe } from "@/app/_interfaces/Recipe";
-import useOpenForm from "@/app/_helpers/useOpenForm";
+import { FormContext } from "@/app/_contexts/FormContext";
 import PageHeader from "@/app/_components/modules/PageHeader/PageHeader";
 import RecipeForm from "@/app/_components/modules/RecipeForm/RecipeForm";
 import RecipeCard from "@/app/_components/elements/RecipeCard/RecipeCard";
 
 const Recipes = () => {
-    const [isOpen, handleOpen, handleClose] = useOpenForm(false);
+    const { openForm } = useContext(FormContext);
     const [isUpdated, setIsUpdated] = useState(false);
     const [recipeList, setRecipeList] = useState<Recipe[]>([]);
-    const [recipeToUpdate, setRecipeToUpdate] = useState<Recipe | null>(null);
     const [filteredRecipeList, setFilteredRecipeList] =
         useState<Recipe[]>(recipeList);
 
     useEffect(() => {
         setIsUpdated(false);
         loadData("recipeList", setRecipeList);
-    }, [isOpen, isUpdated]);
+    }, [openForm, isUpdated]);
 
     const handleFilteredData = (filteredData: Recipe[]) => {
         setFilteredRecipeList(filteredData);
@@ -32,18 +31,14 @@ const Recipes = () => {
         <div className="relative">
             <div>
                 <RecipeForm
-                    handleClose={handleClose}
-                    className={`${isOpen ? "form-visible" : "form-hidden"}`}
-                    recipe={recipeToUpdate}
+                    className={`${openForm ? "form-visible" : "form-hidden"}`}
                     updateRecipe={updateRecipe}
-                    setRecipeToUpdate={setRecipeToUpdate}
                 />
-                <div className={` ${isOpen ? "page-hidden" : "slide"} `}>
+                <div className={` ${openForm ? "page-hidden" : "slide"} `}>
                     <PageHeader
                         title="Recipe List"
                         subtitle="Hi, Name. Easily manage and add recipes!"
                         buttonText="Add Recipes"
-                        handleOpen={handleOpen}
                         dataList={recipeList}
                         handleFilteredData={handleFilteredData}
                         className=""
@@ -53,8 +48,6 @@ const Recipes = () => {
                             <RecipeCard
                                 key={recipe.id}
                                 recipe={recipe}
-                                setRecipeToUpdate={setRecipeToUpdate}
-                                handleOpen={handleOpen}
                             />
                         ))}
                     </div>

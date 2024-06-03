@@ -1,8 +1,8 @@
 "use client";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 import { Employee } from "@/app/_interfaces/Employee";
 import { loadData } from "@/app/_utils/loadData";
-import useOpenForm from "@/app/_helpers/useOpenForm";
+import { FormContext } from "@/app/_contexts/FormContext";
 import PageHeader from "@/app/_components/modules/PageHeader/PageHeader";
 import EmployeeForm from "@/app/_components/modules/EmployeeForm/EmployeeForm";
 import EmployeeCard from "@/app/_components/elements/EmployeeCard/EmployeeCard";
@@ -10,12 +10,9 @@ import EmployeeRow from "@/app/_components/modules/EmployeeRow/EmployeeRow";
 
 const Employees = () => {
     const SCREEN_WIDTH_LIMIT_FOR_MOBILE = 990;
+    const { openForm } = useContext(FormContext);
     const [isMobile, setIsMobile] = useState(false);
-    const [isOpen, handleOpen, handleClose] = useOpenForm(false);
     const [isUpdated, setIsUpdated] = useState(false);
-    const [employeeToUpdate, setEmployeeToUpdate] = useState<Employee | null>(
-        null
-    );
     const [employeeList, setEmplyeeList] = useState<Employee[]>([]);
     const [filteredEmployeeList, setFilteredEmployeeList] =
         useState<Employee[]>(employeeList);
@@ -45,7 +42,7 @@ const Employees = () => {
     useEffect(() => {
         setIsUpdated(false);
         loadData("employeeList", setEmplyeeList);
-    }, [isOpen, isUpdated]);
+    }, [openForm, isUpdated]);
 
     const updateEmployee = () => {
         setIsUpdated(true);
@@ -58,18 +55,14 @@ const Employees = () => {
     return (
         <div className="w-full relative">
             <EmployeeForm
-                handleClose={handleClose}
-                className={`${isOpen ? "form-visible" : "form-hidden"}`}
-                employee={employeeToUpdate}
+                className={`${openForm ? "form-visible" : "form-hidden"}`}
                 updateEmployee={updateEmployee}
-                setEmployeeToUpdate={setEmployeeToUpdate}
             />
-            <div className={` ${isOpen ? "page-hidden" : "slide"} `}>
+            <div className={` ${openForm ? "page-hidden" : "slide"} `}>
                 <PageHeader
                     title="Employees List"
                     subtitle="Hi, Name. Here you can easily manage employees!"
                     buttonText="Add Employee"
-                    handleOpen={handleOpen}
                     dataList={employeeList}
                     handleFilteredData={handleFilteredData}
                 />
@@ -79,8 +72,6 @@ const Employees = () => {
                             <EmployeeCard
                                 key={employee.id}
                                 employee={employee}
-                                setEmployeeToUpdate={setEmployeeToUpdate}
-                                handleOpen={handleOpen}
                             />
                         ))}
                     </div>
@@ -100,8 +91,6 @@ const Employees = () => {
                                 <EmployeeRow
                                     key={employee.id}
                                     employee={employee}
-                                    setEmployeeToUpdate={setEmployeeToUpdate}
-                                    handleOpen={handleOpen}
                                 />
                             ))}
                         </tbody>

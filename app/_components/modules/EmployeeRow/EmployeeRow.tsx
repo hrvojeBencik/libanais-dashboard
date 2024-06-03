@@ -1,21 +1,17 @@
 import { Employee } from "@/app/_interfaces/Employee";
-
+import { FormContext } from "@/app/_contexts/FormContext";
+import { useContext } from "react";
 interface EmployeeRowProps {
     employee: Employee;
-    setEmployeeToUpdate: any;
-    handleOpen: any;
 }
 
-const EmployeeRow = ({
-    employee,
-    setEmployeeToUpdate,
-    handleOpen,
-}: EmployeeRowProps) => {
+const EmployeeRow = ({ employee }: EmployeeRowProps) => {
+    const { setOpenForm, setEditFormData } = useContext(FormContext);
+
     const handleClick = () => {
-        setEmployeeToUpdate(employee);
-        if (typeof handleOpen === "function") {
-            handleOpen();
-        }
+        setEditFormData(employee);
+        setOpenForm(true);
+        window.scrollTo(0, 0);
     };
 
     return (
@@ -25,7 +21,7 @@ const EmployeeRow = ({
             <td>{employee.rank}</td>
             <td>{employee.email}</td>
             <td
-                className=" cursor-pointer font-bold"
+                className="cursor-pointer font-bold"
                 onClick={handleClick}
             >
                 Edit

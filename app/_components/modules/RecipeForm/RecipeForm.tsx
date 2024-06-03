@@ -1,11 +1,12 @@
 "use client";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useContext } from "react";
 import { inputChangeHandler } from "@/app/_utils/inputChangeHandle";
 import { Ingredient } from "@/app/_interfaces/Ingredient";
 import { InputType } from "../../elements/InputField/InputField";
 import { addDoc, updateDoc, collection, doc } from "firebase/firestore";
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import { db, storage } from "../../../firebase";
+import { FormContext } from "@/app/_contexts/FormContext";
 import validateForm from "@/app/_utils/validateForm";
 import Header from "../../elements/Header/Header";
 import InputField from "../../elements/InputField/InputField";
@@ -16,24 +17,20 @@ import FormButtons from "../../elements/FormButtons/FormButtons";
 
 interface RecipeFormProps {
     className?: string;
-    handleClose: boolean | (() => void);
     recipe?: any;
     updateRecipe?: any;
-    setRecipeToUpdate?: any;
 }
 
-const RecipeForm = ({
-    className,
-    handleClose,
-    recipe,
-    updateRecipe,
-    setRecipeToUpdate,
-}: RecipeFormProps) => {
-    const [previewPhoto, setPreviewPhoto] = useState(recipe?.imageUrl || "");
+const RecipeForm = ({ className, recipe, updateRecipe }: RecipeFormProps) => {
+    const { setOpenForm, editFormData, setEditFormData } =
+        useContext(FormContext);
+    const [previewPhoto, setPreviewPhoto] = useState(
+        editFormData?.imageUrl || ""
+    );
     const [formValues, setFormValues] = useState({
-        name: recipe?.name || "",
-        description: recipe?.description || "",
-        imageUrl: recipe?.imageUrl || "",
+        name: editFormData?.name || "",
+        description: editFormData?.description || "",
+        imageUrl: editFormData?.imageUrl || "",
     });
     const [file, setFile] = useState<File | null>(null);
     const [ingredientList, setIngredientList] = useState<Ingredient[]>([]);
@@ -46,16 +43,16 @@ const RecipeForm = ({
     const [sendingForm, setSendingForm] = useState(false);
 
     useEffect(() => {
-        if (recipe) {
+        if (editFormData) {
             setFormValues({
-                name: recipe.name || "",
-                description: recipe.description || "",
-                imageUrl: recipe.imageUrl || "",
+                name: editFormData.name || "",
+                description: editFormData.description || "",
+                imageUrl: editFormData.imageUrl || "",
             });
-            setPreviewPhoto(recipe.imageUrl);
-            setIngredientList(recipe.ingredients || []);
+            setPreviewPhoto(editFormData.imageUrl);
+            setIngredientList(editFormData.ingredients || []);
         }
-    }, [recipe]);
+    }, [editFormData]);
 
     const handleInputChange = (
         e:
@@ -79,7 +76,6 @@ const RecipeForm = ({
     };
 
     const handleCloseForm = () => {
-        setRecipeToUpdate(null);
         setFormValues({
             name: "",
             description: "",
@@ -87,9 +83,9 @@ const RecipeForm = ({
         });
         setPreviewPhoto("");
         setIngredientList([]);
-        if (typeof handleClose === "function") {
-            handleClose();
-        }
+        setEditFormData(null);
+        setOpenForm(false);
+        window.scrollTo(0, 0);
     };
 
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -116,8 +112,8 @@ const RecipeForm = ({
             return;
         }
 
-        if (recipe) {
-            await updateDoc(doc(db, "recipeList", recipe.id), {
+        if (editFormData) {
+            await updateDoc(doc(db, "recipeList", editFormData.id), {
                 ...formValues,
                 ingredients: ingredientList.map((ingredient) => ({
                     ...ingredient,
@@ -127,11 +123,14 @@ const RecipeForm = ({
             });
 
             if (file) {
-                const fileRef = ref(storage, `recipes/${recipe.id}/image.jpeg`);
+                const fileRef = ref(
+                    storage,
+                    `recipes/${editFormData.id}/image.jpeg`
+                );
                 await uploadBytes(fileRef, file);
                 const photoUrl = await getDownloadURL(fileRef);
 
-                await updateDoc(doc(db, "recipeList", recipe.id), {
+                await updateDoc(doc(db, "recipeList", editFormData.id), {
                     imageUrl: photoUrl,
                 });
             }
