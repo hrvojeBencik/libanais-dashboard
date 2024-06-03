@@ -71,7 +71,7 @@ const SidebarHandler = ({ children }: SidebarHandlerProps) => {
                         <div className=" h-[72px] top-0 w-full bg-albescent-white"></div>
                     </div>
                 )}
-                {isMobile && <MobileBanner />}
+                {isMobile && <MobileBanner openSidebar={openSidebar} />}
                 <div className="relative">
                     {isMobile ? (
                         openSidebar ? (

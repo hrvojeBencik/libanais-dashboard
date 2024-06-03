@@ -5,6 +5,7 @@
 body {
     overflow-x: hidden;
 }
+
 .wrapper {
     max-width: 1080px;
     margin-inline: auto;
@@ -90,6 +91,34 @@ td {
 .employeeCardField {
     font-weight: 500;
     margin-bottom: 4px;
+}
+
+.menuButton {
+    display: block;
+    border: none;
+    background-color: var(--color-surface);
+    color: var(--color-primary);
+}
+
+.menuButton:hover {
+    cursor: pointer;
+}
+
+.closeIcon *,
+.menuButton * {
+    transition: transform 0.3s ease;
+}
+
+.closeIcon line:nth-child(2) {
+    transform: translate(10px, -0.5px) rotate(45deg);
+}
+
+.closeIcon line:nth-child(1) {
+    opacity: 0;
+}
+
+.closeIcon line:nth-child(3) {
+    transform: translate(-7px, 8px) rotate(-45deg);
 }
 
 @media screen and (max-width: 990px) {

@@ -4,8 +4,11 @@ import Image from "next/image";
 import Logo from "@/public/assets/Logo.png";
 import MenuIcon from "@/public/assets/svg/menu";
 
-interface MobileBannerProps {}
-const MobileBanner = ({}: MobileBannerProps) => {
+interface MobileBannerProps {
+    openSidebar: boolean;
+}
+
+const MobileBanner = ({ openSidebar }: MobileBannerProps) => {
     const { setOpenSidebar } = useContext(SidebarContext);
     const toggleSidebar = () => {
         setOpenSidebar((prev) => !prev);
@@ -19,7 +22,16 @@ const MobileBanner = ({}: MobileBannerProps) => {
                 className="h-8 w-auto"
                 priority={true}
             />
-            <MenuIcon className="h-8 w-auto" onClick={toggleSidebar} />
+            <button
+                className={`menuButton ${
+                    openSidebar ? "closeIcon" : "openIcon"
+                }`}
+                onClick={toggleSidebar}
+                type="button"
+                title="Menu"
+            >
+                <MenuIcon className="h-8 w-auto" />
+            </button>
         </div>
     );
 };
