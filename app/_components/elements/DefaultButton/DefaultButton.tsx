@@ -19,7 +19,7 @@ const DefaultButton = ({
         <button
             className={`${className} ${
                 light
-                    ? " bg-white-smoke border-2 border-albescent-white"
+                    ? " bg-white border-2 border-albescent-white"
                     : " bg-albescent-white"
             } text-brown-derby font-medium hover:text-brown-coffee`}
             onClick={onClick}

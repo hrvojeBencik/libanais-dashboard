@@ -1,14 +1,14 @@
 "use client";
-import RecipeCard from "@/app/_components/elements/RecipeCard/RecipeCard";
+import { loadData } from "@/app/_utils/loadData";
+import { useState, useEffect, useContext } from "react";
+import { Recipe } from "@/app/_interfaces/Recipe";
+import { FormContext } from "@/app/_contexts/FormContext";
 import PageHeader from "@/app/_components/modules/PageHeader/PageHeader";
 import RecipeForm from "@/app/_components/modules/RecipeForm/RecipeForm";
-import useOpenForm from "@/app/_helpers/useOpenForm";
-import { loadData } from "@/app/_utils/loadData";
-import { useState, useEffect } from "react";
-import { Recipe } from "@/app/_interfaces/Recipe";
+import RecipeCard from "@/app/_components/elements/RecipeCard/RecipeCard";
 
 const Recipes = () => {
-    const [isOpen, handleOpen, handleClose] = useOpenForm(false);
+    const { openForm } = useContext(FormContext);
     const [isUpdated, setIsUpdated] = useState(false);
     const [recipeList, setRecipeList] = useState<Recipe[]>([]);
     const [filteredRecipeList, setFilteredRecipeList] =
@@ -17,7 +17,7 @@ const Recipes = () => {
     useEffect(() => {
         setIsUpdated(false);
         loadData("recipeList", setRecipeList);
-    }, [isOpen, isUpdated]);
+    }, [openForm, isUpdated]);
 
     const handleFilteredData = (filteredData: Recipe[]) => {
         setFilteredRecipeList(filteredData);
@@ -26,33 +26,31 @@ const Recipes = () => {
     const updateRecipe = () => {
         setIsUpdated(true);
     };
+
     return (
-        <div className="w-full pt-[40.5px]">
-            <RecipeForm
-                handleClose={handleClose}
-                className={`${isOpen ? "form-visible" : "form-hidden"}`}
-            />
-            <div
-                className={`pl-16 pr-6 relative ${
-                    isOpen ? "page-hidden" : "slide"
-                }`}
-            >
-                <PageHeader
-                    title="Recipe List"
-                    subtitle="Hi, Name. Easily manage and add recipes!"
-                    buttonText="Add Recipes"
-                    handleOpen={handleOpen}
-                    dataList={recipeList}
-                    handleFilteredData={handleFilteredData}
+        <div className="relative">
+            <div>
+                <RecipeForm
+                    className={`${openForm ? "form-visible" : "form-hidden"}`}
+                    updateRecipe={updateRecipe}
                 />
-                <div className=" box-border mt-11">
-                    {filteredRecipeList.map((recipe) => (
-                        <RecipeCard
-                            key={recipe.id}
-                            recipe={recipe}
-                            updateRecipe={updateRecipe}
-                        />
-                    ))}
+                <div className={` ${openForm ? "page-hidden" : "slide"} `}>
+                    <PageHeader
+                        title="Recipe List"
+                        subtitle="Hi, Name. Easily manage and add recipes!"
+                        buttonText="Add Recipes"
+                        dataList={recipeList}
+                        handleFilteredData={handleFilteredData}
+                        className=""
+                    />
+                    <div className="mt-8 sm:mt-6 flex flex-col gap-[36px] sm:gap-[22px]">
+                        {filteredRecipeList.map((recipe) => (
+                            <RecipeCard
+                                key={recipe.id}
+                                recipe={recipe}
+                            />
+                        ))}
+                    </div>
                 </div>
             </div>
         </div>

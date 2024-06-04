@@ -25,6 +25,10 @@ const config: Config = {
             margin: {
                 "18": "18px",
             },
+            screens: {
+                sm: { max: "990px" },
+                lg: "1028px",
+            },
         },
     },
     plugins: [],

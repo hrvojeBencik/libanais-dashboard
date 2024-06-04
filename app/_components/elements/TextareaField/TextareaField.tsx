@@ -23,11 +23,11 @@ const TextareaField = ({
 }: TextareaFieldProps) => {
     return (
         <>
-            <label className="font-medium mb-2 text-[18px] text-black-chocolate text-left">
+            <label className="font-medium mb-2 text-[18px] sm:text-sm text-black-chocolate text-left">
                 {label}
             </label>
             <textarea
-                className="p-[18px] min-h-[119px] font-normal resize-none focus:outline-0 text-[18px] rounded-[13.5px] bg-albescent-white text-brown-coffee placeholder:text-brown-coffee"
+                className="p-[18px] min-h-[119px] font-normal resize-none focus:outline-0 text-[18px] sm:text-sm rounded-[13.5px] sm:rounded-lg bg-albescent-white text-brown-coffee placeholder:text-brown-coffee"
                 value={value}
                 rows={rows}
                 name={name}
@@ -35,7 +35,9 @@ const TextareaField = ({
                 onChange={onChange}
                 required={required}
             />
-            {error && <p>Input filed can&apos;t be empty!</p>}
+            {error && (
+                <p className="sm:text-sm">Input filed can&apos;t be empty!</p>
+            )}
         </>
     );
 };

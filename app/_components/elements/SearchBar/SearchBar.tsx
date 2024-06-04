@@ -7,6 +7,7 @@ interface SearchBarProps {
     searchbarClassName?: string;
     dataList?: any;
     handleFilteredData?: any;
+    iconStyle: string;
 }
 
 const SearchBar = ({
@@ -14,6 +15,7 @@ const SearchBar = ({
     searchbarClassName,
     dataList,
     handleFilteredData,
+    iconStyle,
 }: SearchBarProps) => {
     const [query, setQuery] = useState("");
 
@@ -39,18 +41,18 @@ const SearchBar = ({
             noValidate
             action=""
             role="search"
-            className={`${className} relative mt-8`}
+            className={`${className} relative`}
         >
             <input
                 placeholder="Search here"
                 title="Search bar"
-                className={`${searchbarClassName} py-4 pr-4 pl-16 w-full bg-albescent-white 
-                font-sans tracking-wider rounded-[27px] focus:outline-0 text-brown-derby 
+                className={`${searchbarClassName} pr-4 pl-14 w-full 
+                font-sans rounded-[27px] focus:outline-0 text-brown-derby 
                 placeholder-brown-derby`}
                 value={query}
                 onChange={handleInputChange}
             />
-            <SearchIcon className="absolute left-4 top-4" />
+            <SearchIcon className={`${iconStyle} absolute left-4 `} />
         </form>
     );
 };

@@ -1,39 +1,38 @@
 import DefaultButton from "../DefaultButton/DefaultButton";
-import { Ingredient } from "@/app/_interfaces/Ingredient";
-import useOpenForm from "@/app/_helpers/useOpenForm";
-import RecipeForm from "../../modules/RecipeForm/RecipeForm";
 import { Recipe } from "@/app/_interfaces/Recipe";
-
+import { useContext } from "react";
+import { FormContext } from "@/app/_contexts/FormContext";
 interface RecipeCardProps {
     recipe: Recipe;
-    updateRecipe: () => void;
 }
-const RecipeCard = ({ recipe, updateRecipe }: RecipeCardProps) => {
+const RecipeCard = ({ recipe }: RecipeCardProps) => {
+    const { setOpenForm, setEditFormData } = useContext(FormContext);
+
     const ingredientList = recipe.ingredients
         .map((ingredient) => ingredient.name)
         .join(", ");
 
-    const [isOpen, handleOpen, handleClose] = useOpenForm(false);
-
     const handleClick = () => {
-        if (typeof handleOpen === "function") {
-            handleOpen();
-        }
+        setEditFormData(recipe);
+        setOpenForm(true);
+        window.scrollTo(0, 0);
     };
 
     return (
-        <div className="w-full flex bg-white rounded-xl p-[18px] mb-[36px] justify-between">
+        <div className="flex bg-white rounded-xl p-[18px] sm:p-4 justify-between sm:flex-col-reverse box-border">
             <div>
-                <h4 className=" text-brown-coffee">
+                <h4 className=" text-brown-coffee sm:mt-4 sm:text-sm">
                     Ingredients: {ingredientList}
                 </h4>
-                <h2 className=" text-black-chocolate text-lg font-bold my-1">
+                <h2 className=" text-black-chocolate text-lg font-bold my-1 sm:my-5 sm:text-sm">
                     {recipe.name}
                 </h2>
-                <h4 className=" text-brown-coffee">{recipe.description}</h4>
+                <h4 className=" text-brown-coffee sm:text-sm">
+                    {recipe.description}
+                </h4>
                 <DefaultButton
                     text="Edit Recipe"
-                    className="rounded-[18px] py-1.5 px-14 mt-[18px]"
+                    className="rounded-[18px] py-1.5 px-14 mt-[18px] sm:text-sm sm:w-full"
                     onClick={handleClick}
                 />
             </div>
@@ -41,19 +40,9 @@ const RecipeCard = ({ recipe, updateRecipe }: RecipeCardProps) => {
                 <img
                     src={recipe.imageUrl}
                     alt=""
-                    className="max-h-44 w-auto"
+                    className="max-h-44 max-w-80 w-auto h-auto sm:w-full sm:max-w-full sm:max-h-24 object-cover object-center"
                 />
                 <div className="absolute inset-0 h-[347px] bg-gradient-to-b from-transparent to-black "></div>
-            </div>
-
-            <div className="absolute top-0 left-0 right-0 bg-white-smoke z-10">
-                {isOpen && (
-                    <RecipeForm
-                        handleClose={handleClose}
-                        recipe={recipe}
-                        updateRecipe={updateRecipe}
-                    />
-                )}
             </div>
         </div>
     );

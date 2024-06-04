@@ -1,5 +1,3 @@
-"use client";
-
 interface BoxProps {
     className?: string;
 }

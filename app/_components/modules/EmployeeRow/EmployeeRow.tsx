@@ -1,19 +1,19 @@
 import { Employee } from "@/app/_interfaces/Employee";
-import useOpenForm from "@/app/_helpers/useOpenForm";
-import EmployeeForm from "../EmployeeForm/EmployeeForm";
+import { FormContext } from "@/app/_contexts/FormContext";
+import { useContext } from "react";
 interface EmployeeRowProps {
     employee: Employee;
-    updateEmployee: () => void;
 }
 
-const EmployeeRow = ({ employee, updateEmployee }: EmployeeRowProps) => {
-    const [isOpen, handleOpen, handleClose] = useOpenForm(false);
+const EmployeeRow = ({ employee }: EmployeeRowProps) => {
+    const { setOpenForm, setEditFormData } = useContext(FormContext);
 
     const handleClick = () => {
-        if (typeof handleOpen === "function") {
-            handleOpen();
-        }
+        setEditFormData(employee);
+        setOpenForm(true);
+        window.scrollTo(0, 0);
     };
+
     return (
         <tr>
             <td>{employee.pin}</td>
@@ -21,21 +21,11 @@ const EmployeeRow = ({ employee, updateEmployee }: EmployeeRowProps) => {
             <td>{employee.rank}</td>
             <td>{employee.email}</td>
             <td
-                className=" cursor-pointer font-bold"
+                className="cursor-pointer font-bold"
                 onClick={handleClick}
             >
                 Edit
             </td>
-
-            {isOpen && (
-                <td className="absolute top-0 left-0 right-0 bottom-0 bg-white-smoke z-20 border-0">
-                    <EmployeeForm
-                        handleClose={handleClose}
-                        employee={employee}
-                        updateEmployee={updateEmployee}
-                    />
-                </td>
-            )}
         </tr>
     );
 };

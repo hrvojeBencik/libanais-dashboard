@@ -17,9 +17,9 @@ const ImageInput = ({
 }: ImageInputProps) => {
     return (
         <div
-            className={`${className} flex-column items-center w-1/2 mt-[28px]`}
+            className={`${className} flex-column items-center w-1/2 mt-[28px] sm:mt-6 sm:w-full`}
         >
-            <div className="mb-[58px] ml-[22px]">
+            <div className="mb-[58px] ml-[22px] sm:mx-0">
                 {previewPhoto ? (
                     <div className="">
                         <img
@@ -46,7 +46,7 @@ const ImageInput = ({
                     />
                 </div>
             </div>
-            {error && <p>You must select an image.</p>}
+            {error && <p className="sm:text-sm">You must select an image.</p>}
         </div>
     );
 };

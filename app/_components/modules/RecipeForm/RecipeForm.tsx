@@ -1,43 +1,37 @@
 "use client";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useContext } from "react";
+import { inputChangeHandler } from "@/app/_utils/inputChangeHandle";
+import { Ingredient } from "@/app/_interfaces/Ingredient";
+import { InputType } from "../../elements/InputField/InputField";
+import { addDoc, updateDoc, collection, doc } from "firebase/firestore";
+import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
+import { db, storage } from "../../../firebase";
+import { FormContext } from "@/app/_contexts/FormContext";
+import validateForm from "@/app/_utils/validateForm";
 import Header from "../../elements/Header/Header";
 import InputField from "../../elements/InputField/InputField";
 import TextareaField from "../../elements/TextareaField/TextareaField";
 import IngredientForm from "../IngredientForm/IngredientForm";
 import ImageInput from "../ImageInput/ImageInput";
-import { inputChangeHandler } from "@/app/_utils/inputChangeHandle";
-import { Ingredient } from "@/app/_interfaces/Ingredient";
-import validateForm from "@/app/_utils/validateForm";
-import { db, storage } from "../../../firebase";
-import { addDoc, updateDoc, collection, doc } from "firebase/firestore";
-import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
-import { InputType } from "../../elements/InputField/InputField";
 import FormButtons from "../../elements/FormButtons/FormButtons";
 
 interface RecipeFormProps {
     className?: string;
-    handleClose: boolean | (() => void);
     recipe?: any;
     updateRecipe?: any;
 }
 
-interface FormValues {
-    name: string;
-    description: string;
-    imageUrl: string;
-    [key: string]: string;
-}
-
-const RecipeForm = ({
-    className,
-    handleClose,
-    recipe,
-    updateRecipe,
-}: RecipeFormProps) => {
-    const [previewPhoto, setPreviewPhoto] = useState(recipe?.imageUrl || "");
-    const [formValues, setFormValues] = useState(
-        recipe || getDefaultFormValues()
+const RecipeForm = ({ className, recipe, updateRecipe }: RecipeFormProps) => {
+    const { setOpenForm, editFormData, setEditFormData } =
+        useContext(FormContext);
+    const [previewPhoto, setPreviewPhoto] = useState(
+        editFormData?.imageUrl || ""
     );
+    const [formValues, setFormValues] = useState({
+        name: editFormData?.name || "",
+        description: editFormData?.description || "",
+        imageUrl: editFormData?.imageUrl || "",
+    });
     const [file, setFile] = useState<File | null>(null);
     const [ingredientList, setIngredientList] = useState<Ingredient[]>([]);
     const [emptyIngredients, setEmptyIngredients] = useState(false);
@@ -48,13 +42,17 @@ const RecipeForm = ({
     });
     const [sendingForm, setSendingForm] = useState(false);
 
-    function getDefaultFormValues(): FormValues {
-        return {
-            name: "",
-            description: "",
-            imageUrl: "",
-        };
-    }
+    useEffect(() => {
+        if (editFormData) {
+            setFormValues({
+                name: editFormData.name || "",
+                description: editFormData.description || "",
+                imageUrl: editFormData.imageUrl || "",
+            });
+            setPreviewPhoto(editFormData.imageUrl);
+            setIngredientList(editFormData.ingredients || []);
+        }
+    }, [editFormData]);
 
     const handleInputChange = (
         e:
@@ -78,9 +76,16 @@ const RecipeForm = ({
     };
 
     const handleCloseForm = () => {
-        if (typeof handleClose === "function") {
-            handleClose();
-        }
+        setFormValues({
+            name: "",
+            description: "",
+            imageUrl: "",
+        });
+        setPreviewPhoto("");
+        setIngredientList([]);
+        setEditFormData(null);
+        setOpenForm(false);
+        window.scrollTo(0, 0);
     };
 
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -107,8 +112,8 @@ const RecipeForm = ({
             return;
         }
 
-        if (recipe) {
-            await updateDoc(doc(db, "recipeList", recipe.id), {
+        if (editFormData) {
+            await updateDoc(doc(db, "recipeList", editFormData.id), {
                 ...formValues,
                 ingredients: ingredientList.map((ingredient) => ({
                     ...ingredient,
@@ -118,11 +123,14 @@ const RecipeForm = ({
             });
 
             if (file) {
-                const fileRef = ref(storage, `recipes/${recipe.id}/image.jpeg`);
+                const fileRef = ref(
+                    storage,
+                    `recipes/${editFormData.id}/image.jpeg`
+                );
                 await uploadBytes(fileRef, file);
                 const photoUrl = await getDownloadURL(fileRef);
 
-                await updateDoc(doc(db, "recipeList", recipe.id), {
+                await updateDoc(doc(db, "recipeList", editFormData.id), {
                     imageUrl: photoUrl,
                 });
             }
@@ -167,7 +175,7 @@ const RecipeForm = ({
     };
 
     return (
-        <div className={`${className} wrapper pl-[18px]`}>
+        <div className={`${className} wrapper pl-[18px] sm:p-4 `}>
             <Header
                 title={recipe ? "Edit Recipe" : "Add Recipe"}
                 subtitle={`Hi, Name. Let's ${
@@ -177,11 +185,11 @@ const RecipeForm = ({
             <form
                 onSubmit={handleSubmit}
                 action=""
-                className="mt-[58.5px]"
+                className="mt-[58.5px] sm:mt-6"
                 name="recipeForm"
             >
-                <div className="flex">
-                    <div className="flex flex-col w-[52%]">
+                <div className="flex sm:flex-col">
+                    <div className="flex flex-col w-[52%] sm:w-full">
                         <InputField
                             label="Recipe Name"
                             type={InputType.Text}
@@ -202,7 +210,7 @@ const RecipeForm = ({
                         />
                     </div>
                     <ImageInput
-                        className="pl-[92px]"
+                        className="pl-[92px] sm:px-0 sm:w-full"
                         previewPhoto={previewPhoto}
                         handleInputChange={handleInputChange}
                         error={formErrors.imageUrl}
@@ -212,11 +220,11 @@ const RecipeForm = ({
                     setIngredientList={setIngredientList}
                     emptyIngredients={emptyIngredients}
                     setEmptyIngredients={setEmptyIngredients}
-                    ingredientList={recipe?.ingredients}
+                    ingredientList={ingredientList}
                 />
                 <FormButtons
-                    className="mt-[160px]"
-                    text="Recipes"
+                    className="mt-[160px] sm:mt-6"
+                    text="Recipe"
                     handleCloseForm={handleCloseForm}
                 />
             </form>

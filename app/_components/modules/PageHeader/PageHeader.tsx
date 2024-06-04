@@ -1,14 +1,14 @@
 import DefaultButton from "../../elements/DefaultButton/DefaultButton";
 import SearchBar from "../../elements/SearchBar/SearchBar";
 import Header from "../../elements/Header/Header";
-
+import { useContext } from "react";
+import { FormContext } from "@/app/_contexts/FormContext";
 interface PageHeaderProps {
     className?: string;
     searchbarClassName?: string;
     title: string;
     subtitle: string;
     buttonText?: string;
-    handleOpen?: boolean | (() => void);
     dataList?: any;
     handleFilteredData?: any;
 }
@@ -18,19 +18,19 @@ const PageHeader = ({
     title,
     subtitle,
     buttonText,
-    handleOpen,
     dataList,
     handleFilteredData,
 }: PageHeaderProps) => {
+    const { openForm, setOpenForm } = useContext(FormContext);
+
     const handleClick = () => {
-        if (typeof handleOpen === "function") {
-            handleOpen();
-        }
+        setOpenForm(true);
+        window.scrollTo(0, 0);
     };
 
     return (
         <div className={className}>
-            <div className="flex justify-between items-center ">
+            <div className="flex justify-between items-center sm:flex-col sm:items-baseline">
                 <Header
                     title={title}
                     subtitle={subtitle}
@@ -38,13 +38,15 @@ const PageHeader = ({
                 {buttonText && (
                     <DefaultButton
                         text={buttonText}
-                        className="rounded-[100px] px-[105px] h-fit py-3 text-[18px]"
+                        className="rounded-[100px] max-w-[327px] sm:max-w-fit sm:px-6 w-full  h-fit py-3 text-[18px] sm:text-sm sm:mt-6"
                         onClick={handleClick}
                     />
                 )}
             </div>
             <SearchBar
-                searchbarClassName={searchbarClassName}
+                className="mt-8 sm:mt-6"
+                searchbarClassName={`${searchbarClassName} bg-albescent-white py-[13.5px] text-lg`}
+                iconStyle="top-4"
                 dataList={dataList}
                 handleFilteredData={handleFilteredData}
             />

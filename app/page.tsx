@@ -197,13 +197,12 @@ export default function Home() {
     }, [employeeList, employeeSummary]);
 
     return (
-        <main className="pl-16 pr-6 pt-[40.5px]">
+        <main className="">
             <PageHeader
                 title="Dashboard"
-                subtitle="Hi, John. Welcome back to Libanais Dashboard!"
-                searchbarClassName="shadow"
+                subtitle="Hi, Name. Welcome back to Libanais Dashboard!"
             />
-            <div className="flex gap-[18px] mt-8">
+            <div className="flex gap-[18px] mt-8 sm:mt-6 sm:gap-4 sm:flex-col">
                 <DashboardCard
                     title="Total Packages"
                     number={750}

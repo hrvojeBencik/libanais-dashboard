@@ -12,7 +12,7 @@ const FormButtons = ({
     handleCloseForm,
 }: FormButtonsProps) => {
     return (
-        <div className={`${className} flex gap-[51px]`}>
+        <div className={`${className} flex gap-[51px] sm:gap-4`}>
             <DefaultButton
                 text="Go Back"
                 className="form-button"
