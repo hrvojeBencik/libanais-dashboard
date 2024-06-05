@@ -5,6 +5,7 @@ import { useContext } from "react";
 import { FormContext } from "@/app/_contexts/FormContext";
 interface PageHeaderProps {
     className?: string;
+    searchbar?: boolean;
     searchbarClassName?: string;
     title: string;
     subtitle: string;
@@ -14,6 +15,7 @@ interface PageHeaderProps {
 }
 const PageHeader = ({
     className,
+    searchbar,
     searchbarClassName,
     title,
     subtitle,
@@ -29,12 +31,9 @@ const PageHeader = ({
     };
 
     return (
-        <div className={className}>
+        <div className={`${className} mb-8 sm:mb-6`}>
             <div className="flex justify-between items-center sm:flex-col sm:items-baseline">
-                <Header
-                    title={title}
-                    subtitle={subtitle}
-                />
+                <Header title={title} subtitle={subtitle} />
                 {buttonText && (
                     <DefaultButton
                         text={buttonText}
@@ -43,13 +42,15 @@ const PageHeader = ({
                     />
                 )}
             </div>
-            <SearchBar
-                className="mt-8 sm:mt-6"
-                searchbarClassName={`${searchbarClassName} bg-albescent-white py-[13.5px] text-lg`}
-                iconStyle="top-4"
-                dataList={dataList}
-                handleFilteredData={handleFilteredData}
-            />
+            {searchbar && (
+                <SearchBar
+                    className="mt-8 sm:mt-6"
+                    searchbarClassName={`${searchbarClassName} bg-albescent-white py-[13.5px] text-lg`}
+                    iconStyle="top-4"
+                    dataList={dataList}
+                    handleFilteredData={handleFilteredData}
+                />
+            )}
         </div>
     );
 };

@@ -3,7 +3,7 @@ import { useState, useEffect } from "react";
 import { Employee } from "./_interfaces/Employee";
 import { Recipe } from "./_interfaces/Recipe";
 import { loadData } from "./_utils/loadData";
-import DashboardCard from "./_components/elements/DashboardCard.tsx/DashboardCard";
+import StatisticCard from "./_components/elements/StatisticCard/StatisticCard";
 import PageHeader from "./_components/modules/PageHeader/PageHeader";
 import { db } from "./firebase";
 import {
@@ -201,19 +201,20 @@ export default function Home() {
             <PageHeader
                 title="Dashboard"
                 subtitle="Hi, Name. Welcome back to Libanais Dashboard!"
+                searchbar={true}
             />
-            <div className="flex gap-[18px] mt-8 sm:mt-6 sm:gap-4 sm:flex-col">
-                <DashboardCard
+            <div className="flex gap-[18px] sm:gap-4 sm:flex-col">
+                <StatisticCard
                     title="Total Packages"
                     number={750}
                     percentage={5}
                 />
-                <DashboardCard
+                <StatisticCard
                     title="Total Recipes"
                     number={currentRecipeCount}
                     percentage={recipeChangePercentage}
                 />
-                <DashboardCard
+                <StatisticCard
                     title="Total Chefs"
                     number={
                         employeeList.filter(
