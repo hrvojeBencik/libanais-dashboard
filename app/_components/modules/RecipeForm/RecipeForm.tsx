@@ -14,6 +14,7 @@ import TextareaField from "../../elements/TextareaField/TextareaField";
 import IngredientForm from "../IngredientForm/IngredientForm";
 import ImageInput from "../ImageInput/ImageInput";
 import FormButtons from "../../elements/FormButtons/FormButtons";
+import DotsLoader from "../../elements/DotsLoader/DotsLoader";
 
 interface RecipeFormProps {
     className?: string;
@@ -27,6 +28,7 @@ const RecipeForm = ({ className, recipe, updateRecipe }: RecipeFormProps) => {
     const [previewPhoto, setPreviewPhoto] = useState(
         editFormData?.imageUrl || ""
     );
+    const [closeForm, setCloseForm] = useState(false);
     const [formValues, setFormValues] = useState({
         name: editFormData?.name || "",
         description: editFormData?.description || "",
@@ -85,6 +87,7 @@ const RecipeForm = ({ className, recipe, updateRecipe }: RecipeFormProps) => {
         setIngredientList([]);
         setEditFormData(null);
         setOpenForm(false);
+        setCloseForm(true);
         window.scrollTo(0, 0);
     };
 
@@ -221,7 +224,9 @@ const RecipeForm = ({ className, recipe, updateRecipe }: RecipeFormProps) => {
                     emptyIngredients={emptyIngredients}
                     setEmptyIngredients={setEmptyIngredients}
                     ingredientList={ingredientList}
+                    closeForm={closeForm}
                 />
+                {sendingForm && <DotsLoader className="top-16" />}
                 <FormButtons
                     className="mt-[160px] sm:mt-6"
                     text="Recipe"
