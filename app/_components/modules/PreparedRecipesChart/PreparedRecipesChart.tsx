@@ -24,7 +24,18 @@ ChartJS.register(
     Legend
 );
 
-export const options = {
+const getLabels = () => {
+    const labels = [];
+    const today = new Date();
+    for (let i = 6; i >= 0; i--) {
+        const date = new Date();
+        date.setDate(today.getDate() - i);
+        labels.push(date.toLocaleDateString("en-US", { weekday: "long" }));
+    }
+    return labels;
+};
+
+const options = {
     responsive: true,
     plugins: {
         legend: {
@@ -35,11 +46,42 @@ export const options = {
         },
         tooltip: {
             enabled: true,
-            mode: "nearest",
+            mode: "index" as const,
             intersect: false,
+            backgroundColor: "white",
+            titleColor: "#5c4338",
+            titleFont: (context: any) => {
+                const width = context.chart.width;
+                return {
+                    size: width < 920 ? 10 : 14,
+                    weight: "bold" as "bold",
+                };
+            },
+            bodyColor: "#5c4338",
+            bodyFont: function (context: any) {
+                const width = context.chart.width;
+                return {
+                    size: width < 920 ? 10 : 14,
+                };
+            },
+            padding: 10,
+            displayColors: false,
+            borderColor: "#E8DECF",
+            borderWidth: 1,
+            cornerRadius: 4,
+            caretSize: 5,
+            caretPadding: 6,
             callbacks: {
+                title: () => "",
                 label: (context: any) => {
-                    return `Recipes: ${context.raw}`;
+                    const date = new Date();
+                    date.setDate(date.getDate() - (6 - context.dataIndex));
+                    const formattedDate = date.toLocaleDateString("en-US", {
+                        month: "short",
+                        day: "numeric",
+                        year: "numeric",
+                    });
+                    return [`${context.raw} Recipes`, formattedDate];
                 },
             },
         },
@@ -55,36 +97,54 @@ export const options = {
             grid: {
                 display: false,
             },
+            ticks: {
+                font: {
+                    size: 9.54,
+                },
+            },
+        },
+    },
+    hover: {
+        mode: "index" as const, // Explicitly type mode
+        intersect: false,
+    },
+    interaction: {
+        mode: "nearest" as const, // Explicitly type mode
+    },
+    elements: {
+        point: {
+            radius: 0,
+            hoverRadius: 8,
+            hoverBackgroundColor: "rgba(92,67,56, 1)",
+            backgroundColor: "rgba(92,67,56, 1)",
+            borderColor: "rgba(218,213,196)",
+            borderWidth: 3,
+            hoverBorderColor: "rgba(218,213,196)",
+            hoverBorderWidth: 4,
+            clip: false,
         },
     },
 };
 
-const getLabels = () => {
-    const labels = [];
-    const today = new Date();
-    for (let i = 6; i >= 0; i--) {
-        const date = new Date();
-        date.setDate(today.getDate() - i);
-        labels.push(date.toLocaleDateString("en-US", { weekday: "long" }));
-    }
-    return labels;
-};
-
 interface PreparedRecipesChartProps {
     weeklyData: number[];
+    title: string;
 }
 
-const PreparedRecipesChart = ({ weeklyData }: PreparedRecipesChartProps) => {
+const PreparedRecipesChart = ({
+    weeklyData,
+    title,
+}: PreparedRecipesChartProps) => {
     const [gradientHeight, setGradientHeight] = useState(700);
 
     useEffect(() => {
         const handleResize = () => {
             setGradientHeight(
-                window.innerWidth > 1800
-                    ? 700
-                    : window.innerWidth > 1400
+                window.innerWidth > 2200
+                    ? 800
+                    : window.innerWidth > 1000
                     ? 400
-                    : 200
+                    : 150
             );
         };
 
@@ -115,12 +175,6 @@ const PreparedRecipesChart = ({ weeklyData }: PreparedRecipesChartProps) => {
                 borderColor: "#5c4338",
                 borderWidth: 5,
                 tension: 0.4,
-                pointRadius: 8,
-                pointHoverBorderWidth: 9,
-                pointBorderWidth: 3,
-                pointBackgroundColor: "rgba(92,67,56)",
-                pointBorderColor: "rgba(218,213,196)",
-                pointHoverBorderColor: "rgba(218,213,196)",
                 data: weeklyData,
                 backgroundColor: gradient,
             },
@@ -128,8 +182,14 @@ const PreparedRecipesChart = ({ weeklyData }: PreparedRecipesChartProps) => {
     };
 
     return (
-        <div className="w-full">
-            <Line options={options} data={chartData} />
+        <div className="w-full border-[1.15px] p-7 sm:p-4 pb-[54px] sm rounded-[13.5px] border-[#E8DECF]">
+            <h2 className="text-black-chocolate font-medium mb-8 sm:mb-6">
+                {title}
+            </h2>
+            <Line
+                options={options}
+                data={chartData}
+            />
         </div>
     );
 };

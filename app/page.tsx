@@ -208,11 +208,13 @@ export default function Home() {
                     title="Total Packages"
                     number={750}
                     percentage={5}
+                    includeDays={true}
                 />
                 <StatisticCard
                     title="Total Recipes"
                     number={currentRecipeCount}
                     percentage={recipeChangePercentage}
+                    includeDays={true}
                 />
                 <StatisticCard
                     title="Total Chefs"
@@ -222,6 +224,7 @@ export default function Home() {
                         ).length
                     }
                     percentage={chefChangePercentage}
+                    includeDays={true}
                 />
             </div>
         </main>

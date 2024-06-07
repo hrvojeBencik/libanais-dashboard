@@ -23,7 +23,7 @@ const PageHeader = ({
     dataList,
     handleFilteredData,
 }: PageHeaderProps) => {
-    const { openForm, setOpenForm } = useContext(FormContext);
+    const { setOpenForm } = useContext(FormContext);
 
     const handleClick = () => {
         setOpenForm(true);
@@ -33,7 +33,10 @@ const PageHeader = ({
     return (
         <div className={`${className} mb-8 sm:mb-6`}>
             <div className="flex justify-between items-center sm:flex-col sm:items-baseline">
-                <Header title={title} subtitle={subtitle} />
+                <Header
+                    title={title}
+                    subtitle={subtitle}
+                />
                 {buttonText && (
                     <DefaultButton
                         text={buttonText}

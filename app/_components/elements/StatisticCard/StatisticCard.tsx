@@ -3,6 +3,7 @@ interface StatisticCardProps {
     title: string;
     number: number;
     percentage: number;
+    includeDays?: boolean;
 }
 
 const StatisticCard = ({
@@ -10,9 +11,12 @@ const StatisticCard = ({
     title,
     number,
     percentage,
+    includeDays,
 }: StatisticCardProps) => {
     return (
-        <div className="border-[1.15px] p-7 sm:p-4 min-w-[236px] rounded-[13.5px] border-[#E8DECF]">
+        <div
+            className={`${className} border-[1.15px] p-7 sm:p-4 min-w-[236px] sm:w-full sm:min-w-fit rounded-[13.5px] border-[#E8DECF]`}
+        >
             <h2 className="font-medium text-lg sm:text-sm ">{title}</h2>
             <h3 className="font-semibold text-[27px] leading-5 sm:text-2xl my-[9px] sm:my-2">
                 {number}
@@ -26,7 +30,8 @@ const StatisticCard = ({
                         : "text-[#C22929]"
                 }`}
             >
-                {percentage > 0 ? `+${percentage}` : percentage}% (3 days)
+                {percentage > 0 ? `+${percentage}` : percentage}%{" "}
+                {includeDays && "(3 days)"}
             </p>
         </div>
     );
