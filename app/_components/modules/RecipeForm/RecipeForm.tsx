@@ -115,7 +115,7 @@ const RecipeForm = ({ className, recipe, updateRecipe }: RecipeFormProps) => {
             return;
         }
 
-        if (editFormData) {
+        if (editFormData && editFormData.id) {
             await updateDoc(doc(db, "recipeList", editFormData.id), {
                 ...formValues,
                 ingredients: ingredientList.map((ingredient) => ({

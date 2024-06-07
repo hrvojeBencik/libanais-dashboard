@@ -94,7 +94,7 @@ const EmployeeForm = ({ className, updateEmployee }: EmployeeFormProps) => {
             return;
         }
 
-        if (editFormData) {
+        if (editFormData && editFormData.id) {
             await updateDoc(doc(db, "employeeList", editFormData.id), {
                 ...formValues,
             });

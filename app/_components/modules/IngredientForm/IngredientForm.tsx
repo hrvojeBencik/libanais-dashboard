@@ -21,6 +21,7 @@ interface FormValues {
     name: string;
     quantityFull: number | "";
     unit: string;
+    category: string;
 }
 
 const IngredientForm = ({
@@ -34,6 +35,7 @@ const IngredientForm = ({
         ingredientList || []
     );
     const [unit, setUnit] = useState("grams");
+    const [category, setCategory] = useState("Dry Ingredients");
     const [formValues, setFormValues] = useState(getDefaultFormValues());
     const [formErrors, setFormErrors] = useState({
         name: false,
@@ -45,6 +47,7 @@ const IngredientForm = ({
             name: "",
             quantityFull: "",
             unit: "grams",
+            category: "Dry Ingredients",
         };
     }
 
@@ -60,9 +63,10 @@ const IngredientForm = ({
         inputChangeHandler(e, setFormValues);
     };
 
-    const handleButtonClick = (unit: string) => {
+    const handleButtonClick = (unit: string, category: string) => {
         return () => {
             setUnit(unit);
+            setCategory(category);
         };
     };
 
@@ -80,6 +84,7 @@ const IngredientForm = ({
             {
                 ...formValues,
                 unit: unit,
+                category: category,
             },
         ]);
         setFormValues(getDefaultFormValues());
@@ -143,15 +148,18 @@ const IngredientForm = ({
                     <div className="flex justify-between mb-[42px] sm:mb-6 gap-[20px] sm:gap-0">
                         <IngredientButton
                             label="Dry Ingredients"
-                            onClick={handleButtonClick("grams")}
+                            onClick={handleButtonClick(
+                                "grams",
+                                "Dry Ingredients"
+                            )}
                         />
                         <IngredientButton
                             label="Nuts"
-                            onClick={handleButtonClick("grams")}
+                            onClick={handleButtonClick("grams", "Nuts")}
                         />
                         <IngredientButton
                             label="Wet Ingredients"
-                            onClick={handleButtonClick("ml")}
+                            onClick={handleButtonClick("ml", "Wet Ingredients")}
                         />
                     </div>
                     <DefaultButton
