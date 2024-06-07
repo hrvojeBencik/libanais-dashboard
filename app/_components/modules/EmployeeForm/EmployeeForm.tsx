@@ -11,6 +11,8 @@ import InputField from "../../elements/InputField/InputField";
 import ImageInput from "../ImageInput/ImageInput";
 import Header from "../../elements/Header/Header";
 import { FormContext } from "@/app/_contexts/FormContext";
+import DotsLoader from "../../elements/DotsLoader/DotsLoader";
+
 interface EmployeeFormProps {
     className?: string;
     employee?: any;
@@ -172,7 +174,7 @@ const EmployeeForm = ({ className, updateEmployee }: EmployeeFormProps) => {
                 className="mt-[58.5px] sm:mt-6"
                 name="employeeForm"
             >
-                <div className="flex items-center mb-[45px] sm:flex-col">
+                <div className="flex items-center sm:flex-col">
                     <div className="flex flex-col w-[52%] sm:w-full">
                         <InputField
                             label="Full Name"
@@ -219,9 +221,11 @@ const EmployeeForm = ({ className, updateEmployee }: EmployeeFormProps) => {
                         error={formErrors.imageUrl}
                     />
                 </div>
+                {sendingForm && <DotsLoader className="" />}
                 <FormButtons
                     text="Employee"
                     handleCloseForm={handleCloseForm}
+                    className="mt-[45px]"
                 />
             </form>
         </div>
