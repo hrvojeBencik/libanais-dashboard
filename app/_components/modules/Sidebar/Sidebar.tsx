@@ -52,7 +52,7 @@ const Sidebar = ({ openSidebar, isMobile, setOpenSidebar }: SidebarProps) => {
                         className={`group w-[250px] sm:w-full flex items-center font-medium gap-6 text-lg py-3.5 mb-2.5 box-border rounded-lg pl-5 pr-14 
                     ${
                         pathname === link.path
-                            ? "bg-brown-derby bg-opacity-50 text-[#2e211c] font-[700]"
+                            ? "bg-brown-derby bg-opacity-50 text-[#2e211c] font-[800]"
                             : "text-[#464255]"
                     } hover:text-[#2e211c]`}
                     >
