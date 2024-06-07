@@ -14,6 +14,7 @@ interface IngredientFormProps {
     emptyIngredients: boolean;
     setEmptyIngredients: Dispatch<SetStateAction<boolean>>;
     ingredientList: any;
+    closeForm: boolean;
 }
 
 interface FormValues {
@@ -27,6 +28,7 @@ const IngredientForm = ({
     emptyIngredients,
     setEmptyIngredients,
     ingredientList,
+    closeForm,
 }: IngredientFormProps) => {
     const [ingredients, setIngredients] = useState<FormValues[]>(
         ingredientList || []
@@ -47,7 +49,7 @@ const IngredientForm = ({
     }
 
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        const { name, value } = e.target;
+        const { name } = e.target;
 
         if (name) {
             setFormErrors((previousValues) => ({
@@ -88,6 +90,12 @@ const IngredientForm = ({
     useEffect(() => {
         setIngredientList(ingredients);
     }, [ingredients]);
+
+    useEffect(() => {
+        if (closeForm) {
+            setFormValues(getDefaultFormValues());
+        }
+    }, [closeForm]);
 
     useEffect(() => {
         if (ingredientList) {
