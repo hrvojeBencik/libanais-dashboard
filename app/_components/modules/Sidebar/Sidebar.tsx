@@ -49,11 +49,11 @@ const Sidebar = ({ openSidebar, isMobile, setOpenSidebar }: SidebarProps) => {
                         key={key}
                         href={link.path}
                         onClick={toggleMobileSidebar}
-                        className={`group w-[250px] sm:w-full flex items-center font-medium gap-6 text-lg py-3.5 mb-2.5 box-border rounded-lg pl-5 pr-14 
+                        className={`group w-[250px] sm:w-full flex items-center gap-6 text-lg py-3.5 mb-2.5 box-border rounded-lg pl-5 pr-14 
                     ${
                         pathname === link.path
-                            ? "bg-brown-derby bg-opacity-50 text-[#2e211c] font-[700]"
-                            : "text-[#464255]"
+                            ? "bg-brown-derby bg-opacity-50 text-[#2e211c] font-bold"
+                            : "text-[#464255] font-medium"
                     } hover:text-[#2e211c]`}
                     >
                         <link.icon
