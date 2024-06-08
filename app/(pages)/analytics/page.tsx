@@ -104,7 +104,7 @@ const Analytics = () => {
                     percentage={totalRecipesPercentageIncrease}
                 />
                 <StatisticCard
-                    title="Daily Average Recipes Prepared Today"
+                    title="Daily Average Recipes Prepared"
                     number={Math.round(dailyAverageToday)}
                     percentage={percentageIncrease}
                 />
