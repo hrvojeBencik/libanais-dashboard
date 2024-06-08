@@ -7,8 +7,10 @@ import PageHeader from "@/app/_components/modules/PageHeader/PageHeader";
 import EmployeeForm from "@/app/_components/modules/EmployeeForm/EmployeeForm";
 import EmployeeCard from "@/app/_components/elements/EmployeeCard/EmployeeCard";
 import EmployeeRow from "@/app/_components/modules/EmployeeRow/EmployeeRow";
+import Loading from "@/app/_components/elements/Loading/Loading";
 
 const Employees = () => {
+    const [isLoading, setIsLoading] = useState(true);
     const SCREEN_WIDTH_LIMIT_FOR_MOBILE = 990;
     const { openForm } = useContext(FormContext);
     const [isMobile, setIsMobile] = useState(false);
@@ -42,6 +44,7 @@ const Employees = () => {
     useEffect(() => {
         setIsUpdated(false);
         loadData("employeeList", setEmplyeeList);
+        setIsLoading(false);
     }, [openForm, isUpdated]);
 
     const updateEmployee = () => {
@@ -51,6 +54,10 @@ const Employees = () => {
     const handleFilteredData = (filteredData: Employee[]) => {
         setFilteredEmployeeList(filteredData);
     };
+
+    if (isLoading) {
+        return <Loading />;
+    }
 
     return (
         <div className="w-full relative">

@@ -4,8 +4,10 @@ import { loadData } from "@/app/_utils/loadData";
 import PreparedRecipesChart from "@/app/_components/modules/PreparedRecipesChart/PreparedRecipesChart";
 import StatisticCard from "@/app/_components/elements/StatisticCard/StatisticCard";
 import PageHeader from "@/app/_components/modules/PageHeader/PageHeader";
+import Loading from "@/app/_components/elements/Loading/Loading";
 
 const Analytics = () => {
+    const [isLoading, setIsLoading] = useState(true);
     const [preparedRecipes, setPreparedRecipes] = useState<any[]>([]);
     const [totalRecipesNumber, setTotalRecipesNumber] = useState(0);
     const [preparedRecipesChartData, setPreparedRecipesChartData] = useState<
@@ -23,6 +25,7 @@ const Analytics = () => {
         };
 
         fetchData();
+        setIsLoading(false);
     }, []);
 
     useEffect(() => {
@@ -90,6 +93,10 @@ const Analytics = () => {
             100;
         setTotalRecipesPercentageIncrease(Math.round(totalPercentage));
     }, [preparedRecipes]);
+
+    if (isLoading) {
+        return <Loading />;
+    }
 
     return (
         <div className="">
