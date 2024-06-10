@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Poppins } from "next/font/google";
 import "./globals.css";
 import NavigationHandler from "./_components/modules/NavigationHandler/NavigationHandler";
+import Loading from "./_components/elements/Loading/Loading";
 
 const poppins = Poppins({
     subsets: ["latin"],
@@ -25,7 +26,9 @@ export default function RootLayout({
             <body
                 className={`${poppins.className}  min-h-screen bg-white-smoke w-screen`}
             >
-                <NavigationHandler>{children}</NavigationHandler>
+                <Loading>
+                    <NavigationHandler>{children}</NavigationHandler>
+                </Loading>
             </body>
         </html>
     );

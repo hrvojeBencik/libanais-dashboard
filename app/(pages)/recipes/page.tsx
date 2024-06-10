@@ -6,10 +6,8 @@ import { FormContext } from "@/app/_contexts/FormContext";
 import PageHeader from "@/app/_components/modules/PageHeader/PageHeader";
 import RecipeForm from "@/app/_components/modules/RecipeForm/RecipeForm";
 import RecipeCard from "@/app/_components/elements/RecipeCard/RecipeCard";
-import Loading from "@/app/_components/elements/Loading/Loading";
 
 const Recipes = () => {
-    const [isLoading, setIsLoading] = useState(true);
     const { openForm } = useContext(FormContext);
     const [isUpdated, setIsUpdated] = useState(false);
     const [recipeList, setRecipeList] = useState<Recipe[]>([]);
@@ -17,10 +15,8 @@ const Recipes = () => {
         useState<Recipe[]>(recipeList);
 
     useEffect(() => {
-        setIsLoading(true);
         setIsUpdated(false);
         loadData("recipeList", setRecipeList);
-        setIsLoading(false);
     }, [openForm, isUpdated]);
 
     const handleFilteredData = (filteredData: Recipe[]) => {
@@ -30,10 +26,6 @@ const Recipes = () => {
     const updateRecipe = () => {
         setIsUpdated(true);
     };
-
-    if (isLoading) {
-        return <Loading />;
-    }
 
     return (
         <div className="relative">

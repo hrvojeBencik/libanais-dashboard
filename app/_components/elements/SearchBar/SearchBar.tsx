@@ -41,7 +41,7 @@ const SearchBar = ({
             noValidate
             action=""
             role="search"
-            className={`${className} relative`}
+            className={`${className} relative z-40`}
         >
             <input
                 placeholder="Search here"

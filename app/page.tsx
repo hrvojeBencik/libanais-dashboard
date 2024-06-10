@@ -16,7 +16,6 @@ import {
     setDoc,
     serverTimestamp,
 } from "firebase/firestore";
-import Loading from "./_components/elements/Loading/Loading";
 
 interface EmployeeSummary {
     id: string;
@@ -31,7 +30,6 @@ interface RecipeSummary {
 }
 
 export default function Home() {
-    const [isLoading, setIsLoading] = useState(true);
     const [employeeList, setEmployeeList] = useState<Employee[]>([]);
     const [recipeList, setRecipeList] = useState<Recipe[]>([]);
     const [employeeSummary, setEmployeeSummary] = useState<EmployeeSummary[]>(
@@ -56,7 +54,6 @@ export default function Home() {
 
     useEffect(() => {
         fetchData();
-        setIsLoading(false);
     }, []);
 
     // Function to check and update summary
@@ -165,10 +162,6 @@ export default function Home() {
             )
         );
     }, [employeeList, employeeSummary]);
-
-    if (isLoading) {
-        return <Loading />;
-    }
 
     return (
         <main className="">
