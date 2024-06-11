@@ -1,8 +1,8 @@
 "use client";
 import { useState, useEffect, useContext } from "react";
 import { Employee } from "@/app/_interfaces/Employee";
-import { loadData } from "@/app/_utils/loadData";
 import { FormContext } from "@/app/_contexts/FormContext";
+import { DataContext } from "@/app/_contexts/DataContext";
 import PageHeader from "@/app/_components/modules/PageHeader/PageHeader";
 import EmployeeForm from "@/app/_components/modules/EmployeeForm/EmployeeForm";
 import EmployeeCard from "@/app/_components/elements/EmployeeCard/EmployeeCard";
@@ -11,9 +11,8 @@ import EmployeeRow from "@/app/_components/modules/EmployeeRow/EmployeeRow";
 const Employees = () => {
     const SCREEN_WIDTH_LIMIT_FOR_MOBILE = 990;
     const { openForm } = useContext(FormContext);
+    const { employeeList } = useContext(DataContext);
     const [isMobile, setIsMobile] = useState(false);
-    const [isUpdated, setIsUpdated] = useState(false);
-    const [employeeList, setEmplyeeList] = useState<Employee[]>([]);
     const [filteredEmployeeList, setFilteredEmployeeList] =
         useState<Employee[]>(employeeList);
 
@@ -40,13 +39,8 @@ const Employees = () => {
     }, [isMobile, setIsMobile]);
 
     useEffect(() => {
-        setIsUpdated(false);
-        loadData("employeeList", setEmplyeeList);
-    }, [openForm, isUpdated]);
-
-    const updateEmployee = () => {
-        setIsUpdated(true);
-    };
+        setFilteredEmployeeList(employeeList);
+    }, [employeeList, openForm]);
 
     const handleFilteredData = (filteredData: Employee[]) => {
         setFilteredEmployeeList(filteredData);
@@ -56,7 +50,6 @@ const Employees = () => {
         <div className="w-full relative">
             <EmployeeForm
                 className={`${openForm ? "form-visible" : "form-hidden"}`}
-                updateEmployee={updateEmployee}
             />
             <div className={` ${openForm ? "page-hidden" : "slide"} `}>
                 <PageHeader

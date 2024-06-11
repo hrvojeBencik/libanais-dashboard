@@ -7,6 +7,7 @@ import { addDoc, updateDoc, collection, doc } from "firebase/firestore";
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import { db, storage } from "../../../firebase";
 import { FormContext } from "@/app/_contexts/FormContext";
+import { DataContext } from "@/app/_contexts/DataContext";
 import validateForm from "@/app/_utils/validateForm";
 import Header from "../../elements/Header/Header";
 import InputField from "../../elements/InputField/InputField";
@@ -25,6 +26,7 @@ interface RecipeFormProps {
 const RecipeForm = ({ className, recipe, updateRecipe }: RecipeFormProps) => {
     const { setOpenForm, editFormData, setEditFormData } =
         useContext(FormContext);
+    const { refreshData } = useContext(DataContext);
     const [previewPhoto, setPreviewPhoto] = useState(
         editFormData?.imageUrl || ""
     );
@@ -115,47 +117,44 @@ const RecipeForm = ({ className, recipe, updateRecipe }: RecipeFormProps) => {
             return;
         }
 
-        if (editFormData && editFormData.id) {
-            await updateDoc(doc(db, "recipeList", editFormData.id), {
-                ...formValues,
-                ingredients: ingredientList.map((ingredient) => ({
-                    ...ingredient,
-                    lotNumber: "", //
-                    quantityHalf: "",
-                })),
-            });
-
-            if (file) {
-                const fileRef = ref(
-                    storage,
-                    `recipes/${editFormData.id}/image.jpeg`
-                );
-                await uploadBytes(fileRef, file);
-                const photoUrl = await getDownloadURL(fileRef);
-
+        try {
+            if (editFormData && editFormData.id) {
                 await updateDoc(doc(db, "recipeList", editFormData.id), {
-                    imageUrl: photoUrl,
+                    ...formValues,
+                    ingredients: ingredientList.map((ingredient) => ({
+                        ...ingredient,
+                        lotNumber: "",
+                        quantityHalf: "",
+                    })),
                 });
-            }
-            updateRecipe();
-            handleCloseForm();
-            setSendingForm(false);
-        } else {
-            const docRef = await addDoc(collection(db, "recipeList"), {
-                id: "",
-                ...formValues,
-                ingredients: ingredientList.map((ingredient) => ({
-                    ...ingredient,
-                    lotNumber: "", //
-                    quantityHalf: "",
-                })),
-                date: new Date().toISOString(),
-                imageUrl: "", // Initially set photo to empty string
-            });
 
-            const recipeId = docRef.id;
+                if (file) {
+                    const fileRef = ref(
+                        storage,
+                        `recipes/${editFormData.id}/image.jpeg`
+                    );
+                    await uploadBytes(fileRef, file);
+                    const photoUrl = await getDownloadURL(fileRef);
 
-            try {
+                    await updateDoc(doc(db, "recipeList", editFormData.id), {
+                        imageUrl: photoUrl,
+                    });
+                }
+            } else {
+                const docRef = await addDoc(collection(db, "recipeList"), {
+                    id: "",
+                    ...formValues,
+                    ingredients: ingredientList.map((ingredient) => ({
+                        ...ingredient,
+                        lotNumber: "",
+                        quantityHalf: "",
+                    })),
+                    date: new Date().toISOString(),
+                    imageUrl: "",
+                });
+
+                const recipeId = docRef.id;
+
                 if (file) {
                     const fileRef = ref(
                         storage,
@@ -169,12 +168,14 @@ const RecipeForm = ({ className, recipe, updateRecipe }: RecipeFormProps) => {
                         imageUrl: photoUrl,
                     });
                 }
-            } catch (error) {
-                console.log(error);
             }
+        } catch (error) {
+            console.log(error);
+        } finally {
+            refreshData();
+            handleCloseForm();
+            setSendingForm(false);
         }
-        handleCloseForm();
-        setSendingForm(false);
     };
 
     return (

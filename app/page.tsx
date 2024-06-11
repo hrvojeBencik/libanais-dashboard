@@ -1,8 +1,7 @@
+// Home.tsx
 "use client";
-import { useState, useEffect } from "react";
-import { Employee } from "./_interfaces/Employee";
-import { Recipe } from "./_interfaces/Recipe";
-import { loadData } from "./_utils/loadData";
+import { useContext, useEffect, useState } from "react";
+import { DataContext } from "./_contexts/DataContext";
 import StatisticCard from "./_components/elements/StatisticCard/StatisticCard";
 import PageHeader from "./_components/modules/PageHeader/PageHeader";
 import { db } from "./firebase";
@@ -17,46 +16,46 @@ import {
     serverTimestamp,
 } from "firebase/firestore";
 
-interface EmployeeSummary {
-    id: string;
-    date: string;
-    totalChefs: number;
-}
-
-interface RecipeSummary {
-    id: string;
-    date: string;
-    totalRecipes: number;
-}
-
 export default function Home() {
-    const [employeeList, setEmployeeList] = useState<Employee[]>([]);
-    const [recipeList, setRecipeList] = useState<Recipe[]>([]);
-    const [employeeSummary, setEmployeeSummary] = useState<EmployeeSummary[]>(
-        []
-    );
-    const [recipeSummary, setRecipeSummary] = useState<RecipeSummary[]>([]);
-    const [currentRecipeCount, setCurrentRecipeCount] = useState(0);
-    const [recipeChangePercentage, setRecipeChangePercentage] =
-        useState<number>(0);
-    const [chefChangePercentage, setChefChangePercentage] = useState<number>(0);
+    const {
+        employeeList,
+        recipeList,
+        employeeSummary,
+        recipeSummary,
+        setEmployeeList,
+        setRecipeList,
+        setEmployeeSummary,
+        setRecipeSummary,
+    } = useContext(DataContext);
 
-    const fetchData = async () => {
-        try {
-            await loadData("recipeList", setRecipeList);
-            await loadData("employeeList", setEmployeeList);
-            await loadData("employeeSummary", setEmployeeSummary);
-            await loadData("recipeSummary", setRecipeSummary);
-        } catch (error) {
-            console.error("Error fetching data:", error);
-        }
-    };
+    const [currentRecipeCount, setCurrentRecipeCount] = useState(0);
+    const [recipeChangePercentage, setRecipeChangePercentage] = useState(0);
+    const [chefChangePercentage, setChefChangePercentage] = useState(0);
 
     useEffect(() => {
-        fetchData();
-    }, []);
+        if (recipeList.length > 0) {
+            checkAndUpdateSummary(
+                "recipeSummary",
+                recipeList,
+                "date",
+                "totalRecipes"
+            );
+            setCurrentRecipeCount(recipeList.length);
+        }
+    }, [recipeList]);
 
-    // Function to check and update summary
+    useEffect(() => {
+        if (employeeList.length > 0) {
+            checkAndUpdateSummary(
+                "employeeSummary",
+                employeeList,
+                "date",
+                "totalChefs",
+                (employee) => employee.rank.toLowerCase() === "chef"
+            );
+        }
+    }, [employeeList]);
+
     const checkAndUpdateSummary = async (
         collectionName: string,
         list: any[],
@@ -91,30 +90,6 @@ export default function Home() {
             );
         }
     };
-
-    useEffect(() => {
-        if (recipeList.length > 0) {
-            checkAndUpdateSummary(
-                "recipeSummary",
-                recipeList,
-                "date",
-                "totalRecipes"
-            );
-            setCurrentRecipeCount(recipeList.length);
-        }
-    }, [recipeList]);
-
-    useEffect(() => {
-        if (employeeList.length > 0) {
-            checkAndUpdateSummary(
-                "employeeSummary",
-                employeeList,
-                "date",
-                "totalChefs",
-                (employee) => employee.rank.toLowerCase() === "chef"
-            );
-        }
-    }, [employeeList]);
 
     const calculateChangePercentage = (
         currentList: any[],

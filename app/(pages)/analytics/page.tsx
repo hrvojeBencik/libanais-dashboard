@@ -4,17 +4,14 @@ import { loadData } from "@/app/_utils/loadData";
 import PreparedRecipesChart from "@/app/_components/modules/PreparedRecipesChart/PreparedRecipesChart";
 import StatisticCard from "@/app/_components/elements/StatisticCard/StatisticCard";
 import PageHeader from "@/app/_components/modules/PageHeader/PageHeader";
-import Loading from "@/app/_components/elements/Loading/Loading";
 
 const Analytics = () => {
-    const [isLoading, setIsLoading] = useState(true);
     const [preparedRecipes, setPreparedRecipes] = useState<any[]>([]);
     const [totalRecipesNumber, setTotalRecipesNumber] = useState(0);
     const [preparedRecipesChartData, setPreparedRecipesChartData] = useState<
         number[]
     >([]);
     const [dailyAverageToday, setDailyAverageToday] = useState(0);
-    const [dailyAverageYesterday, setDailyAverageYesterday] = useState(0);
     const [percentageIncrease, setPercentageIncrease] = useState(0);
     const [totalRecipesPercentageIncrease, setTotalRecipesPercentageIncrease] =
         useState(0);
@@ -25,7 +22,6 @@ const Analytics = () => {
         };
 
         fetchData();
-        setIsLoading(false);
     }, []);
 
     useEffect(() => {
@@ -34,7 +30,6 @@ const Analytics = () => {
 
         if (totalRecipes === 0) {
             setDailyAverageToday(0);
-            setDailyAverageYesterday(0);
             setPercentageIncrease(0);
             setTotalRecipesPercentageIncrease(0);
             return;
@@ -82,7 +77,6 @@ const Analytics = () => {
         const diffDaysYesterday = diffDays - 1;
 
         const averageYesterday = totalRecipesYesterday / diffDaysYesterday;
-        setDailyAverageYesterday(averageYesterday);
 
         const percentage =
             ((averageToday - averageYesterday) / averageYesterday) * 100;
@@ -93,10 +87,6 @@ const Analytics = () => {
             100;
         setTotalRecipesPercentageIncrease(Math.round(totalPercentage));
     }, [preparedRecipes]);
-
-    if (isLoading) {
-        return <Loading />;
-    }
 
     return (
         <div className="">

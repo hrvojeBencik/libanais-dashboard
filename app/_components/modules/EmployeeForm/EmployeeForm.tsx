@@ -1,6 +1,8 @@
 "use client";
 import { useState, useEffect, useContext } from "react";
 import { InputType } from "../../elements/InputField/InputField";
+import { FormContext } from "@/app/_contexts/FormContext";
+import { DataContext } from "@/app/_contexts/DataContext";
 import { db, storage } from "../../../firebase";
 import { addDoc, updateDoc, collection, doc } from "firebase/firestore";
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
@@ -10,18 +12,17 @@ import FormButtons from "../../elements/FormButtons/FormButtons";
 import InputField from "../../elements/InputField/InputField";
 import ImageInput from "../ImageInput/ImageInput";
 import Header from "../../elements/Header/Header";
-import { FormContext } from "@/app/_contexts/FormContext";
 import DotsLoader from "../../elements/DotsLoader/DotsLoader";
 
 interface EmployeeFormProps {
     className?: string;
     employee?: any;
-    updateEmployee?: any;
 }
 
-const EmployeeForm = ({ className, updateEmployee }: EmployeeFormProps) => {
+const EmployeeForm = ({ className }: EmployeeFormProps) => {
     const { setOpenForm, editFormData, setEditFormData } =
         useContext(FormContext);
+    const { refreshData } = useContext(DataContext);
     const [previewPhoto, setPreviewPhoto] = useState(
         editFormData?.imageUrl || ""
     );
@@ -90,41 +91,37 @@ const EmployeeForm = ({ className, updateEmployee }: EmployeeFormProps) => {
 
         if (Object.values(errors).some((error) => error)) {
             setSendingForm(false);
-
             return;
         }
 
-        if (editFormData && editFormData.id) {
-            await updateDoc(doc(db, "employeeList", editFormData.id), {
-                ...formValues,
-            });
-
-            if (file) {
-                const fileRef = ref(
-                    storage,
-                    `employees/${editFormData.id}/image.jpeg`
-                );
-                await uploadBytes(fileRef, file);
-                const photoUrl = await getDownloadURL(fileRef);
-
+        try {
+            if (editFormData && editFormData.id) {
                 await updateDoc(doc(db, "employeeList", editFormData.id), {
-                    imageUrl: photoUrl,
+                    ...formValues,
                 });
-            }
-            updateEmployee();
-            handleCloseForm();
-            setSendingForm(false);
-        } else {
-            const docRef = await addDoc(collection(db, "employeeList"), {
-                id: "",
-                ...formValues,
-                date: new Date().toISOString(),
-                imageUrl: "",
-            });
 
-            const employeeId = docRef.id;
+                if (file) {
+                    const fileRef = ref(
+                        storage,
+                        `employees/${editFormData.id}/image.jpeg`
+                    );
+                    await uploadBytes(fileRef, file);
+                    const photoUrl = await getDownloadURL(fileRef);
 
-            try {
+                    await updateDoc(doc(db, "employeeList", editFormData.id), {
+                        imageUrl: photoUrl,
+                    });
+                }
+            } else {
+                const docRef = await addDoc(collection(db, "employeeList"), {
+                    id: "",
+                    ...formValues,
+                    date: new Date().toISOString(),
+                    imageUrl: "",
+                });
+
+                const employeeId = docRef.id;
+
                 if (file) {
                     const fileRef = ref(
                         storage,
@@ -138,12 +135,14 @@ const EmployeeForm = ({ className, updateEmployee }: EmployeeFormProps) => {
                         imageUrl: photoUrl,
                     });
                 }
-            } catch (error) {
-                console.log(error);
             }
+        } catch (error) {
+            console.log(error);
+        } finally {
+            refreshData();
+            handleCloseForm();
+            setSendingForm(false);
         }
-        handleCloseForm();
-        setSendingForm(false);
     };
 
     const handleCloseForm = () => {
@@ -166,7 +165,7 @@ const EmployeeForm = ({ className, updateEmployee }: EmployeeFormProps) => {
                 title={editFormData ? "Edit Employee" : "Add Employee"}
                 subtitle={`Hi, Name. Let's ${
                     editFormData ? "edit" : "add"
-                }  an employee!`}
+                } an employee!`}
             />
             <form
                 onSubmit={handleSubmit}
@@ -221,7 +220,7 @@ const EmployeeForm = ({ className, updateEmployee }: EmployeeFormProps) => {
                         error={formErrors.imageUrl}
                     />
                 </div>
-                {sendingForm && <DotsLoader className="" />}
+                {sendingForm && <DotsLoader />}
                 <FormButtons
                     text="Employee"
                     handleCloseForm={handleCloseForm}
