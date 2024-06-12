@@ -7,6 +7,7 @@ import {
     SetStateAction,
 } from "react";
 import { loadData } from "../_utils/loadData";
+import removeOldData from "../_utils/removeOldData";
 import { Employee } from "../_interfaces/Employee";
 import { Recipe } from "../_interfaces/Recipe";
 
@@ -42,6 +43,9 @@ export const DataProvider = ({ children }: { children: React.ReactNode }) => {
 
     const fetchData = async () => {
         try {
+            await removeOldData("employeeSummary");
+            await removeOldData("recipeSummary");
+
             await loadData("recipeList", setRecipeList);
             await loadData("employeeList", setEmployeeList);
             await loadData("employeeSummary", setEmployeeSummary);
