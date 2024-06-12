@@ -129,7 +129,7 @@ const IngredientForm = ({
             <div className="flex max-h-[364px] sm:flex-col sm:max-h-fit">
                 <div className="flex flex-col w-[52%] sm:w-full">
                     <InputField
-                        inputId="name"
+                        inputId="ingredientName"
                         label="Ingredient Name"
                         type={InputType.Text}
                         placeholder="Enter the ingredient name"
