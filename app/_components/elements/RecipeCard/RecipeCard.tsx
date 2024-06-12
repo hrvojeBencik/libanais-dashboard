@@ -2,6 +2,7 @@ import DefaultButton from "../DefaultButton/DefaultButton";
 import { Recipe } from "@/app/_interfaces/Recipe";
 import { useContext } from "react";
 import { FormContext } from "@/app/_contexts/FormContext";
+import Image from "next/image";
 interface RecipeCardProps {
     recipe: Recipe;
 }
@@ -37,9 +38,13 @@ const RecipeCard = ({ recipe }: RecipeCardProps) => {
                 />
             </div>
             <div className="relative overflow-hidden rounded-xl">
-                <img
+                <Image
                     src={recipe.imageUrl}
+                    width={347}
+                    height={212}
+                    priority
                     alt=""
+                    sizes="(max-width: 920px) 100vw, 15vw"
                     className="max-h-44 max-w-80 w-auto h-auto sm:w-full sm:max-w-full sm:max-h-24 object-cover object-center"
                 />
                 <div className="absolute inset-0 h-[347px] bg-gradient-to-b from-transparent to-black "></div>

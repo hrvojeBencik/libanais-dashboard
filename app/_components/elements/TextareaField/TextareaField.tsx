@@ -2,6 +2,7 @@ import { ChangeEvent } from "react";
 
 interface TextareaFieldProps {
     label: string;
+    inputId: string;
     rows: number;
     value: string | number;
     name: string;
@@ -13,6 +14,7 @@ interface TextareaFieldProps {
 
 const TextareaField = ({
     label,
+    inputId,
     rows,
     value,
     name,
@@ -23,10 +25,14 @@ const TextareaField = ({
 }: TextareaFieldProps) => {
     return (
         <>
-            <label className="font-medium mb-2 text-[18px] sm:text-sm text-black-chocolate text-left">
+            <label
+                htmlFor={inputId}
+                className="font-medium mb-2 text-[18px] sm:text-sm text-black-chocolate text-left"
+            >
                 {label}
             </label>
             <textarea
+                id={inputId}
                 className="p-[18px] min-h-[119px] font-normal resize-none focus:outline-0 text-[18px] sm:text-sm rounded-[13.5px] sm:rounded-lg bg-albescent-white text-brown-coffee placeholder:text-brown-coffee"
                 value={value}
                 rows={rows}
@@ -34,6 +40,7 @@ const TextareaField = ({
                 placeholder={placeholder}
                 onChange={onChange}
                 required={required}
+                autoComplete="off"
             />
             {error && (
                 <p className="sm:text-sm">Input filed can&apos;t be empty!</p>

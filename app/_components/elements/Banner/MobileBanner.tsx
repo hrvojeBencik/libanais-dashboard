@@ -21,6 +21,7 @@ const MobileBanner = ({ openSidebar }: MobileBannerProps) => {
                 alt="Libanais logo"
                 className="h-8 w-auto"
                 priority={true}
+                sizes="10vw"
             />
             <button
                 className={`menuButton ${

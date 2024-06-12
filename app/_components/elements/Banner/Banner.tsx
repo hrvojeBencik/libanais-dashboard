@@ -17,7 +17,7 @@ const Banner = ({ className, isMobile }: BannerProps) => {
             {pathname === "/" || isMobile ? (
                 <SearchBar
                     searchbarClassName="bg-[#F5F0E5] w-full py-3"
-                    className="min-w-[358px] sm:min-w-0 ml-auto sm:m-0 sm:w-full sm:max-w-full z-50"
+                    className="min-w-[358px] sm:min-w-0 ml-auto sm:m-0 sm:w-full sm:max-w-full z-20"
                     iconStyle="top-3"
                 />
             ) : (
@@ -27,6 +27,7 @@ const Banner = ({ className, isMobile }: BannerProps) => {
                 src={EmployeeImage}
                 alt="Employee Image"
                 className=" max-h-[45px] w-auto"
+                sizes="10vw"
             />
         </div>
     );

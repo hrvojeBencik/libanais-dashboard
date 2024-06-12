@@ -1,25 +1,33 @@
 "use client";
-import { useState, useEffect } from "react";
+import {
+    useState,
+    useEffect,
+    Dispatch,
+    SetStateAction,
+    useContext,
+} from "react";
+import { InputType } from "../../elements/InputField/InputField";
+import { FormContext } from "@/app/_contexts/FormContext";
+import { inputChangeHandler } from "@/app/_utils/inputChangeHandle";
 import DefaultButton from "../../elements/DefaultButton/DefaultButton";
 import Bin from "public/assets/svg/bin";
-import { inputChangeHandler } from "@/app/_utils/inputChangeHandle";
 import InputField from "../../elements/InputField/InputField";
 import IngredientButton from "./IngredientButton/IngredientButton";
-import { Dispatch, SetStateAction } from "react";
 import validateForm from "@/app/_utils/validateForm";
-import { InputType } from "../../elements/InputField/InputField";
 
 interface IngredientFormProps {
     setIngredientList: Dispatch<SetStateAction<FormValues[]>>;
     emptyIngredients: boolean;
     setEmptyIngredients: Dispatch<SetStateAction<boolean>>;
     ingredientList: any;
+    closeForm: boolean;
 }
 
 interface FormValues {
     name: string;
     quantityFull: number | "";
     unit: string;
+    category: string;
 }
 
 const IngredientForm = ({
@@ -27,11 +35,14 @@ const IngredientForm = ({
     emptyIngredients,
     setEmptyIngredients,
     ingredientList,
+    closeForm,
 }: IngredientFormProps) => {
+    const { openForm } = useContext(FormContext);
     const [ingredients, setIngredients] = useState<FormValues[]>(
         ingredientList || []
     );
     const [unit, setUnit] = useState("grams");
+    const [category, setCategory] = useState("Dry Ingredients");
     const [formValues, setFormValues] = useState(getDefaultFormValues());
     const [formErrors, setFormErrors] = useState({
         name: false,
@@ -43,11 +54,12 @@ const IngredientForm = ({
             name: "",
             quantityFull: "",
             unit: "grams",
+            category: "Dry Ingredients",
         };
     }
 
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        const { name, value } = e.target;
+        const { name } = e.target;
 
         if (name) {
             setFormErrors((previousValues) => ({
@@ -58,9 +70,10 @@ const IngredientForm = ({
         inputChangeHandler(e, setFormValues);
     };
 
-    const handleButtonClick = (unit: string) => {
+    const handleButtonClick = (unit: string, category: string) => {
         return () => {
             setUnit(unit);
+            setCategory(category);
         };
     };
 
@@ -78,6 +91,7 @@ const IngredientForm = ({
             {
                 ...formValues,
                 unit: unit,
+                category: category,
             },
         ]);
         setFormValues(getDefaultFormValues());
@@ -88,6 +102,12 @@ const IngredientForm = ({
     useEffect(() => {
         setIngredientList(ingredients);
     }, [ingredients]);
+
+    useEffect(() => {
+        if (!openForm) {
+            setFormValues(getDefaultFormValues());
+        }
+    }, [openForm]);
 
     useEffect(() => {
         if (ingredientList) {
@@ -109,6 +129,7 @@ const IngredientForm = ({
             <div className="flex max-h-[364px] sm:flex-col sm:max-h-fit">
                 <div className="flex flex-col w-[52%] sm:w-full">
                     <InputField
+                        inputId="ingredientName"
                         label="Ingredient Name"
                         type={InputType.Text}
                         placeholder="Enter the ingredient name"
@@ -118,6 +139,7 @@ const IngredientForm = ({
                         error={formErrors.name}
                     />
                     <InputField
+                        inputId="amount"
                         label="Amount"
                         type={InputType.Number}
                         placeholder="500"
@@ -135,15 +157,18 @@ const IngredientForm = ({
                     <div className="flex justify-between mb-[42px] sm:mb-6 gap-[20px] sm:gap-0">
                         <IngredientButton
                             label="Dry Ingredients"
-                            onClick={handleButtonClick("grams")}
+                            onClick={handleButtonClick(
+                                "grams",
+                                "Dry Ingredients"
+                            )}
                         />
                         <IngredientButton
                             label="Nuts"
-                            onClick={handleButtonClick("grams")}
+                            onClick={handleButtonClick("grams", "Nuts")}
                         />
                         <IngredientButton
                             label="Wet Ingredients"
-                            onClick={handleButtonClick("ml")}
+                            onClick={handleButtonClick("ml", "Wet Ingredients")}
                         />
                     </div>
                     <DefaultButton
