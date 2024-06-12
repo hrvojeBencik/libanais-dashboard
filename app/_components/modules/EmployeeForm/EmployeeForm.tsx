@@ -176,6 +176,7 @@ const EmployeeForm = ({ className }: EmployeeFormProps) => {
                 <div className="flex items-center sm:flex-col">
                     <div className="flex flex-col w-[52%] sm:w-full">
                         <InputField
+                            inputId="name"
                             label="Full Name"
                             type={InputType.Text}
                             name="name"
@@ -185,6 +186,7 @@ const EmployeeForm = ({ className }: EmployeeFormProps) => {
                             error={formErrors.name}
                         />
                         <InputField
+                            inputId="rank"
                             label="Rank"
                             type={InputType.Text}
                             name="rank"
@@ -194,6 +196,7 @@ const EmployeeForm = ({ className }: EmployeeFormProps) => {
                             error={formErrors.rank}
                         />
                         <InputField
+                            inputId="pin"
                             label="4-Digit PIN"
                             type={InputType.Number}
                             name="pin"
@@ -204,6 +207,7 @@ const EmployeeForm = ({ className }: EmployeeFormProps) => {
                             className="[&::-webkit-inner-spin-button]:appearance-none"
                         />
                         <InputField
+                            inputId="email"
                             label="Email Address"
                             type={InputType.Email}
                             name="email"
@@ -214,6 +218,7 @@ const EmployeeForm = ({ className }: EmployeeFormProps) => {
                         />
                     </div>
                     <ImageInput
+                        inputId="image"
                         className="pl-[92px] sm:p-0"
                         previewPhoto={previewPhoto}
                         handleInputChange={handleInputChange}

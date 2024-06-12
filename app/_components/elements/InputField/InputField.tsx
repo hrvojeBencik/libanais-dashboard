@@ -11,6 +11,7 @@ interface InputFieldProps {
     className?: string;
     type: InputType;
     label: string;
+    inputId: string;
     value: string | number;
     name: string;
     placeholder: string;
@@ -24,6 +25,7 @@ const InputField = ({
     className,
     type,
     label,
+    inputId,
     value,
     name,
     placeholder,
@@ -37,10 +39,12 @@ const InputField = ({
                 className={`${children ? "flex items-end gap-5 sm:gap-6" : ""}`}
             >
                 <label
+                    htmlFor={inputId}
                     className={`font-medium flex-column text-[18px] sm:text-sm  text-black-chocolate text-left`}
                 >
                     {label}
                     <input
+                        id={inputId}
                         className={`${className}  sm:w-full font-normal leading-relaxed  mt-2 p-[18px] 
                         sm:p-3 focus:outline-0 text-[18px] sm:text-sm rounded-[13.5px] sm:rounded-lg 
                         bg-albescent-white text-brown-coffee placeholder:text-brown-coffee`}
@@ -49,6 +53,7 @@ const InputField = ({
                         name={name}
                         placeholder={placeholder}
                         onChange={onChange}
+                        autoComplete="off"
                     />
                 </label>
                 {children}

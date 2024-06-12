@@ -4,6 +4,7 @@ import DefaultButton from "../../elements/DefaultButton/DefaultButton";
 
 interface ImageInputProps {
     className?: string;
+    inputId: string;
     previewPhoto?: string;
     handleInputChange: React.ChangeEventHandler<HTMLInputElement>;
     error: boolean;
@@ -11,6 +12,7 @@ interface ImageInputProps {
 
 const ImageInput = ({
     className,
+    inputId,
     previewPhoto,
     handleInputChange,
     error,
@@ -33,11 +35,15 @@ const ImageInput = ({
                 )}
             </div>
             <div className="">
-                <label className="font-medium text-[12.66px] text-brown-coffee">
+                <label
+                    htmlFor={inputId}
+                    className="font-medium text-[12.66px] text-brown-coffee"
+                >
                     Please upload picture, size less than 1GB
                 </label>
                 <div>
                     <input
+                        id={inputId}
                         onChange={handleInputChange}
                         type="file"
                         accept="image/*"

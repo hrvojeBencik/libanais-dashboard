@@ -194,6 +194,7 @@ const RecipeForm = ({ className, recipe }: RecipeFormProps) => {
                 <div className="flex sm:flex-col">
                     <div className="flex flex-col w-[52%] sm:w-full">
                         <InputField
+                            inputId="name"
                             label="Recipe Name"
                             type={InputType.Text}
                             name="name"
@@ -203,6 +204,7 @@ const RecipeForm = ({ className, recipe }: RecipeFormProps) => {
                             error={formErrors.name}
                         />
                         <TextareaField
+                            inputId="desc"
                             label="Short Description"
                             rows={3}
                             value={formValues.description}
@@ -213,6 +215,7 @@ const RecipeForm = ({ className, recipe }: RecipeFormProps) => {
                         />
                     </div>
                     <ImageInput
+                        inputId="image"
                         className="pl-[92px] sm:px-0 sm:w-full"
                         previewPhoto={previewPhoto}
                         handleInputChange={handleInputChange}
