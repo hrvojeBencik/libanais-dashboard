@@ -62,12 +62,13 @@ const Employees = () => {
                 <PageHeader
                     title="Employees List"
                     subtitle="Hi, Name. Here you can easily manage employees!"
+                    searchbar={true}
                     buttonText="Add Employee"
                     dataList={employeeList}
                     handleFilteredData={handleFilteredData}
                 />
                 {isMobile ? (
-                    <div className="flex flex-col gap-4 mt-6">
+                    <div className="flex flex-col gap-4 ">
                         {filteredEmployeeList.map((employee) => (
                             <EmployeeCard
                                 key={employee.id}
@@ -76,7 +77,7 @@ const Employees = () => {
                         ))}
                     </div>
                 ) : (
-                    <table className="w-full text-left mt-8 ">
+                    <table className="w-full text-left">
                         <thead>
                             <tr>
                                 <th>PIN</th>

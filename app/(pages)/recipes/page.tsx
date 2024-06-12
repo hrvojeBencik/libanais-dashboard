@@ -38,17 +38,14 @@ const Recipes = () => {
                     <PageHeader
                         title="Recipe List"
                         subtitle="Hi, Name. Easily manage and add recipes!"
+                        searchbar={true}
                         buttonText="Add Recipes"
                         dataList={recipeList}
                         handleFilteredData={handleFilteredData}
-                        className=""
                     />
-                    <div className="mt-8 sm:mt-6 flex flex-col gap-[36px] sm:gap-[22px]">
+                    <div className="flex flex-col gap-[36px] sm:gap-[22px]">
                         {filteredRecipeList.map((recipe) => (
-                            <RecipeCard
-                                key={recipe.id}
-                                recipe={recipe}
-                            />
+                            <RecipeCard key={recipe.id} recipe={recipe} />
                         ))}
                     </div>
                 </div>
