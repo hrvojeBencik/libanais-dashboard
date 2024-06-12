@@ -19,6 +19,7 @@ const Loading = ({ children }: LoadingProps) => {
                         src={Logo}
                         className="max-w-24"
                         alt="Libanais Logo Image"
+                        sizes="10vw"
                     />
                 </div>
             )}

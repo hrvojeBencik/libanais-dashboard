@@ -27,6 +27,7 @@ const Banner = ({ className, isMobile }: BannerProps) => {
                 src={EmployeeImage}
                 alt="Employee Image"
                 className=" max-h-[45px] w-auto"
+                sizes="10vw"
             />
         </div>
     );
