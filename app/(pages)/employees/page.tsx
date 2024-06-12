@@ -12,7 +12,7 @@ const Employees = () => {
     const SCREEN_WIDTH_LIMIT_FOR_MOBILE = 990;
     const { openForm } = useContext(FormContext);
     const { employeeList } = useContext(DataContext);
-    const [isMobile, setIsMobile] = useState(false);
+    const [isMobile, setIsMobile] = useState(true);
     const [filteredEmployeeList, setFilteredEmployeeList] =
         useState<Employee[]>(employeeList);
 
@@ -47,7 +47,7 @@ const Employees = () => {
     };
 
     return (
-        <div className="w-full relative">
+        <div className="relative">
             <EmployeeForm
                 className={`${openForm ? "form-visible" : "form-hidden"}`}
             />
