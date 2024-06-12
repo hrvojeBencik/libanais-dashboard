@@ -2,32 +2,14 @@
 "use client";
 import { useContext, useEffect, useState } from "react";
 import { DataContext } from "./_contexts/DataContext";
+import { calculateChangePercentage } from "./_utils/calculateChangePercentage";
+import { checkAndUpdateSummary } from "./_utils/checkAndUpdateSummary";
 import StatisticCard from "./_components/elements/StatisticCard/StatisticCard";
 import PageHeader from "./_components/modules/PageHeader/PageHeader";
-import { db } from "./firebase";
-import {
-    query,
-    collection,
-    orderBy,
-    limit,
-    getDocs,
-    doc,
-    setDoc,
-    serverTimestamp,
-} from "firebase/firestore";
 
 export default function Home() {
-    const {
-        employeeList,
-        recipeList,
-        employeeSummary,
-        recipeSummary,
-        setEmployeeList,
-        setRecipeList,
-        setEmployeeSummary,
-        setRecipeSummary,
-    } = useContext(DataContext);
-
+    const { employeeList, recipeList, employeeSummary, recipeSummary } =
+        useContext(DataContext);
     const [currentRecipeCount, setCurrentRecipeCount] = useState(0);
     const [recipeChangePercentage, setRecipeChangePercentage] = useState(0);
     const [chefChangePercentage, setChefChangePercentage] = useState(0);
@@ -55,71 +37,6 @@ export default function Home() {
             );
         }
     }, [employeeList]);
-
-    const checkAndUpdateSummary = async (
-        collectionName: string,
-        list: any[],
-        dateKey: string,
-        totalKey: string,
-        filterCondition?: (item: any) => boolean
-    ) => {
-        const currentDate = new Date().toISOString().split("T")[0];
-        const summaryRef = collection(db, collectionName);
-        const q = query(summaryRef, orderBy("date", "desc"), limit(1));
-
-        try {
-            const querySnapshot = await getDocs(q);
-            const latestDocDate = !querySnapshot.empty
-                ? querySnapshot.docs[0].id
-                : null;
-
-            const totalCount = filterCondition
-                ? list.filter(filterCondition).length
-                : list.length;
-
-            if (latestDocDate !== currentDate) {
-                await setDoc(doc(db, collectionName, currentDate), {
-                    [totalKey]: totalCount,
-                    timestamp: serverTimestamp(),
-                });
-            }
-        } catch (error) {
-            console.error(
-                `Error checking and updating ${collectionName} summary:`,
-                error
-            );
-        }
-    };
-
-    const calculateChangePercentage = (
-        currentList: any[],
-        summaryList: any[],
-        key: string,
-        filterCondition?: (item: any) => boolean
-    ) => {
-        const threeDaysAgo = new Date();
-        threeDaysAgo.setDate(threeDaysAgo.getDate() - 3);
-        const threeDaysAgoDate = threeDaysAgo.toISOString().split("T")[0];
-
-        const threeDaysAgoSummary = summaryList.find(
-            (summary) => summary.id === threeDaysAgoDate
-        );
-        if (threeDaysAgoSummary) {
-            const threeDaysAgoCount = threeDaysAgoSummary[key] || 0;
-            const currentTotalCount = filterCondition
-                ? currentList.filter(filterCondition).length
-                : currentList.length;
-            if (threeDaysAgoCount !== 0) {
-                const difference = currentTotalCount - threeDaysAgoCount;
-                const percentage = (
-                    (difference / threeDaysAgoCount) *
-                    100
-                ).toFixed(2);
-                return parseFloat(percentage);
-            }
-        }
-        return 0;
-    };
 
     useEffect(() => {
         setRecipeChangePercentage(
