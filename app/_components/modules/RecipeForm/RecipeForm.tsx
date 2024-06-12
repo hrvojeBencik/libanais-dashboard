@@ -20,10 +20,9 @@ import DotsLoader from "../../elements/DotsLoader/DotsLoader";
 interface RecipeFormProps {
     className?: string;
     recipe?: any;
-    updateRecipe?: any;
 }
 
-const RecipeForm = ({ className, recipe, updateRecipe }: RecipeFormProps) => {
+const RecipeForm = ({ className, recipe }: RecipeFormProps) => {
     const { setOpenForm, editFormData, setEditFormData } =
         useContext(FormContext);
     const { refreshData } = useContext(DataContext);

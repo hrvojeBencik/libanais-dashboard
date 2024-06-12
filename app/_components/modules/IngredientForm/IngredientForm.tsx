@@ -1,13 +1,19 @@
 "use client";
-import { useState, useEffect } from "react";
+import {
+    useState,
+    useEffect,
+    Dispatch,
+    SetStateAction,
+    useContext,
+} from "react";
+import { InputType } from "../../elements/InputField/InputField";
+import { FormContext } from "@/app/_contexts/FormContext";
+import { inputChangeHandler } from "@/app/_utils/inputChangeHandle";
 import DefaultButton from "../../elements/DefaultButton/DefaultButton";
 import Bin from "public/assets/svg/bin";
-import { inputChangeHandler } from "@/app/_utils/inputChangeHandle";
 import InputField from "../../elements/InputField/InputField";
 import IngredientButton from "./IngredientButton/IngredientButton";
-import { Dispatch, SetStateAction } from "react";
 import validateForm from "@/app/_utils/validateForm";
-import { InputType } from "../../elements/InputField/InputField";
 
 interface IngredientFormProps {
     setIngredientList: Dispatch<SetStateAction<FormValues[]>>;
@@ -31,6 +37,7 @@ const IngredientForm = ({
     ingredientList,
     closeForm,
 }: IngredientFormProps) => {
+    const { openForm } = useContext(FormContext);
     const [ingredients, setIngredients] = useState<FormValues[]>(
         ingredientList || []
     );
@@ -97,10 +104,10 @@ const IngredientForm = ({
     }, [ingredients]);
 
     useEffect(() => {
-        if (closeForm) {
+        if (!openForm) {
             setFormValues(getDefaultFormValues());
         }
-    }, [closeForm]);
+    }, [openForm]);
 
     useEffect(() => {
         if (ingredientList) {
