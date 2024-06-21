@@ -1,35 +1,30 @@
-export const calculateChangePercentage = (
-    currentList: any[],
-    summaryList: any[],
-    key: string,
-    filterCondition?: (item: any) => boolean
-) => {
+export const calculateChangePercentage = (summaryList: any[], key: string) => {
+    const today = new Date();
     const threeDaysAgo = new Date();
-    threeDaysAgo.setDate(threeDaysAgo.getDate() - 3);
+    threeDaysAgo.setDate(today.getDate() - 3);
+
+    const todayDate = today.toISOString().split("T")[0];
     const threeDaysAgoDate = threeDaysAgo.toISOString().split("T")[0];
+
+    const todaySummary = summaryList.find(
+        (summary) => summary.id === todayDate
+    );
 
     const threeDaysAgoSummary = summaryList.find(
         (summary) => summary.id === threeDaysAgoDate
     );
-    let threeDaysAgoCount = 0;
 
-    if (threeDaysAgoSummary) {
-        threeDaysAgoCount = threeDaysAgoSummary[key] || 0;
-    } else {
-        threeDaysAgoCount = currentList.filter((item) => {
-            const itemDate = new Date(item.date);
-            return itemDate < threeDaysAgo;
-        }).length;
-    }
+    if (todaySummary && threeDaysAgoSummary) {
+        const todayCount = todaySummary[key] || 0;
+        const threeDaysAgoCount = threeDaysAgoSummary[key] || 0;
 
-    const currentTotalCount = filterCondition
-        ? currentList.filter(filterCondition).length
-        : currentList.length;
-
-    if (threeDaysAgoCount !== 0) {
-        const difference = currentTotalCount - threeDaysAgoCount;
-        const percentage = ((difference / threeDaysAgoCount) * 100).toFixed(2);
-        return parseFloat(percentage);
+        if (threeDaysAgoCount !== 0) {
+            const difference = todayCount - threeDaysAgoCount;
+            const percentage = ((difference / threeDaysAgoCount) * 100).toFixed(
+                2
+            );
+            return parseFloat(percentage);
+        }
     }
 
     return 0;

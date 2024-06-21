@@ -14,13 +14,22 @@ const DashboardAnalytics = ({
     className,
     analytics,
 }: DashboardAnalyticsProps) => {
-    const { employeeList, recipeList, employeeSummary, recipeSummary } =
-        useContext(DataContext);
+    const {
+        employeeList,
+        recipeList,
+        employeeSummary,
+        recipeSummary,
+        refreshData,
+    } = useContext(DataContext);
     const [recipeChangePercentage, setRecipeChangePercentage] = useState(0);
     const [chefChangePercentage, setChefChangePercentage] = useState(0);
     const [selectedDate, setSelectedDate] = useState<string>(
         new Date().toISOString().split("T")[0]
     ); // Initialize with current date
+
+    useEffect(() => {
+        refreshData();
+    }, []);
 
     useEffect(() => {
         if (recipeList.length > 0) {
@@ -47,20 +56,15 @@ const DashboardAnalytics = ({
 
     useEffect(() => {
         setRecipeChangePercentage(
-            calculateChangePercentage(recipeList, recipeSummary, "totalRecipes")
+            calculateChangePercentage(recipeSummary, "totalRecipes")
         );
-    }, [recipeList, recipeSummary]);
+    }, [recipeSummary]);
 
     useEffect(() => {
         setChefChangePercentage(
-            calculateChangePercentage(
-                employeeList,
-                employeeSummary,
-                "totalChefs",
-                (employee) => employee.rank.toLowerCase() === "chef"
-            )
+            calculateChangePercentage(employeeSummary, "totalChefs")
         );
-    }, [employeeList, employeeSummary]);
+    }, [employeeSummary]);
 
     // Handle date selection from dropdown
     const handleDateChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
