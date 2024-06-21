@@ -7,6 +7,7 @@ import {
     getDocs,
     doc,
     setDoc,
+    getDoc,
     serverTimestamp,
 } from "firebase/firestore";
 
@@ -17,25 +18,38 @@ export const checkAndUpdateSummary = async (
     totalKey: string,
     filterCondition?: (item: any) => boolean
 ) => {
-    const currentDate = new Date().toISOString().split("T")[0];
-    const summaryRef = collection(db, collectionName);
-    const q = query(summaryRef, orderBy("date", "desc"), limit(1));
-
     try {
-        const querySnapshot = await getDocs(q);
-        const latestDocDate = !querySnapshot.empty
-            ? querySnapshot.docs[0].id
-            : null;
-
+        const summaryRef = collection(db, collectionName);
         const totalCount = filterCondition
             ? list.filter(filterCondition).length
             : list.length;
 
-        if (latestDocDate !== currentDate) {
-            await setDoc(doc(db, collectionName, currentDate), {
-                [totalKey]: totalCount,
-                timestamp: serverTimestamp(),
-            });
+        // Calculate dates for today and the past four days
+        const datesToCheck = [];
+        for (let i = 0; i < 5; i++) {
+            const date = new Date();
+            date.setDate(date.getDate() - i);
+            const formattedDate = date.toISOString().split("T")[0];
+            datesToCheck.push(formattedDate);
+        }
+
+        for (const date of datesToCheck) {
+            const docRef = doc(db, collectionName, date);
+            const docSnapshot = await getDoc(docRef);
+
+            if (!docSnapshot.exists()) {
+                // Document doesn't exist, set it
+                await setDoc(docRef, {
+                    [totalKey]: totalCount,
+                    timestamp: serverTimestamp(),
+                });
+            } else if (date === datesToCheck[0]) {
+                // Always update today's document
+                await setDoc(docRef, {
+                    [totalKey]: totalCount,
+                    timestamp: serverTimestamp(),
+                });
+            }
         }
     } catch (error) {
         console.error(

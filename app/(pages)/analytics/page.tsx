@@ -4,6 +4,7 @@ import { loadData } from "@/app/_utils/loadData";
 import PreparedRecipesChart from "@/app/_components/modules/PreparedRecipesChart/PreparedRecipesChart";
 import StatisticCard from "@/app/_components/elements/StatisticCard/StatisticCard";
 import PageHeader from "@/app/_components/modules/PageHeader/PageHeader";
+import DashboardAnalytics from "@/app/_components/modules/DashboardAnalytics/DashboardAnalytics";
 
 const Analytics = () => {
     const [preparedRecipes, setPreparedRecipes] = useState<any[]>([]);
@@ -95,6 +96,10 @@ const Analytics = () => {
                 subtitle="Hi, Name. Here you can view and print analytics!"
             />
             <div className="grid grid-cols-2 gap-x-[19px] gap-y-[50px] sm:gap-4">
+                <div className="col-span-2  gap-x-[19px]">
+                    <DashboardAnalytics analytics={true} className="w-full" />
+                </div>
+
                 <StatisticCard
                     title="Total Recipes Prepared"
                     number={totalRecipesNumber}
