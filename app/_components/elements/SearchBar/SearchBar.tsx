@@ -35,9 +35,10 @@ const SearchBar = ({
                     );
 
                 const matchesOtherFields = (item: any) =>
-                    Object.values(item).some(
-                        (value) =>
+                    Object.entries(item).some(
+                        ([key, value]) =>
                             typeof value === "string" &&
+                            key !== "imageUrl" && // Exclude imageUrl field
                             value.toLowerCase().includes(queryLowerCase)
                     );
 
