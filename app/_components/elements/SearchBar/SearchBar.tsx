@@ -21,37 +21,29 @@ const SearchBar = ({
 
     useEffect(() => {
         if (dataList && handleFilteredData) {
+            const queryLowerCase = query.toLowerCase();
             const filtered = dataList.filter((data: any) => {
-                // Check if the item is a recipe by checking the presence of 'ingredients' field
                 const isRecipe = data.hasOwnProperty("ingredients");
-                if (isRecipe) {
-                    return (
-                        (typeof data.name === "string" &&
-                            data.name
+
+                const matchesLotNumber = (recipe: any) =>
+                    recipe.ingredients.some(
+                        (ingredient: any) =>
+                            typeof ingredient.lotNumber === "string" &&
+                            ingredient.lotNumber
                                 .toLowerCase()
-                                .includes(query.toLowerCase())) ||
-                        (typeof data.description === "string" &&
-                            data.description
-                                .toLowerCase()
-                                .includes(query.toLowerCase())) ||
-                        data.ingredients.some((ingredient: any) =>
-                            Object.values(ingredient).some(
-                                (value) =>
-                                    typeof value === "string" &&
-                                    value
-                                        .toLowerCase()
-                                        .includes(query.toLowerCase())
-                            )
-                        )
+                                .includes(queryLowerCase)
                     );
-                } else {
-                    // Default search logic for other collections
-                    return Object.values(data).some(
+
+                const matchesOtherFields = (item: any) =>
+                    Object.values(item).some(
                         (value) =>
                             typeof value === "string" &&
-                            value.toLowerCase().includes(query.toLowerCase())
+                            value.toLowerCase().includes(queryLowerCase)
                     );
-                }
+
+                return isRecipe
+                    ? matchesLotNumber(data) || matchesOtherFields(data)
+                    : matchesOtherFields(data);
             });
             handleFilteredData(filtered);
         }
