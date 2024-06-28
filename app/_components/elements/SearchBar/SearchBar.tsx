@@ -21,13 +21,38 @@ const SearchBar = ({
 
     useEffect(() => {
         if (dataList && handleFilteredData) {
-            const filtered = dataList.filter((data: any) =>
-                Object.values(data).some(
-                    (value) =>
-                        typeof value === "string" &&
-                        value.toLowerCase().includes(query.toLowerCase())
-                )
-            );
+            const filtered = dataList.filter((data: any) => {
+                // Check if the item is a recipe by checking the presence of 'ingredients' field
+                const isRecipe = data.hasOwnProperty("ingredients");
+                if (isRecipe) {
+                    return (
+                        (typeof data.name === "string" &&
+                            data.name
+                                .toLowerCase()
+                                .includes(query.toLowerCase())) ||
+                        (typeof data.description === "string" &&
+                            data.description
+                                .toLowerCase()
+                                .includes(query.toLowerCase())) ||
+                        data.ingredients.some((ingredient: any) =>
+                            Object.values(ingredient).some(
+                                (value) =>
+                                    typeof value === "string" &&
+                                    value
+                                        .toLowerCase()
+                                        .includes(query.toLowerCase())
+                            )
+                        )
+                    );
+                } else {
+                    // Default search logic for other collections
+                    return Object.values(data).some(
+                        (value) =>
+                            typeof value === "string" &&
+                            value.toLowerCase().includes(query.toLowerCase())
+                    );
+                }
+            });
             handleFilteredData(filtered);
         }
     }, [query, dataList]);

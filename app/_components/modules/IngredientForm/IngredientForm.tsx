@@ -20,11 +20,11 @@ interface IngredientFormProps {
     emptyIngredients: boolean;
     setEmptyIngredients: Dispatch<SetStateAction<boolean>>;
     ingredientList: any;
-    closeForm: boolean;
 }
 
 interface FormValues {
     name: string;
+    lotNumber: string;
     quantityFull: number | "";
     unit: string;
     category: string;
@@ -35,7 +35,6 @@ const IngredientForm = ({
     emptyIngredients,
     setEmptyIngredients,
     ingredientList,
-    closeForm,
 }: IngredientFormProps) => {
     const { openForm } = useContext(FormContext);
     const [ingredients, setIngredients] = useState<FormValues[]>(
@@ -46,12 +45,14 @@ const IngredientForm = ({
     const [formValues, setFormValues] = useState(getDefaultFormValues());
     const [formErrors, setFormErrors] = useState({
         name: false,
+        lotNumber: false,
         quantityFull: false,
     });
 
     function getDefaultFormValues(): FormValues {
         return {
             name: "",
+            lotNumber: "",
             quantityFull: "",
             unit: "grams",
             category: "Dry Ingredients",
@@ -126,7 +127,7 @@ const IngredientForm = ({
             <p className="mb-[53.5px] sm:mb-4 text-[20.25px] font-semibold tracking-tight leading-snug">
                 Ingredients
             </p>
-            <div className="flex max-h-[364px] sm:flex-col sm:max-h-fit">
+            <div className="flex sm:flex-col sm:max-h-fit">
                 <div className="flex flex-col w-[52%] sm:w-full">
                     <InputField
                         inputId="ingredientName"
@@ -137,6 +138,16 @@ const IngredientForm = ({
                         value={formValues.name}
                         onChange={handleInputChange}
                         error={formErrors.name}
+                    />
+                    <InputField
+                        inputId="lotNumber"
+                        label="Lot Number"
+                        type={InputType.Text}
+                        placeholder="Enter the Lot number"
+                        name="lotNumber"
+                        value={formValues.lotNumber}
+                        onChange={handleInputChange}
+                        error={formErrors.lotNumber}
                     />
                     <InputField
                         inputId="amount"

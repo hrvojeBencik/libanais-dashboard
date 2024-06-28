@@ -122,7 +122,6 @@ const RecipeForm = ({ className, recipe }: RecipeFormProps) => {
                     ...formValues,
                     ingredients: ingredientList.map((ingredient) => ({
                         ...ingredient,
-                        lotNumber: "",
                         quantityHalf: "",
                     })),
                 });
@@ -145,7 +144,6 @@ const RecipeForm = ({ className, recipe }: RecipeFormProps) => {
                     ...formValues,
                     ingredients: ingredientList.map((ingredient) => ({
                         ...ingredient,
-                        lotNumber: "",
                         quantityHalf: "",
                     })),
                     date: new Date().toISOString(),
@@ -227,7 +225,6 @@ const RecipeForm = ({ className, recipe }: RecipeFormProps) => {
                     emptyIngredients={emptyIngredients}
                     setEmptyIngredients={setEmptyIngredients}
                     ingredientList={ingredientList}
-                    closeForm={closeForm}
                 />
                 {sendingForm && <DotsLoader className="top-16" />}
                 <FormButtons
