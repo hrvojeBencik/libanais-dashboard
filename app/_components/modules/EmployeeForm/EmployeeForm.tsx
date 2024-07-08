@@ -48,6 +48,9 @@ const EmployeeForm = ({ className }: EmployeeFormProps) => {
 
     useEffect(() => {
         setOpenSidebar(false);
+    }, [setOpenSidebar]);
+
+    useEffect(() => {
         if (editFormData) {
             setFormValues({
                 name: editFormData.name || "",
