@@ -49,6 +49,9 @@ const RecipeForm = ({ className, recipe }: RecipeFormProps) => {
 
     useEffect(() => {
         setOpenSidebar(false);
+    }, [setOpenSidebar]);
+
+    useEffect(() => {
         if (editFormData) {
             setFormValues({
                 name: editFormData.name || "",
