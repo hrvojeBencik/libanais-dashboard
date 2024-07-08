@@ -1,18 +1,19 @@
-import DefaultButton from "../DefaultButton/DefaultButton";
 import { Recipe } from "@/app/_interfaces/Recipe";
 import { useContext } from "react";
+import { useRouter } from "next/navigation";
 import { FormContext } from "@/app/_contexts/FormContext";
+import DefaultButton from "../DefaultButton/DefaultButton";
 import Image from "next/image";
+
 interface RecipeCardProps {
     recipe: Recipe;
 }
 const RecipeCard = ({ recipe }: RecipeCardProps) => {
-    const { setOpenForm, setEditFormData } = useContext(FormContext);
-
+    const { setEditFormData } = useContext(FormContext);
+    const router = useRouter();
     const handleClick = () => {
         setEditFormData(recipe);
-        setOpenForm(true);
-        window.scrollTo(0, 0);
+        router.push(`/recipes/edit/${recipe.id}`);
     };
 
     return (

@@ -14,11 +14,9 @@ interface SidebarProps {
 }
 
 const Sidebar = ({ openSidebar, isMobile, setOpenSidebar }: SidebarProps) => {
-    const { setOpenForm } = useContext(FormContext);
     const pathname = usePathname();
 
     const toggleMobileSidebar = () => {
-        setOpenForm(false);
         if (setOpenSidebar) {
             setOpenSidebar(false);
         }

@@ -1,8 +1,10 @@
+import { useContext } from "react";
+import { FormContext } from "@/app/_contexts/FormContext";
+import { useRouter } from "next/navigation";
 import DefaultButton from "../../elements/DefaultButton/DefaultButton";
 import SearchBar from "../../elements/SearchBar/SearchBar";
 import Header from "../../elements/Header/Header";
-import { useContext } from "react";
-import { FormContext } from "@/app/_contexts/FormContext";
+
 interface PageHeaderProps {
     className?: string;
     searchbar?: boolean;
@@ -12,6 +14,7 @@ interface PageHeaderProps {
     buttonText?: string;
     dataList?: any;
     handleFilteredData?: any;
+    href?: string;
 }
 const PageHeader = ({
     className,
@@ -22,12 +25,14 @@ const PageHeader = ({
     buttonText,
     dataList,
     handleFilteredData,
+    href,
 }: PageHeaderProps) => {
-    const { setOpenForm } = useContext(FormContext);
+    const router = useRouter();
 
     const handleClick = () => {
-        setOpenForm(true);
-        window.scrollTo(0, 0);
+        if (href) {
+            router.push(href);
+        }
     };
 
     return (

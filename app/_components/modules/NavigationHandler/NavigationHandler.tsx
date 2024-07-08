@@ -14,7 +14,6 @@ interface NavigationHandlerProps {
 const NavigationHandler = ({ children }: NavigationHandlerProps) => {
     const { setIsLoading } = useContext(LoadingContext); // Use LoadingContext
     const [openSidebar, setOpenSidebar] = useState(false);
-    const [openForm, setOpenForm] = useState(false);
     const [editFormData, setEditFormData] = useState({});
     const SCREEN_WIDTH_LIMIT_FOR_MOBILE = 990;
     const [isMobile, setIsMobile] = useState(false);
@@ -26,12 +25,11 @@ const NavigationHandler = ({ children }: NavigationHandlerProps) => {
             setOpenSidebar(false);
         } else {
             setIsMobile(false);
-            setOpenSidebar(!openForm);
+            setOpenSidebar(true);
         }
     };
 
     useEffect(() => {
-        // Add/remove class to body based on sidebar visibility
         if (isMobile && openSidebar) {
             document.body.classList.add("overflow-hidden");
         } else {
@@ -50,7 +48,7 @@ const NavigationHandler = ({ children }: NavigationHandlerProps) => {
         };
 
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [openForm]);
+    }, []);
 
     useEffect(() => {
         setIsLoading(true); // Start loading
@@ -64,9 +62,7 @@ const NavigationHandler = ({ children }: NavigationHandlerProps) => {
 
     return (
         <SidebarContext.Provider value={{ openSidebar, setOpenSidebar }}>
-            <FormContext.Provider
-                value={{ openForm, setOpenForm, editFormData, setEditFormData }}
-            >
+            <FormContext.Provider value={{ editFormData, setEditFormData }}>
                 {!isMobile && (
                     <div className="absolute h-full w-[346px] top-0 bottom-0 -z-10 bg-white-smoke">
                         <div className=" h-[72px] top-0 w-full bg-albescent-white"></div>

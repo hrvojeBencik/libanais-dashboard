@@ -1,5 +1,6 @@
 "use client";
 import { useEffect, useState, useContext } from "react";
+import { useRouter } from "next/navigation";
 import { inputChangeHandler } from "@/app/_utils/inputChangeHandle";
 import { Ingredient } from "@/app/_interfaces/Ingredient";
 import { InputType } from "../../elements/InputField/InputField";
@@ -8,6 +9,7 @@ import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import { db, storage } from "../../../firebase";
 import { FormContext } from "@/app/_contexts/FormContext";
 import { DataContext } from "@/app/_contexts/DataContext";
+import { SidebarContext } from "@/app/_contexts/SidebarContext";
 import validateForm from "@/app/_utils/validateForm";
 import Header from "../../elements/Header/Header";
 import InputField from "../../elements/InputField/InputField";
@@ -23,13 +25,13 @@ interface RecipeFormProps {
 }
 
 const RecipeForm = ({ className, recipe }: RecipeFormProps) => {
-    const { setOpenForm, editFormData, setEditFormData } =
-        useContext(FormContext);
+    const router = useRouter();
+    const { setOpenSidebar } = useContext(SidebarContext);
+    const { editFormData, setEditFormData } = useContext(FormContext);
     const { refreshData } = useContext(DataContext);
     const [previewPhoto, setPreviewPhoto] = useState(
         editFormData?.imageUrl || ""
     );
-    const [closeForm, setCloseForm] = useState(false);
     const [formValues, setFormValues] = useState({
         name: editFormData?.name || "",
         description: editFormData?.description || "",
@@ -46,6 +48,7 @@ const RecipeForm = ({ className, recipe }: RecipeFormProps) => {
     const [sendingForm, setSendingForm] = useState(false);
 
     useEffect(() => {
+        setOpenSidebar(false);
         if (editFormData) {
             setFormValues({
                 name: editFormData.name || "",
@@ -87,9 +90,7 @@ const RecipeForm = ({ className, recipe }: RecipeFormProps) => {
         setPreviewPhoto("");
         setIngredientList([]);
         setEditFormData(null);
-        setOpenForm(false);
-        setCloseForm(true);
-        window.scrollTo(0, 0);
+        router.push("/recipes");
     };
 
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {

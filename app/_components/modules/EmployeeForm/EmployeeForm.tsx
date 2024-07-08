@@ -1,7 +1,9 @@
 "use client";
 import { useState, useEffect, useContext } from "react";
+import { useRouter } from "next/navigation";
 import { InputType } from "../../elements/InputField/InputField";
 import { FormContext } from "@/app/_contexts/FormContext";
+import { SidebarContext } from "@/app/_contexts/SidebarContext";
 import { DataContext } from "@/app/_contexts/DataContext";
 import { db, storage } from "../../../firebase";
 import { addDoc, updateDoc, collection, doc } from "firebase/firestore";
@@ -20,8 +22,9 @@ interface EmployeeFormProps {
 }
 
 const EmployeeForm = ({ className }: EmployeeFormProps) => {
-    const { setOpenForm, editFormData, setEditFormData } =
-        useContext(FormContext);
+    const router = useRouter();
+    const { setOpenSidebar } = useContext(SidebarContext);
+    const { editFormData, setEditFormData } = useContext(FormContext);
     const { refreshData } = useContext(DataContext);
     const [previewPhoto, setPreviewPhoto] = useState(
         editFormData?.imageUrl || ""
@@ -44,6 +47,7 @@ const EmployeeForm = ({ className }: EmployeeFormProps) => {
     const [sendingForm, setSendingForm] = useState(false);
 
     useEffect(() => {
+        setOpenSidebar(false);
         if (editFormData) {
             setFormValues({
                 name: editFormData.name || "",
@@ -154,9 +158,8 @@ const EmployeeForm = ({ className }: EmployeeFormProps) => {
             imageUrl: "",
         });
         setPreviewPhoto("");
-        setOpenForm(false);
         setEditFormData(null);
-        window.scrollTo(0, 0);
+        router.push("/employees");
     };
 
     return (

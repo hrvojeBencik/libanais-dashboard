@@ -1,13 +1,6 @@
 "use client";
-import {
-    useState,
-    useEffect,
-    Dispatch,
-    SetStateAction,
-    useContext,
-} from "react";
+import { useState, useEffect, Dispatch, SetStateAction } from "react";
 import { InputType } from "../../elements/InputField/InputField";
-import { FormContext } from "@/app/_contexts/FormContext";
 import { inputChangeHandler } from "@/app/_utils/inputChangeHandle";
 import DefaultButton from "../../elements/DefaultButton/DefaultButton";
 import Bin from "public/assets/svg/bin";
@@ -36,7 +29,6 @@ const IngredientForm = ({
     setEmptyIngredients,
     ingredientList,
 }: IngredientFormProps) => {
-    const { openForm } = useContext(FormContext);
     const [ingredients, setIngredients] = useState<FormValues[]>(
         ingredientList || []
     );
@@ -103,12 +95,6 @@ const IngredientForm = ({
     useEffect(() => {
         setIngredientList(ingredients);
     }, [ingredients]);
-
-    useEffect(() => {
-        if (!openForm) {
-            setFormValues(getDefaultFormValues());
-        }
-    }, [openForm]);
 
     useEffect(() => {
         if (ingredientList) {

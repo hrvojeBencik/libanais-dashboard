@@ -1,17 +1,18 @@
 import { Employee } from "@/app/_interfaces/Employee";
 import { FormContext } from "@/app/_contexts/FormContext";
 import { useContext } from "react";
+import { useRouter } from "next/navigation";
 interface EmployeeRowProps {
     employee: Employee;
 }
 
 const EmployeeRow = ({ employee }: EmployeeRowProps) => {
-    const { setOpenForm, setEditFormData } = useContext(FormContext);
+    const { setEditFormData } = useContext(FormContext);
+    const router = useRouter();
 
     const handleClick = () => {
         setEditFormData(employee);
-        setOpenForm(true);
-        window.scrollTo(0, 0);
+        router.push(`/employees/edit/${employee.id}`);
     };
 
     return (
