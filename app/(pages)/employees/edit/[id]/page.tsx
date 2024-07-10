@@ -1,21 +1,24 @@
-import { Employee } from "@/app/_interfaces/Employee";
-import { getDocs, collection, query } from "firebase/firestore";
-import { db } from "@/app/firebase";
+"use client";
+
+import { useContext } from "react";
+import { useParams } from "next/navigation";
+import { DataContext } from "@/app/_contexts/DataContext";
 import EmployeeForm from "@/app/_components/modules/EmployeeForm/EmployeeForm";
 
-export async function generateStaticParams() {
-    const snapshot = await getDocs(query(collection(db, "employeeList")));
-    const data = snapshot.docs.map((doc) => ({
-        id: doc.id,
-        ...doc.data(),
-    }));
+const EditEmployee = () => {
+    const { id } = useParams();
+    const { employeeList } = useContext(DataContext);
 
-    return data.map((employee) => ({
-        id: employee.id,
-    }));
-}
+    if (!id || typeof id !== "string") {
+        return <div>Invalid employee ID</div>;
+    }
 
-const EditEmployee = ({ employee }: { employee: Employee }) => {
+    const employee = employeeList.find((emp) => emp.id === id);
+
+    if (!employee) {
+        return <div>Employee not found</div>;
+    }
+
     return <EmployeeForm employee={employee} />;
 };
 

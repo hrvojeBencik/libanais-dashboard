@@ -7,11 +7,10 @@ interface EmployeeCardProps {
 }
 
 const EmployeeCard = ({ employee }: EmployeeCardProps) => {
-    const { setOpenForm, setEditFormData } = useContext(FormContext);
+    const { setEditFormData } = useContext(FormContext);
 
     const handleClick = () => {
         setEditFormData(employee);
-        setOpenForm(true);
         window.scrollTo(0, 0);
     };
 
